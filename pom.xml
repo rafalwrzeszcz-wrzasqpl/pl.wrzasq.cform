@@ -17,7 +17,7 @@
     <groupId>pl.wrzasq.cform</groupId>
     <artifactId>cform</artifactId>
     <packaging>pom</packaging>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
     <parent>
         <groupId>pl.wrzasq.parent</groupId>
         <artifactId>parent-opensource</artifactId>
