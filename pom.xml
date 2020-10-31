@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+# This file is part of the pl.wrzasq.cform.
+#
+# @license http://mit-license.org/ The MIT license
+# @copyright 2020 © by Rafał Wrzeszcz - Wrzasq.pl.
+-->
+<project
+    xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="
+        http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd
+">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- core project settings -->
+    <groupId>pl.wrzasq.cform</groupId>
+    <artifactId>cform</artifactId>
+    <packaging>pom</packaging>
+    <version>0.0.1-SNAPSHOT</version>
+    <parent>
+        <groupId>pl.wrzasq.parent</groupId>
+        <artifactId>parent-opensource</artifactId>
+        <version>1.2.0</version>
+    </parent>
+
+    <!-- project meta info -->
+    <name>WrzasqPl CForm</name>
+    <url>https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.cform</url>
+    <description>WrzasqPl-CForm is set of AWS CloudFormation extensions.</description>
+    <inceptionYear>2020</inceptionYear>
+
+    <!-- legal info -->
+    <licenses>
+        <license>
+            <name>The MIT license</name>
+            <url>http://mit-license.org/</url>
+            <distribution>repo</distribution>
+            <comments>MIT</comments>
+        </license>
+    </licenses>
+
+    <organization>
+        <name>Rafał Wrzeszcz - Wrzasq.pl</name>
+        <url>https://wrzasq.pl/</url>
+    </organization>
+
+    <!-- personal info -->
+    <developers>
+        <developer>
+            <id>rafal.wrzeszcz</id>
+            <name>Rafał Wrzeszcz</name>
+            <email>rafal.wrzeszcz@wrzasq.pl</email>
+            <url>https://wrzasq.pl/</url>
+            <organization>Rafał Wrzeszcz - Wrzasq.pl</organization>
+            <organizationUrl>https://wrzasq.pl/</organizationUrl>
+            <roles>
+                <role>creator</role>
+                <role>owner</role>
+                <role>manager</role>
+                <role>architect</role>
+                <role>developer</role>
+            </roles>
+            <timezone>+1</timezone>
+            <properties>
+                <picUrl>https://www.gravatar.com/avatar/412a39726c1c9c96965d9db8f8c6787a.png</picUrl>
+            </properties>
+        </developer>
+    </developers>
+
+    <!-- development handling -->
+    <issueManagement>
+        <system>GitHub</system>
+        <url>https://github.com/rafalwrzeszcz-wrzasqpl/pl.wrzasq.cform/issues</url>
+    </issueManagement>
+
+    <ciManagement>
+        <system>Travis CI</system>
+        <url>https://travis-ci.org/rafalwrzeszcz-wrzasqpl/pl.wrzasq.cform</url>
+    </ciManagement>
+
+    <scm>
+        <connection>scm:git:https://github.com/rafalwrzeszcz-wrzasqpl/pl.wrzasq.cform.git</connection>
+        <developerConnection>scm:git:git@github.com:rafalwrzeszcz-wrzasqpl/pl.wrzasq.cform.git</developerConnection>
+        <url>https://github.com/rafalwrzeszcz-wrzasqpl/pl.wrzasq.cform</url>
+    </scm>
+
+    <!-- distribution handling -->
+    <distributionManagement>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <site>
+            <id>github</id>
+            <url>git:ssh://git@github.com/rafalwrzeszcz-wrzasqpl/pl.wrzasq.cform.git?gh-pages#</url>
+        </site>
+    </distributionManagement>
+
+    <!-- build profiles -->
+    <profiles>
+        <profile>
+            <id>deploy</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-scm-plugin</artifactId>
+                        <inherited>false</inherited>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+    <!-- components of WrzasqPl-CForm project -->
+    <modules>
+    </modules>
+</project>
