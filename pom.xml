@@ -21,7 +21,7 @@
     <parent>
         <groupId>pl.wrzasq.parent</groupId>
         <artifactId>parent-opensource</artifactId>
-        <version>1.2.0</version>
+        <version>1.2.3</version>
     </parent>
 
     <!-- project meta info -->
@@ -75,8 +75,8 @@
     </issueManagement>
 
     <ciManagement>
-        <system>Travis CI</system>
-        <url>https://travis-ci.org/rafalwrzeszcz-wrzasqpl/pl.wrzasq.cform</url>
+        <system>GitHub Actions</system>
+        <url>https://github.com/rafalwrzeszcz-wrzasqpl/pl.wrzasq.cform/actions</url>
     </ciManagement>
 
     <scm>
@@ -97,7 +97,7 @@
         </snapshotRepository>
         <site>
             <id>github</id>
-            <url>git:ssh://git@github.com/rafalwrzeszcz-wrzasqpl/pl.wrzasq.cform.git?gh-pages#</url>
+            <url>git:https://github.com/rafalwrzeszcz-wrzasqpl/pl.wrzasq.cform.git?gh-pages#</url>
         </site>
     </distributionManagement>
 

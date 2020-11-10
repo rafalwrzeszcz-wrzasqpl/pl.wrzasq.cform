@@ -17,6 +17,5 @@
 # project builds
 /**/target
 
-# Travis CI files
-/.travis/gpg_key
-/.travis/id_rsa 
+# GitHub Actions files
+/.github/gpg_key

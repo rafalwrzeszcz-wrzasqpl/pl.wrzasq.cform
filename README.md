@@ -10,7 +10,7 @@
 **WrzasqPl-CForm** is a set of serverless applications that aim to extend
 [CloudFormation](https://aws.amazon.com/cloudformation/) capabilities.
 
-[![Build Status](https://travis-ci.com/rafalwrzeszcz-wrzasqpl/pl.wrzasq.cform.svg)](https://travis-ci.com/rafalwrzeszcz-wrzasqpl/pl.wrzasq.cform)
+[![Build Status](https://github.com/rafalwrzeszcz-wrzasqpl/pl.wrzasq.cform/workflows/build/badge.svg)](https://github.com/rafalwrzeszcz-wrzasqpl/pl.wrzasq.cform/actions)
 [![Coverage Status](https://coveralls.io/repos/github/rafalwrzeszcz-wrzasqpl/pl.wrzasq.cform/badge.svg)](https://coveralls.io/github/rafalwrzeszcz-wrzasqpl/pl.wrzasq.cform)
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/rafalwrzeszcz-wrzasqpl/pl.wrzasq.cform)
 
