@@ -2,7 +2,7 @@
 # This file is part of the pl.wrzasq.cform.
 #
 # @license http://mit-license.org/ The MIT license
-# @copyright 2020 © by Rafał Wrzeszcz - Wrzasq.pl.
+# @copyright 2020 - 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
 ##
 
 # Eclipse IDE files
@@ -16,7 +16,3 @@
 
 # project builds
 /**/target
-
-# Travis CI files
-/.travis/gpg_key
-/.travis/id_rsa

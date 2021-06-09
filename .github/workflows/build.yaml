@@ -1,0 +1,128 @@
+##
+# This file is part of the pl.wrzasq.cform.
+#
+# @license http://mit-license.org/ The MIT license
+# @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+##
+
+on:
+    push:
+        tags-ignore: "**"
+        branches: "**"
+    pull_request:
+        branches: "**"
+    schedule:
+        -
+            cron: "0 3 * * 0"
+
+jobs:
+    build:
+        if: "!contains(github.event.head_commit.message, '[skip ci]') || (github.event_name == 'schedule')"
+        runs-on: "ubuntu-20.04"
+        steps:
+            -
+                uses: "actions/checkout@v2.3.4"
+            -
+                uses: "ayltai/setup-graalvm@v1"
+                with:
+                    java-version: "11"
+                    graalvm-version: "21.1.0"
+            -
+                uses: "actions/cache@v2.1.6"
+                with:
+                    path: "~/.m2/repository/"
+                    key: "${{ runner.os }}-m2-11"
+            -
+                run: "mvn -B -e verify site"
+
+    release:
+        if: "(github.event_name == 'push') && (github.event.ref == 'refs/heads/master')"
+        runs-on: "ubuntu-20.04"
+        needs: "build"
+        steps:
+            # workspace preparation
+            -
+                uses: "actions/checkout@v2.3.4"
+            -
+                uses: "ayltai/setup-graalvm@v1"
+                with:
+                    java-version: "11"
+                    graalvm-version: "21.1.0"
+                    native-image: true
+            -
+                uses: "crazy-max/ghaction-import-gpg@v3.1.0"
+                with:
+                    gpg-private-key: "${{ secrets.GPG_PRIVATE_KEY }}"
+                    passphrase: "${{ secrets.GPG_PASSPHRASE }}"
+            -
+                uses: "actions/cache@v2.1.6"
+                with:
+                    path: "~/.m2/repository/"
+                    key: "${{ runner.os }}-m2-11"
+            # Git setup
+            -
+                run: |
+                    git config user.name "GitHub Actions"
+                    git config user.email "office@wrzasq.pl"
+            # first make current version release
+            -
+                run: "mvn -B versions:set versions:commit -DremoveSnapshot=true"
+            -
+                run: |
+                    git add -u
+                    git commit -m "[skip ci] Automated release release."
+            # perform a release
+            -
+                run: "mvn -B -e clean deploy site -P deploy --settings .github/settings.xml"
+                env:
+                    GITHUB_ACTOR: "${{ secrets.GITHUB_ACTOR }}"
+                    GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+                    OSSRH_USERNAME: "${{ secrets.OSSRH_USERNAME }}"
+                    OSSRH_PASSWORD: "${{ secrets.OSSRH_PASSWORD }}"
+                    GPG_PASSPHRASE: "${{ secrets.GPG_PASSPHRASE }}"
+            -
+                uses: "crazy-max/ghaction-upx@v1.4.0"
+                with:
+                    version: "v3.96"
+                    files: "*/target/*.bin"
+            # we tried using papeloto/action-zip but it's important to build particular structure and keep executable
+            # flags so we need to operate on the shell level - we need to build two-level nesting of .zip packages
+            -
+                run: |
+                    zip -j cform-resource-aws-organization/target/cform-resource-aws-organization.zip cform-resource-aws-organization/bootstrap cform-resource-aws-organization/target/cform-resource-aws-organization.bin
+                    zip -j cform-resource-aws-organization/target/wrzasqpl-aws-organization.zip cform-resource-aws-organization/.rpdk-config cform-resource-aws-organization/src/main/resources/schema.json cform-resource-aws-organization/target/cform-resource-aws-organization.zip
+            # deploy site as GitHub Pages - we previously had it integrated with Maven build in `site-deploy` phase
+            # but net.trajano.wagon:wagon-git has a lot of problems with handling newer SSH connection protocols
+            # and official GitHub Maven Pages plugin uses low-level Git API and exceeds rate limit easily
+            -
+                run: |
+                    for site in */target/site ; do
+                        cp -r $site target/site/$(echo $site | cut -d / -f 1);
+                    done
+            -
+                uses: "peaceiris/actions-gh-pages@v3.7.3"
+                with:
+                    github_token: "${{ secrets.GITHUB_TOKEN }}"
+                    publish_dir: "./target/site/"
+            # now create a new version commit
+            -
+                run: "mvn -B build-helper:parse-version versions:set versions:commit -DnewVersion=\"\\${semver.majorVersion}.\\${semver.minorVersion}.\\${semver.nextIncrementalVersion}-SNAPSHOT\""
+            -
+                run: |
+                    git add -u
+                    git commit -m "[skip ci] New version bump."
+            -
+                uses: "ad-m/github-push-action@v0.6.0"
+                with:
+                    github_token: "${{ secrets.GITHUB_TOKEN }}"
+                    branch: "${{ github.ref }}"
+            -
+                id: "tag"
+                run: "echo ::set-output name=ref::$(git describe --abbrev=0)"
+            -
+                uses: "ncipollo/release-action@v1.8.6"
+                with:
+                    tag: "${{ steps.tag.outputs.ref }}"
+                    body: "${{ github.event.head_commit.message }}"
+                    token: "${{ secrets.GITHUB_TOKEN }}"
+                    artifacts: "cform-resource-aws-organization/target/wrzasqpl-aws-organization.zip,*/target/*.jar"

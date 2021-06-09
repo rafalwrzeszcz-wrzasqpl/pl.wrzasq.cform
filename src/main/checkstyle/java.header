@@ -1,8 +1,0 @@
-^/\*$
-^ \* This file is part of the pl\.wrzasq\.cform\.$
-^ \*$
-^ \* @license http://mit-license\.org/ The MIT license$
-^ \* @copyright \d{4}[0-9, -]* © by Rafał Wrzeszcz - Wrzasq\.pl\.$
-^ \*/$
-
-^package pl\.wrzasq\.cform(\..+)?;$
