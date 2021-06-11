@@ -49,7 +49,7 @@ import software.amazon.cloudformation.proxy.StdCallbackContext
 
     protected abstract val updateHandler: ActionHandler&lt;ResourceType&gt;
 
-    protected abstract fun getRequestTypeReference(): TypeReference&lt;HandlerRequest&lt;ResourceType?, StdCallbackContext?&gt;&gt;
+    protected abstract fun getRequestTypeReference(): TypeReference&lt;HandlerRequest&lt;ResourceType?, StdCallbackContext&gt;&gt;
 
     protected abstract fun getResourceTypeReference(): TypeReference&lt;ResourceType?&gt;
 

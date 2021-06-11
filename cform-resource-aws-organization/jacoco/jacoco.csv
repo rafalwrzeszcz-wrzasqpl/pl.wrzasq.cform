@@ -1,0 +1,17 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+WrzasqPl::AWS::Organization resource,pl.wrzasq.cform.resource.aws.organization.config,LambdaResourcesFactory.listHandler.new Function0() {...},4,0,0,0,1,0,1,0,1,0
+WrzasqPl::AWS::Organization resource,pl.wrzasq.cform.resource.aws.organization.config,LambdaResourcesFactory.createHandler.new Function0() {...},11,0,0,0,1,0,1,0,1,0
+WrzasqPl::AWS::Organization resource,pl.wrzasq.cform.resource.aws.organization.config,LambdaResourcesFactory.updateHandler.new Function0() {...},6,0,0,0,1,0,1,0,1,0
+WrzasqPl::AWS::Organization resource,pl.wrzasq.cform.resource.aws.organization.config,LambdaResourcesFactory.readHandler.new Function0() {...},7,0,0,0,1,0,1,0,1,0
+WrzasqPl::AWS::Organization resource,pl.wrzasq.cform.resource.aws.organization.config,LambdaResourcesFactory,117,0,0,0,13,0,11,0,11,0
+WrzasqPl::AWS::Organization resource,pl.wrzasq.cform.resource.aws.organization.config,LambdaResourcesFactory.getResourceTypeReference.new TypeReference() {...},3,0,0,0,1,0,1,0,1,0
+WrzasqPl::AWS::Organization resource,pl.wrzasq.cform.resource.aws.organization.config,LambdaResourcesFactory.deleteHandler.new Function0() {...},7,0,0,0,1,0,1,0,1,0
+WrzasqPl::AWS::Organization resource,pl.wrzasq.cform.resource.aws.organization.config,LambdaResourcesFactory.getRequestTypeReference.new TypeReference() {...},3,0,0,0,1,0,1,0,1,0
+WrzasqPl::AWS::Organization resource,pl.wrzasq.cform.resource.aws.organization.config,LambdaResourcesFactory.Companion,17,0,0,0,3,0,1,0,1,0
+WrzasqPl::AWS::Organization resource,pl.wrzasq.cform.resource.aws.organization.action,ReadHandler,0,183,0,2,0,25,0,6,0,5
+WrzasqPl::AWS::Organization resource,pl.wrzasq.cform.resource.aws.organization.action,CreateHandler,0,255,0,4,0,44,0,10,0,8
+WrzasqPl::AWS::Organization resource,pl.wrzasq.cform.resource.aws.organization.action,ListHandler,0,35,0,0,0,7,0,2,0,2
+WrzasqPl::AWS::Organization resource,pl.wrzasq.cform.resource.aws.organization.action,DeleteHandler,0,245,0,4,0,46,0,9,0,7
+WrzasqPl::AWS::Organization resource,pl.wrzasq.cform.resource.aws.organization.model,ResourceModel.Companion,4,2,0,0,2,1,2,1,2,1
+WrzasqPl::AWS::Organization resource,pl.wrzasq.cform.resource.aws.organization.model,ResourceModelKt,0,90,0,0,0,14,0,5,0,5
+WrzasqPl::AWS::Organization resource,pl.wrzasq.cform.resource.aws.organization.model,ResourceModel,55,39,8,0,10,8,7,9,3,9

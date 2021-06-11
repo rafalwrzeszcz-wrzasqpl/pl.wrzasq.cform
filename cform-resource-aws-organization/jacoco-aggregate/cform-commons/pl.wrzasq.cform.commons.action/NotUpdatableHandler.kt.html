@@ -19,17 +19,17 @@ import software.amazon.cloudformation.proxy.StdCallbackContext
  *
  * @param typeName Name of the resource type.
  */
-<span class="nc" id="L22">class NotUpdatableHandler&lt;ResourceModel&gt;(</span>
-<span class="nc" id="L23">    private val typeName: String</span>
+<span class="fc" id="L22">class NotUpdatableHandler&lt;ResourceModel&gt;(</span>
+<span class="fc" id="L23">    private val typeName: String</span>
 ) : ActionHandler&lt;ResourceModel&gt; {
     override fun handleRequest(
         proxy: AmazonWebServicesClientProxy,
         request: ResourceHandlerRequest&lt;ResourceModel?&gt;,
         callbackContext: StdCallbackContext,
         logger: Logger
-<span class="nc" id="L30">    ): ProgressEvent&lt;ResourceModel?, StdCallbackContext?&gt; = throw CfnNotUpdatableException(</span>
-<span class="nc" id="L31">        typeName,</span>
-<span class="nc" id="L32">        request.logicalResourceIdentifier</span>
+<span class="fc" id="L30">    ): ProgressEvent&lt;ResourceModel?, StdCallbackContext&gt; = throw CfnNotUpdatableException(</span>
+<span class="fc" id="L31">        typeName,</span>
+<span class="fc" id="L32">        request.logicalResourceIdentifier</span>
     )
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

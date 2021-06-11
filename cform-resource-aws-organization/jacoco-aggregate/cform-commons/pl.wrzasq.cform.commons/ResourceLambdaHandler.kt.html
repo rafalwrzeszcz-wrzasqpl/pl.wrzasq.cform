@@ -25,30 +25,30 @@ import software.amazon.cloudformation.proxy.StdCallbackContext
  * @param configuration Handler configuration.
  * @param handlers Mapping of action handlers.
  */
-<span class="nc" id="L28">abstract class ResourceLambdaHandler&lt;ResourceType&gt;(</span>
-<span class="nc" id="L29">    private val configuration: Configuration,</span>
-<span class="nc" id="L30">    private val handlers: Map&lt;Action, ActionHandler&lt;ResourceType&gt;&gt;</span>
-<span class="nc" id="L31">) : LambdaWrapper&lt;ResourceType?, StdCallbackContext?&gt;() {</span>
-<span class="nc" id="L32">    override fun provideResourceSchemaJSONObject() = configuration.resourceSchema</span>
+<span class="fc" id="L28">abstract class ResourceLambdaHandler&lt;ResourceType&gt;(</span>
+<span class="fc" id="L29">    private val configuration: Configuration,</span>
+<span class="fc" id="L30">    private val handlers: Map&lt;Action, ActionHandler&lt;ResourceType&gt;&gt;</span>
+<span class="fc" id="L31">) : LambdaWrapper&lt;ResourceType?, StdCallbackContext&gt;() {</span>
+<span class="fc" id="L32">    override fun provideResourceSchemaJSONObject() = configuration.resourceSchema</span>
 
-<span class="nc" id="L34">    override fun provideResourceDefinedTags(resourceModel: ResourceType?) = null</span>
+<span class="fc" id="L34">    override fun provideResourceDefinedTags(resourceModel: ResourceType?) = null</span>
 
     override fun transform(
-        request: HandlerRequest&lt;ResourceType?, StdCallbackContext?&gt;
+        request: HandlerRequest&lt;ResourceType?, StdCallbackContext&gt;
     ): ResourceHandlerRequest&lt;ResourceType?&gt; {
-<span class="nc" id="L39">        val requestData = request.requestData</span>
-<span class="nc" id="L40">        return ResourceHandlerRequest.builder&lt;ResourceType?&gt;()</span>
-<span class="nc" id="L41">            .clientRequestToken(request.bearerToken)</span>
-<span class="nc" id="L42">            .desiredResourceState(requestData.resourceProperties)</span>
-<span class="nc" id="L43">            .previousResourceState(requestData.previousResourceProperties)</span>
-<span class="nc" id="L44">            .desiredResourceTags(getDesiredResourceTags(request))</span>
-<span class="nc" id="L45">            .systemTags(request.requestData.systemTags)</span>
-<span class="nc" id="L46">            .awsAccountId(request.awsAccountId)</span>
-<span class="nc" id="L47">            .logicalResourceIdentifier(request.requestData.logicalResourceId)</span>
-<span class="nc" id="L48">            .nextToken(request.nextToken)</span>
-<span class="nc" id="L49">            .region(request.region)</span>
-<span class="nc" id="L50">            .awsPartition(PartitionMetadata.of(Region.of(request.region)).id())</span>
-<span class="nc" id="L51">            .build()</span>
+<span class="fc" id="L39">        val requestData = request.requestData</span>
+<span class="fc" id="L40">        return ResourceHandlerRequest.builder&lt;ResourceType?&gt;()</span>
+<span class="fc" id="L41">            .clientRequestToken(request.bearerToken)</span>
+<span class="fc" id="L42">            .desiredResourceState(requestData.resourceProperties)</span>
+<span class="fc" id="L43">            .previousResourceState(requestData.previousResourceProperties)</span>
+<span class="fc" id="L44">            .desiredResourceTags(getDesiredResourceTags(request))</span>
+<span class="fc" id="L45">            .systemTags(request.requestData.systemTags)</span>
+<span class="fc" id="L46">            .awsAccountId(request.awsAccountId)</span>
+<span class="fc" id="L47">            .logicalResourceIdentifier(request.requestData.logicalResourceId)</span>
+<span class="fc" id="L48">            .nextToken(request.nextToken)</span>
+<span class="fc" id="L49">            .region(request.region)</span>
+<span class="fc" id="L50">            .awsPartition(PartitionMetadata.of(Region.of(request.region)).id())</span>
+<span class="fc" id="L51">            .build()</span>
     }
 
     override fun invokeHandler(
@@ -56,20 +56,20 @@ import software.amazon.cloudformation.proxy.StdCallbackContext
         request: ResourceHandlerRequest&lt;ResourceType?&gt;,
         action: Action?,
         callbackContext: StdCallbackContext?
-    ): ProgressEvent&lt;ResourceType?, StdCallbackContext?&gt; {
-<span class="nc bnc" id="L60" title="All 2 branches missed.">        requireNotNull(proxy)</span>
-<span class="nc" id="L61">        val actionName = action.toString()</span>
-<span class="nc bnc" id="L62" title="All 2 branches missed.">        val handler = handlers[action] ?: throw RuntimeException(&quot;Unknown action $actionName&quot;)</span>
-<span class="nc" id="L63">        loggerProxy.log(&quot;[$actionName] invoking handler…&quot;)</span>
+    ): ProgressEvent&lt;ResourceType?, StdCallbackContext&gt; {
+<span class="fc bfc" id="L60" title="All 2 branches covered.">        requireNotNull(proxy)</span>
+<span class="fc" id="L61">        val actionName = action.toString()</span>
+<span class="fc bfc" id="L62" title="All 2 branches covered.">        val handler = handlers[action] ?: throw RuntimeException(&quot;Unknown action $actionName&quot;)</span>
+<span class="fc" id="L63">        loggerProxy.log(&quot;[$actionName] invoking handler…&quot;)</span>
 
-<span class="nc" id="L65">        return handler.handleRequest(</span>
-<span class="nc" id="L66">            proxy,</span>
-<span class="nc" id="L67">            request,</span>
-<span class="nc bnc" id="L68" title="All 2 branches missed.">            callbackContext ?: StdCallbackContext(),</span>
-<span class="nc" id="L69">            loggerProxy</span>
-<span class="nc" id="L70">        ).also {</span>
-<span class="nc" id="L71">            loggerProxy.log(&quot;[$actionName] handler invoked&quot;)</span>
-<span class="nc" id="L72">        }</span>
+<span class="fc" id="L65">        return handler.handleRequest(</span>
+<span class="fc" id="L66">            proxy,</span>
+<span class="fc" id="L67">            request,</span>
+<span class="fc bfc" id="L68" title="All 2 branches covered.">            callbackContext ?: StdCallbackContext(),</span>
+<span class="fc" id="L69">            loggerProxy</span>
+<span class="fc" id="L70">        ).also {</span>
+<span class="fc" id="L71">            loggerProxy.log(&quot;[$actionName] handler invoked&quot;)</span>
+<span class="fc" id="L72">        }</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -7,5 +7,5 @@ WrzasqPl::AWS::Organization resource/cform-commons,pl.wrzasq.cform.commons.confi
 WrzasqPl::AWS::Organization resource/cform-commons,pl.wrzasq.cform.commons.config,LambdaConfiguration,36,0,0,0,4,0,4,0,4,0
 WrzasqPl::AWS::Organization resource/cform-commons,pl.wrzasq.cform.commons.config,LambdaConfiguration.resourceSchema.new Function0() {...},15,0,0,0,1,0,1,0,1,0
 WrzasqPl::AWS::Organization resource/cform-commons,pl.wrzasq.cform.commons.config,BaseLambdaResourcesFactory.objectMapper.new Function0() {...},3,0,0,0,1,0,1,0,1,0
-WrzasqPl::AWS::Organization resource/cform-commons,pl.wrzasq.cform.commons.action,NotUpdatableHandler,29,0,0,0,5,0,2,0,2,0
-WrzasqPl::AWS::Organization resource/cform-commons,pl.wrzasq.cform.commons,ResourceLambdaHandler,178,0,6,0,31,0,8,0,5,0
+WrzasqPl::AWS::Organization resource/cform-commons,pl.wrzasq.cform.commons.action,NotUpdatableHandler,0,29,0,0,0,5,0,2,0,2
+WrzasqPl::AWS::Organization resource/cform-commons,pl.wrzasq.cform.commons,ResourceLambdaHandler,0,178,0,6,0,31,0,8,0,5
