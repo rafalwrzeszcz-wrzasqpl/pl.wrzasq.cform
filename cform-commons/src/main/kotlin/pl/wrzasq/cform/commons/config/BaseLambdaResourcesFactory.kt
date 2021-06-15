@@ -37,27 +37,11 @@ abstract class BaseLambdaResourcesFactory<ResourceType> : BaseResourcesFactory<R
 
     private val objectMapper by lazy { ObjectMapperFactory.createObjectMapper() }
 
-    private val configuration by lazy { LambdaConfiguration() }
-
-    protected abstract val createHandler: ActionHandler<ResourceType>
-
-    protected abstract val deleteHandler: ActionHandler<ResourceType>
-
-    protected abstract val listHandler: ActionHandler<ResourceType>
-
-    protected abstract val readHandler: ActionHandler<ResourceType>
-
-    protected abstract val updateHandler: ActionHandler<ResourceType>
+    protected val configuration by lazy { LambdaConfiguration() }
 
     protected abstract fun getRequestTypeReference(): TypeReference<HandlerRequest<ResourceType?, StdCallbackContext>>
 
     protected abstract fun getResourceTypeReference(): TypeReference<ResourceType?>
 
-    private fun buildHandlers() = mapOf(
-        Action.CREATE to createHandler,
-        Action.READ to readHandler,
-        Action.UPDATE to updateHandler,
-        Action.DELETE to deleteHandler,
-        Action.LIST to listHandler
-    )
+    protected abstract fun buildHandlers(): Map<Action, ActionHandler<ResourceType>>
 }

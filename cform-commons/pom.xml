@@ -37,6 +37,7 @@
                 <configuration>
                     <excludes>
                         <exclude>pl/wrzasq/cform/commons/config/**/*.class</exclude>
+                        <exclude>pl/wrzasq/cform/commons/model/**/*.class</exclude>
                     </excludes>
                 </configuration>
             </plugin>
@@ -45,6 +46,12 @@
 
     <!-- project dependencies -->
     <dependencies>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>2.12.3</version>
+        </dependency>
+
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-core</artifactId>

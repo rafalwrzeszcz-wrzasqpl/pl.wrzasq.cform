@@ -12,7 +12,8 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
 import io.mockk.verify
-import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertSame
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
@@ -88,10 +89,10 @@ class CreateHandlerTest {
 
         val result = CreateHandler(factory, readHandler).handleRequest(proxy, request, callbackContext, logger)
 
-        Assertions.assertEquals(OperationStatus.SUCCESS, result.status)
-        Assertions.assertEquals(ID, result.resourceModel?.id)
-        Assertions.assertEquals(ARN, result.resourceModel?.arn)
-        Assertions.assertEquals(ROOT_ID, result.resourceModel?.rootId)
+        assertEquals(OperationStatus.SUCCESS, result.status)
+        assertEquals(ID, result.resourceModel?.id)
+        assertEquals(ARN, result.resourceModel?.arn)
+        assertEquals(ROOT_ID, result.resourceModel?.rootId)
     }
 
     @Test
@@ -156,7 +157,7 @@ class CreateHandlerTest {
 
         verify { readHandler wasNot called }
 
-        Assertions.assertEquals(OperationStatus.FAILED, result.status)
+        assertEquals(OperationStatus.FAILED, result.status)
 
         verify {
             proxyClient.injectCredentialsAndInvokeV2(
@@ -200,7 +201,7 @@ class CreateHandlerTest {
 
         val result = CreateHandler(factory, readHandler).handleRequest(proxy, request, callbackContext, logger)
 
-        Assertions.assertSame(event, result)
+        assertSame(event, result)
     }
 
     @Test

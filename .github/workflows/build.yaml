@@ -91,6 +91,8 @@ jobs:
                 run: |
                     zip -j cform-resource-aws-organization/target/cform-resource-aws-organization.zip cform-resource-aws-organization/bootstrap cform-resource-aws-organization/target/cform-resource-aws-organization.bin
                     zip -j cform-resource-aws-organization/target/wrzasqpl-aws-organization.zip cform-resource-aws-organization/.rpdk-config cform-resource-aws-organization/src/main/resources/schema.json cform-resource-aws-organization/target/cform-resource-aws-organization.zip
+                    zip -j cform-resource-aws-organizationalunit/target/cform-resource-aws-organizationalunit.zip cform-resource-aws-organizationalunit/bootstrap cform-resource-aws-organizationalunit/target/cform-resource-aws-organizationalunit.bin
+                    zip -j cform-resource-aws-organizationalunit/target/wrzasqpl-aws-organizationalunit.zip cform-resource-aws-organizationalunit/.rpdk-config cform-resource-aws-organizationalunit/src/main/resources/schema.json cform-resource-aws-organizationalunit/target/cform-resource-aws-organizationalunit.zip
             # deploy site as GitHub Pages - we previously had it integrated with Maven build in `site-deploy` phase
             # but net.trajano.wagon:wagon-git has a lot of problems with handling newer SSH connection protocols
             # and official GitHub Maven Pages plugin uses low-level Git API and exceeds rate limit easily
@@ -125,4 +127,4 @@ jobs:
                     tag: "${{ steps.tag.outputs.ref }}"
                     body: "${{ github.event.head_commit.message }}"
                     token: "${{ secrets.GITHUB_TOKEN }}"
-                    artifacts: "cform-resource-aws-organization/target/wrzasqpl-aws-organization.zip,*/target/*.jar"
+                    artifacts: "*/target/wrzasqpl-*.zip,*/target/*.jar"

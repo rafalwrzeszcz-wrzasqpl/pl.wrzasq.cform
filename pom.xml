@@ -120,5 +120,6 @@
     <modules>
         <module>cform-commons</module>
         <module>cform-resource-aws-organization</module>
+        <module>cform-resource-aws-organizationalunit</module>
     </modules>
 </project>

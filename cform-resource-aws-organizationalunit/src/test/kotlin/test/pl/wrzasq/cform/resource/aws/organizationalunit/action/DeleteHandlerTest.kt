@@ -5,7 +5,7 @@
  * @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
-package test.pl.wrzasq.cform.resource.aws.organization.action
+package test.pl.wrzasq.cform.resource.aws.organizationalunit.action
 
 import io.mockk.called
 import io.mockk.every
@@ -17,15 +17,15 @@ import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
-import pl.wrzasq.cform.resource.aws.organization.action.DeleteHandler
-import pl.wrzasq.cform.resource.aws.organization.config.ResourcesFactory
-import pl.wrzasq.cform.resource.aws.organization.model.ResourceModel
+import pl.wrzasq.cform.resource.aws.organizationalunit.action.DeleteHandler
+import pl.wrzasq.cform.resource.aws.organizationalunit.config.ResourcesFactory
+import pl.wrzasq.cform.resource.aws.organizationalunit.model.ResourceModel
 import software.amazon.awssdk.services.organizations.OrganizationsClient
-import software.amazon.awssdk.services.organizations.model.DeleteOrganizationRequest
-import software.amazon.awssdk.services.organizations.model.DeleteOrganizationResponse
-import software.amazon.awssdk.services.organizations.model.DescribeOrganizationRequest
-import software.amazon.awssdk.services.organizations.model.DescribeOrganizationResponse
-import software.amazon.awssdk.services.organizations.model.Organization
+import software.amazon.awssdk.services.organizations.model.DeleteOrganizationalUnitRequest
+import software.amazon.awssdk.services.organizations.model.DeleteOrganizationalUnitResponse
+import software.amazon.awssdk.services.organizations.model.DescribeOrganizationalUnitRequest
+import software.amazon.awssdk.services.organizations.model.DescribeOrganizationalUnitResponse
+import software.amazon.awssdk.services.organizations.model.OrganizationalUnit
 import software.amazon.cloudformation.exceptions.CfnGeneralServiceException
 import software.amazon.cloudformation.exceptions.CfnResourceConflictException
 import software.amazon.cloudformation.proxy.LoggerProxy
@@ -60,12 +60,12 @@ class DeleteHandlerTest {
 
         every {
             proxyClient.injectCredentialsAndInvokeV2(
-                ofType(DescribeOrganizationRequest::class),
-                any<Function<DescribeOrganizationRequest, DescribeOrganizationResponse>>()
+                ofType(DescribeOrganizationalUnitRequest::class),
+                any<Function<DescribeOrganizationalUnitRequest, DescribeOrganizationalUnitResponse>>()
             )
-        } returns DescribeOrganizationResponse.builder()
-            .organization(
-                Organization.builder()
+        } returns DescribeOrganizationalUnitResponse.builder()
+            .organizationalUnit(
+                OrganizationalUnit.builder()
                     .id(ID)
                     .arn(ARN)
                     .build()
@@ -74,11 +74,10 @@ class DeleteHandlerTest {
 
         every {
             proxyClient.injectCredentialsAndInvokeV2(
-                ofType(DeleteOrganizationRequest::class),
-                any<Function<DeleteOrganizationRequest, DeleteOrganizationResponse>>()
+                ofType(DeleteOrganizationalUnitRequest::class),
+                any<Function<DeleteOrganizationalUnitRequest, DeleteOrganizationalUnitResponse>>()
             )
-        } returns DeleteOrganizationResponse.builder()
-            .build()
+        } returns DeleteOrganizationalUnitResponse.builder().build()
 
         val result = DeleteHandler(factory).handleRequest(proxy, request, StdCallbackContext(), logger)
 
@@ -100,12 +99,12 @@ class DeleteHandlerTest {
 
         every {
             proxyClient.injectCredentialsAndInvokeV2(
-                ofType(DescribeOrganizationRequest::class),
-                any<Function<DescribeOrganizationRequest, DescribeOrganizationResponse>>()
+                ofType(DescribeOrganizationalUnitRequest::class),
+                any<Function<DescribeOrganizationalUnitRequest, DescribeOrganizationalUnitResponse>>()
             )
-        } returns DescribeOrganizationResponse.builder()
-            .organization(
-                Organization.builder()
+        } returns DescribeOrganizationalUnitResponse.builder()
+            .organizationalUnit(
+                OrganizationalUnit.builder()
                     .id(ID)
                     .arn(ARN)
                     .build()
@@ -118,8 +117,8 @@ class DeleteHandlerTest {
 
         verify {
             proxyClient.injectCredentialsAndInvokeV2(
-                ofType(DeleteOrganizationRequest::class),
-                any<Function<DeleteOrganizationRequest, DeleteOrganizationResponse>>()
+                ofType(DeleteOrganizationalUnitRequest::class),
+                any<Function<DeleteOrganizationalUnitRequest, DeleteOrganizationalUnitResponse>>()
             ) wasNot called
         }
     }
@@ -138,12 +137,12 @@ class DeleteHandlerTest {
 
         every {
             proxyClient.injectCredentialsAndInvokeV2(
-                ofType(DescribeOrganizationRequest::class),
-                any<Function<DescribeOrganizationRequest, DescribeOrganizationResponse>>()
+                ofType(DescribeOrganizationalUnitRequest::class),
+                any<Function<DescribeOrganizationalUnitRequest, DescribeOrganizationalUnitResponse>>()
             )
-        } returns DescribeOrganizationResponse.builder()
-            .organization(
-                Organization.builder()
+        } returns DescribeOrganizationalUnitResponse.builder()
+            .organizationalUnit(
+                OrganizationalUnit.builder()
                     .id(ID)
                     .arn(ARN)
                     .build()
@@ -152,8 +151,8 @@ class DeleteHandlerTest {
 
         every {
             proxyClient.injectCredentialsAndInvokeV2(
-                ofType(DeleteOrganizationRequest::class),
-                any<Function<DeleteOrganizationRequest, DeleteOrganizationResponse>>()
+                ofType(DeleteOrganizationalUnitRequest::class),
+                any<Function<DeleteOrganizationalUnitRequest, DeleteOrganizationalUnitResponse>>()
             )
         } throws exception
 

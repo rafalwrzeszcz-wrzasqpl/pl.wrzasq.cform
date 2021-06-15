@@ -31,7 +31,7 @@ abstract class ResourceLambdaHandler<ResourceType>(
 ) : LambdaWrapper<ResourceType?, StdCallbackContext>() {
     override fun provideResourceSchemaJSONObject() = configuration.resourceSchema
 
-    override fun provideResourceDefinedTags(resourceModel: ResourceType?) = null
+    override fun provideResourceDefinedTags(resourceModel: ResourceType?): Map<String, String>? = null
 
     override fun transform(
         request: HandlerRequest<ResourceType?, StdCallbackContext>

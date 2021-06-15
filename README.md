@@ -27,6 +27,10 @@ this source code.
 
 Manage AWS Organizations setup.
 
+### [WrzasqPl::AWS::OrganizationalUnit](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.cform/cform-resource-aws-organizationalunit/)
+
+Manage AWS Organizational Unit setup.
+
 # Resources
 
 -   [GitHub page with API documentation](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.cform)

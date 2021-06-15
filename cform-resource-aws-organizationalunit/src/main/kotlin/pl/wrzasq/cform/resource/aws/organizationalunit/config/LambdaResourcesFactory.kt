@@ -5,14 +5,18 @@
  * @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
-package pl.wrzasq.cform.resource.aws.organization.config
+package pl.wrzasq.cform.resource.aws.organizationalunit.config
 
 import com.fasterxml.jackson.core.type.TypeReference
+import pl.wrzasq.cform.commons.ResourceLambdaHandler
+import pl.wrzasq.cform.commons.action.ActionHandler
 import pl.wrzasq.cform.commons.config.BaseLambdaResourcesFactory
-import pl.wrzasq.cform.resource.aws.organization.action.CreateHandler
-import pl.wrzasq.cform.resource.aws.organization.action.DeleteHandler
-import pl.wrzasq.cform.resource.aws.organization.action.ReadHandler
-import pl.wrzasq.cform.resource.aws.organization.model.ResourceModel
+import pl.wrzasq.cform.commons.model.Tag
+import pl.wrzasq.cform.resource.aws.organizationalunit.action.CreateHandler
+import pl.wrzasq.cform.resource.aws.organizationalunit.action.DeleteHandler
+import pl.wrzasq.cform.resource.aws.organizationalunit.action.ReadHandler
+import pl.wrzasq.cform.resource.aws.organizationalunit.action.UpdateHandler
+import pl.wrzasq.cform.resource.aws.organizationalunit.model.ResourceModel
 import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.organizations.OrganizationsClient
 import software.amazon.cloudformation.Action
@@ -31,6 +35,25 @@ class LambdaResourcesFactory : ResourcesFactory, BaseLambdaResourcesFactory<Reso
 
     private val readHandler by lazy { ReadHandler(this) }
 
+    private val updateHandler: ActionHandler<ResourceModel> by lazy { UpdateHandler(this, readHandler) }
+
+    override val lambdaHandler by lazy {
+        // we can't have it as constructor arguments of ResourceLambdaHandler as these methods are called by super
+        // constructor before any of the child classes assignments occur
+        object : ResourceLambdaHandler<ResourceModel>(
+            configuration,
+            buildHandlers()
+        ) {
+            override fun provideResourceDefinedTags(resourceModel: ResourceModel?) = resourceModel
+                ?.tags
+                ?.associateBy(Tag::key, Tag::value)
+
+            override fun getTypeReference() = getRequestTypeReference()
+
+            override fun getModelTypeReference() = getResourceTypeReference()
+        }
+    }
+
     override fun getRequestTypeReference() =
         object : TypeReference<HandlerRequest<ResourceModel?, StdCallbackContext>>() {}
 
@@ -39,7 +62,8 @@ class LambdaResourcesFactory : ResourcesFactory, BaseLambdaResourcesFactory<Reso
     override fun buildHandlers() = mapOf(
         Action.CREATE to createHandler,
         Action.READ to readHandler,
-        Action.DELETE to deleteHandler
+        Action.DELETE to deleteHandler,
+        Action.UPDATE to updateHandler
     )
 
     override fun getClient(proxy: AmazonWebServicesClientProxy): ProxyClient<OrganizationsClient> = proxy.newProxy {

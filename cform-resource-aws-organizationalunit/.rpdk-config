@@ -1,0 +1,13 @@
+{
+    "artifact_type": "RESOURCE",
+    "typeName": "WrzasqPl::AWS::OrganizationalUnit",
+    "language": "java",
+    "runtime": "provided.al2",
+    "entrypoint": "main",
+    "testEntrypoint": "test",
+    "settings": {
+        "type_name": "WrzasqPl::AWS::OrganizationalUnit",
+        "artifact_type": "RESOURCE",
+        "protocolVersion": "2.0.0"
+    }
+}
