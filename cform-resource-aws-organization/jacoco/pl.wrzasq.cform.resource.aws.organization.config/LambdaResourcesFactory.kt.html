@@ -8,16 +8,14 @@
 package pl.wrzasq.cform.resource.aws.organization.config
 
 import com.fasterxml.jackson.core.type.TypeReference
-import pl.wrzasq.cform.commons.action.ActionHandler
-import pl.wrzasq.cform.commons.action.NotUpdatableHandler
 import pl.wrzasq.cform.commons.config.BaseLambdaResourcesFactory
 import pl.wrzasq.cform.resource.aws.organization.action.CreateHandler
 import pl.wrzasq.cform.resource.aws.organization.action.DeleteHandler
-import pl.wrzasq.cform.resource.aws.organization.action.ListHandler
 import pl.wrzasq.cform.resource.aws.organization.action.ReadHandler
 import pl.wrzasq.cform.resource.aws.organization.model.ResourceModel
 import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.organizations.OrganizationsClient
+import software.amazon.cloudformation.Action
 import software.amazon.cloudformation.proxy.AmazonWebServicesClientProxy
 import software.amazon.cloudformation.proxy.HandlerRequest
 import software.amazon.cloudformation.proxy.ProxyClient
@@ -26,21 +24,23 @@ import software.amazon.cloudformation.proxy.StdCallbackContext
 /**
  * Resources factory for AWS Lambda environment.
  */
-<span class="nc" id="L29">class LambdaResourcesFactory : ResourcesFactory, BaseLambdaResourcesFactory&lt;ResourceModel&gt;() {</span>
-<span class="nc" id="L30">    override val createHandler by lazy { CreateHandler(this, readHandler) }</span>
+<span class="nc" id="L27">class LambdaResourcesFactory : ResourcesFactory, BaseLambdaResourcesFactory&lt;ResourceModel&gt;() {</span>
+<span class="nc" id="L28">    private val createHandler by lazy { CreateHandler(this, readHandler) }</span>
 
-<span class="nc" id="L32">    override val deleteHandler by lazy { DeleteHandler(this) }</span>
+<span class="nc" id="L30">    private val deleteHandler by lazy { DeleteHandler(this) }</span>
 
-<span class="nc" id="L34">    override val listHandler by lazy { ListHandler() }</span>
-
-<span class="nc" id="L36">    override val readHandler by lazy { ReadHandler(this) }</span>
-
-<span class="nc" id="L38">    override val updateHandler: ActionHandler&lt;ResourceModel&gt; by lazy { NotUpdatableHandler(ResourceModel.TYPE_NAME) }</span>
+<span class="nc" id="L32">    private val readHandler by lazy { ReadHandler(this) }</span>
 
     override fun getRequestTypeReference() =
-<span class="nc" id="L41">        object : TypeReference&lt;HandlerRequest&lt;ResourceModel?, StdCallbackContext&gt;&gt;() {}</span>
+<span class="nc" id="L35">        object : TypeReference&lt;HandlerRequest&lt;ResourceModel?, StdCallbackContext&gt;&gt;() {}</span>
 
-<span class="nc" id="L43">    override fun getResourceTypeReference() = object : TypeReference&lt;ResourceModel?&gt;() {}</span>
+<span class="nc" id="L37">    override fun getResourceTypeReference() = object : TypeReference&lt;ResourceModel?&gt;() {}</span>
+
+<span class="nc" id="L39">    override fun buildHandlers() = mapOf(</span>
+<span class="nc" id="L40">        Action.CREATE to createHandler,</span>
+<span class="nc" id="L41">        Action.READ to readHandler,</span>
+<span class="nc" id="L42">        Action.DELETE to deleteHandler</span>
+<span class="nc" id="L43">    )</span>
 
 <span class="nc" id="L45">    override fun getClient(proxy: AmazonWebServicesClientProxy): ProxyClient&lt;OrganizationsClient&gt; = proxy.newProxy {</span>
 <span class="nc" id="L46">        OrganizationsClient.builder()</span>

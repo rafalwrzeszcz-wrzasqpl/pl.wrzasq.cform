@@ -37,28 +37,12 @@ import software.amazon.cloudformation.proxy.StdCallbackContext
 
 <span class="nc" id="L38">    private val objectMapper by lazy { ObjectMapperFactory.createObjectMapper() }</span>
 
-<span class="nc" id="L40">    private val configuration by lazy { LambdaConfiguration() }</span>
-
-    protected abstract val createHandler: ActionHandler&lt;ResourceType&gt;
-
-    protected abstract val deleteHandler: ActionHandler&lt;ResourceType&gt;
-
-    protected abstract val listHandler: ActionHandler&lt;ResourceType&gt;
-
-    protected abstract val readHandler: ActionHandler&lt;ResourceType&gt;
-
-    protected abstract val updateHandler: ActionHandler&lt;ResourceType&gt;
+<span class="nc" id="L40">    protected val configuration by lazy { LambdaConfiguration() }</span>
 
     protected abstract fun getRequestTypeReference(): TypeReference&lt;HandlerRequest&lt;ResourceType?, StdCallbackContext&gt;&gt;
 
     protected abstract fun getResourceTypeReference(): TypeReference&lt;ResourceType?&gt;
 
-<span class="nc" id="L56">    private fun buildHandlers() = mapOf(</span>
-<span class="nc" id="L57">        Action.CREATE to createHandler,</span>
-<span class="nc" id="L58">        Action.READ to readHandler,</span>
-<span class="nc" id="L59">        Action.UPDATE to updateHandler,</span>
-<span class="nc" id="L60">        Action.DELETE to deleteHandler,</span>
-<span class="nc" id="L61">        Action.LIST to listHandler</span>
-<span class="nc" id="L62">    )</span>
+    protected abstract fun buildHandlers(): Map&lt;Action, ActionHandler&lt;ResourceType&gt;&gt;
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

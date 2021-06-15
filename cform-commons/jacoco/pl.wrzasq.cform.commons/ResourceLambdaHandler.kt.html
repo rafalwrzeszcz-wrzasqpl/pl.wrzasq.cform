@@ -31,7 +31,7 @@ import software.amazon.cloudformation.proxy.StdCallbackContext
 <span class="fc" id="L31">) : LambdaWrapper&lt;ResourceType?, StdCallbackContext&gt;() {</span>
 <span class="fc" id="L32">    override fun provideResourceSchemaJSONObject() = configuration.resourceSchema</span>
 
-<span class="fc" id="L34">    override fun provideResourceDefinedTags(resourceModel: ResourceType?) = null</span>
+<span class="fc" id="L34">    override fun provideResourceDefinedTags(resourceModel: ResourceType?): Map&lt;String, String&gt;? = null</span>
 
     override fun transform(
         request: HandlerRequest&lt;ResourceType?, StdCallbackContext&gt;
