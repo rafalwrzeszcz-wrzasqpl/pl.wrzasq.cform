@@ -15,7 +15,6 @@ Resources:
         Type: "WrzasqPl::AWS::Organization"
         Properties:
             FeatureSet: "ALL"
-
 ```
 
 # Properties

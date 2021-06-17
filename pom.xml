@@ -119,6 +119,8 @@
     <!-- components of WrzasqPl-CForm project -->
     <modules>
         <module>cform-commons</module>
+        <module>cform-data-appsync-graphqlapi</module>
+        <module>cform-data-cognito-domain</module>
         <module>cform-resource-aws-organization</module>
         <module>cform-resource-aws-organizationalunit</module>
     </modules>

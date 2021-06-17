@@ -31,6 +31,16 @@ Manage AWS Organizations setup.
 
 Manage AWS Organizational Unit setup.
 
+## Data providers
+
+### [WrzasqPl::AppSync::GraphQlApiData](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.cform/cform-data-appsync-graphqlapi/)
+
+Reads AppSync GraphQl endpoint information.
+
+### [WrzasqPl::Cognito::DomainData](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.cform/cform-data-cognito-domain/)
+
+Reads Cognito custom domain information.
+
 # Resources
 
 -   [GitHub page with API documentation](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.cform)
