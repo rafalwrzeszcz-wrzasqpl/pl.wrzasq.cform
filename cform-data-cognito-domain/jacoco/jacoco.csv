@@ -1,0 +1,14 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+WrzasqPl::Cognito::Domain data provider,pl.wrzasq.cform.data.cognito.domain.config,LambdaResourcesFactory.deleteHandler.new Function0() {...},4,0,0,0,1,0,1,0,1,0
+WrzasqPl::Cognito::Domain data provider,pl.wrzasq.cform.data.cognito.domain.config,LambdaResourcesFactory.createHandler.new Function0() {...},8,0,0,0,1,0,1,0,1,0
+WrzasqPl::Cognito::Domain data provider,pl.wrzasq.cform.data.cognito.domain.config,LambdaResourcesFactory.getRequestTypeReference.new TypeReference() {...},3,0,0,0,1,0,1,0,1,0
+WrzasqPl::Cognito::Domain data provider,pl.wrzasq.cform.data.cognito.domain.config,LambdaResourcesFactory.getResourceTypeReference.new TypeReference() {...},3,0,0,0,1,0,1,0,1,0
+WrzasqPl::Cognito::Domain data provider,pl.wrzasq.cform.data.cognito.domain.config,LambdaResourcesFactory.Companion,17,0,0,0,3,0,1,0,1,0
+WrzasqPl::Cognito::Domain data provider,pl.wrzasq.cform.data.cognito.domain.config,LambdaResourcesFactory,110,0,0,0,12,0,10,0,10,0
+WrzasqPl::Cognito::Domain data provider,pl.wrzasq.cform.data.cognito.domain.config,LambdaResourcesFactory.readHandler.new Function0() {...},7,0,0,0,1,0,1,0,1,0
+WrzasqPl::Cognito::Domain data provider,pl.wrzasq.cform.data.cognito.domain.model,ResourceModel.Companion,2,2,0,0,1,1,1,1,1,1
+WrzasqPl::Cognito::Domain data provider,pl.wrzasq.cform.data.cognito.domain.model,ResourceModel,23,27,4,0,5,5,4,6,2,6
+WrzasqPl::Cognito::Domain data provider,pl.wrzasq.cform.data.cognito.domain.model,ResourceModelKt,0,43,0,0,0,7,0,2,0,2
+WrzasqPl::Cognito::Domain data provider,pl.wrzasq.cform.data.cognito.domain.action,ReadHandler,0,131,0,2,0,23,0,5,0,4
+WrzasqPl::Cognito::Domain data provider,pl.wrzasq.cform.data.cognito.domain.action,DeleteHandler,0,23,0,0,0,2,0,2,0,2
+WrzasqPl::Cognito::Domain data provider,pl.wrzasq.cform.data.cognito.domain.action,CreateHandler,0,29,0,0,0,3,0,2,0,2

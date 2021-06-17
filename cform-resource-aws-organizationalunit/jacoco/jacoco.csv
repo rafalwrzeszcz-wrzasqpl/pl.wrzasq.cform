@@ -7,8 +7,8 @@ WrzasqPl::AWS::Organization resource,pl.wrzasq.cform.resource.aws.organizational
 WrzasqPl::AWS::Organization resource,pl.wrzasq.cform.resource.aws.organizationalunit.config,LambdaResourcesFactory.deleteHandler.new Function0() {...},7,0,0,0,1,0,1,0,1,0
 WrzasqPl::AWS::Organization resource,pl.wrzasq.cform.resource.aws.organizationalunit.config,LambdaResourcesFactory.getRequestTypeReference.new TypeReference() {...},3,0,0,0,1,0,1,0,1,0
 WrzasqPl::AWS::Organization resource,pl.wrzasq.cform.resource.aws.organizationalunit.config,LambdaResourcesFactory.lambdaHandler.new Function0() {...},16,0,0,0,3,0,1,0,1,0
-WrzasqPl::AWS::Organization resource,pl.wrzasq.cform.resource.aws.organizationalunit.config,LambdaResourcesFactory.readHandler.new Function0() {...},7,0,0,0,1,0,1,0,1,0
 WrzasqPl::AWS::Organization resource,pl.wrzasq.cform.resource.aws.organizationalunit.config,LambdaResourcesFactory.Companion,17,0,0,0,3,0,1,0,1,0
+WrzasqPl::AWS::Organization resource,pl.wrzasq.cform.resource.aws.organizationalunit.config,LambdaResourcesFactory.readHandler.new Function0() {...},7,0,0,0,1,0,1,0,1,0
 WrzasqPl::AWS::Organization resource,pl.wrzasq.cform.resource.aws.organizationalunit.model,ResourceModelKt,0,188,0,0,0,31,0,7,0,7
 WrzasqPl::AWS::Organization resource,pl.wrzasq.cform.resource.aws.organizationalunit.model,ResourceModel.Companion,4,2,0,0,2,1,2,1,2,1
 WrzasqPl::AWS::Organization resource,pl.wrzasq.cform.resource.aws.organizationalunit.model,ResourceModel,51,50,8,0,10,9,6,12,2,12
