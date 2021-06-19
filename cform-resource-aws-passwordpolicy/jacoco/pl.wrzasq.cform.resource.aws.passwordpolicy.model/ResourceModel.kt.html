@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ResourceModel.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">WrzasqPl::AWS::PasswordPolicy resource</a> &gt; <a href="index.source.html" class="el_package">pl.wrzasq.cform.resource.aws.passwordpolicy.model</a> &gt; <span class="el_source">ResourceModel.kt</span></div><h1>ResourceModel.kt</h1><pre class="source lang-java linenums">/**
+ * This file is part of the pl.wrzasq.cform.
+ *
+ * @license http://mit-license.org/ The MIT license
+ * @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+ */
+
+package pl.wrzasq.cform.resource.aws.passwordpolicy.model
+
+import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonProperty
+import org.json.JSONObject
+import software.amazon.awssdk.services.iam.model.DeleteAccountPasswordPolicyRequest
+import software.amazon.awssdk.services.iam.model.GetAccountPasswordPolicyRequest
+import software.amazon.awssdk.services.iam.model.GetAccountPasswordPolicyResponse
+import software.amazon.awssdk.services.iam.model.UpdateAccountPasswordPolicyRequest
+
+/**
+ * Account password policy resource description.
+ */
+<span class="fc" id="L21">class ResourceModel {</span>
+    /**
+     * Physical resource identifier.
+     */
+    @JsonProperty(&quot;PhysicalId&quot;)
+<span class="fc" id="L26">    var physicalId: String? = null</span>
+
+    /**
+     * Minimum user password.
+     */
+    @JsonProperty(&quot;MinimumPasswordLength&quot;)
+<span class="fc" id="L32">    var minimumPasswordLength: Int? = null</span>
+
+    /**
+     * Lowercase characters requirement.
+     */
+    @JsonProperty(&quot;RequireLowercaseCharacters&quot;)
+<span class="fc" id="L38">    var requireLowercaseCharacters: Boolean? = null</span>
+
+    /**
+     * Uppercase characters requirement.
+     */
+    @JsonProperty(&quot;RequireUppercaseCharacters&quot;)
+<span class="fc" id="L44">    var requireUppercaseCharacters: Boolean? = null</span>
+
+    /**
+     * Numeric characters requirement.
+     */
+    @JsonProperty(&quot;RequireNumbers&quot;)
+<span class="fc" id="L50">    var requireNumbers: Boolean? = null</span>
+
+    /**
+     * Non-alphanumeric characters requirement.
+     */
+    @JsonProperty(&quot;RequireSymbols&quot;)
+<span class="fc" id="L56">    var requireSymbols: Boolean? = null</span>
+
+    /**
+     * Allowing users to change their passwords.
+     */
+    @JsonProperty(&quot;AllowUsersToChangePassword&quot;)
+<span class="fc" id="L62">    var allowUsersToChangePassword: Boolean? = null</span>
+
+    /**
+     * Number of previous password that are checked.
+     */
+    @JsonProperty(&quot;PasswordReusePrevention&quot;)
+<span class="fc" id="L68">    var passwordReusePrevention: Int? = null</span>
+
+    /**
+     * Maximum password age days.
+     */
+    @JsonProperty(&quot;MaxPasswordAge&quot;)
+<span class="fc" id="L74">    var maxPasswordAge: Int? = null</span>
+
+    /**
+     * Hard expiration flag.
+     */
+    @JsonProperty(&quot;HardExpiry&quot;)
+<span class="fc" id="L80">    var hardExpiry: Boolean? = null</span>
+
+    /**
+     * Primary identifier of the resource.
+     */
+    @get:JsonIgnore
+    val primaryIdentifier: JSONObject?
+        get() {
+<span class="nc" id="L88">            val identifier = JSONObject()</span>
+
+<span class="nc bnc" id="L90" title="All 2 branches missed.">            if (physicalId != null) {</span>
+<span class="nc" id="L91">                identifier.put(IDENTIFIER_KEY_PHYSICAL_ID, physicalId)</span>
+            }
+
+            // only return the identifier if it can be used, i.e. if all components are present
+<span class="nc bnc" id="L95" title="All 2 branches missed.">            return if (identifier.isEmpty) null else identifier</span>
+        }
+
+    /**
+     * All of the unique identifiers.
+     */
+    @get:JsonIgnore
+<span class="nc" id="L102">    val additionalIdentifiers: List&lt;Any&gt;? = null</span>
+
+    companion object {
+        /**
+         * CloudFormation resource type.
+         */
+        @JsonIgnore
+<span class="fc" id="L109">        val TYPE_NAME = &quot;WrzasqPl::AWS::PasswordPolicy&quot;</span>
+
+        /**
+         * Property path to physical ID.
+         */
+        @JsonIgnore
+<span class="pc" id="L115">        val IDENTIFIER_KEY_PHYSICAL_ID = &quot;/properties/PhysicalId&quot;</span>
+    }
+}
+
+/**
+ * Request to read a resource.
+ *
+ * @return AWS service request to read a resource.
+ */
+<span class="fc" id="L124">fun ResourceModel.toReadRequest(): GetAccountPasswordPolicyRequest = GetAccountPasswordPolicyRequest.builder()</span>
+<span class="fc" id="L125">    .build()</span>
+
+/**
+ * Request to create a resource.
+ *
+ * @return AWS service request to create a resource.
+ */
+<span class="fc" id="L132">fun ResourceModel.toCreateRequest(): UpdateAccountPasswordPolicyRequest = UpdateAccountPasswordPolicyRequest.builder()</span>
+<span class="fc" id="L133">    .minimumPasswordLength(minimumPasswordLength)</span>
+<span class="fc" id="L134">    .requireLowercaseCharacters(requireLowercaseCharacters)</span>
+<span class="fc" id="L135">    .requireUppercaseCharacters(requireUppercaseCharacters)</span>
+<span class="fc" id="L136">    .requireNumbers(requireNumbers)</span>
+<span class="fc" id="L137">    .requireSymbols(requireSymbols)</span>
+<span class="fc" id="L138">    .allowUsersToChangePassword(allowUsersToChangePassword)</span>
+<span class="fc" id="L139">    .passwordReusePrevention(passwordReusePrevention)</span>
+<span class="fc" id="L140">    .maxPasswordAge(maxPasswordAge)</span>
+<span class="fc" id="L141">    .hardExpiry(hardExpiry)</span>
+<span class="fc" id="L142">    .build()</span>
+
+/**
+ * Request to delete a resource.
+ *
+ * @return AWS service request to delete a resource.
+ */
+<span class="fc" id="L149">fun ResourceModel.toDeleteRequest(): DeleteAccountPasswordPolicyRequest = DeleteAccountPasswordPolicyRequest.builder()</span>
+<span class="fc" id="L150">    .build()</span>
+
+/**
+ * Translates resource object from SDK into a resource model.
+ *
+ * @param describeResponse The AWS service describe resource response.
+ * @return Resource model.
+ */
+<span class="fc" id="L158">fun fromReadResponse(describeResponse: GetAccountPasswordPolicyResponse) = ResourceModel().apply {</span>
+<span class="fc" id="L159">    physicalId = &quot;password-policy&quot;</span>
+<span class="fc" id="L160">    minimumPasswordLength = describeResponse.passwordPolicy().minimumPasswordLength()</span>
+<span class="fc" id="L161">    requireLowercaseCharacters = describeResponse.passwordPolicy().requireLowercaseCharacters()</span>
+<span class="fc" id="L162">    requireUppercaseCharacters = describeResponse.passwordPolicy().requireUppercaseCharacters()</span>
+<span class="fc" id="L163">    requireNumbers = describeResponse.passwordPolicy().requireNumbers()</span>
+<span class="fc" id="L164">    requireSymbols = describeResponse.passwordPolicy().requireSymbols()</span>
+<span class="fc" id="L165">    allowUsersToChangePassword = describeResponse.passwordPolicy().allowUsersToChangePassword()</span>
+<span class="fc" id="L166">    passwordReusePrevention = describeResponse.passwordPolicy().passwordReusePrevention()</span>
+<span class="fc" id="L167">    maxPasswordAge = describeResponse.passwordPolicy().maxPasswordAge()</span>
+<span class="fc" id="L168">    hardExpiry = describeResponse.passwordPolicy().hardExpiry()</span>
+<span class="fc" id="L169">}</span>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
