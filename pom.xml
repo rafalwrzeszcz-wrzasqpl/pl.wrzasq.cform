@@ -123,5 +123,6 @@
         <module>cform-data-cognito-domain</module>
         <module>cform-resource-aws-organization</module>
         <module>cform-resource-aws-organizationalunit</module>
+        <module>cform-resource-aws-passwordpolicy</module>
     </modules>
 </project>

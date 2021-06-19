@@ -31,6 +31,10 @@ Manage AWS Organizations setup.
 
 Manage AWS Organizational Unit setup.
 
+### [WrzasqPl::AWS::PasswordPolicy](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.cform/cform-resource-aws-passwordpolicy/)
+
+Sets up password policy for AWS account.
+
 ## Data providers
 
 ### [WrzasqPl::AppSync::GraphQlApiData](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.cform/cform-data-appsync-graphqlapi/)

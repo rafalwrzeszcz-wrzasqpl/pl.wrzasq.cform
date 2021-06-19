@@ -1,0 +1,84 @@
+{
+    "typeName": "WrzasqPl::AWS::PasswordPolicy",
+    "description": "AWS account password policy resource handler.",
+    "sourceUrl": "https://github.com/rafalwrzeszcz-wrzasqpl/cform.wrzasq.pl.git",
+    "definitions": {
+    },
+    "properties": {
+        "PhysicalId": {
+            "description": "Physical resource identifier for CloudFormation.",
+            "type": "string"
+        },
+        "MinimumPasswordLength": {
+            "description": "Minimum number of characters allowed in an IAM user password.",
+            "type": "integer",
+            "minimum": 6,
+            "maximum": 128
+        },
+        "RequireLowercaseCharacters": {
+            "description": "Specifies whether IAM user passwords must contain at least one lowercase character from the ISO basic Latin alphabet (a to z).",
+            "type": "boolean"
+        },
+        "RequireUppercaseCharacters": {
+            "description": "Specifies whether IAM user passwords must contain at least one uppercase character from the ISO basic Latin alphabet (A to Z).",
+            "type": "boolean"
+        },
+        "RequireNumbers": {
+            "description": "Specifies whether IAM user passwords must contain at least one numeric character (0 to 9).",
+            "type": "boolean"
+        },
+        "RequireSymbols": {
+            "description": "Specifies whether IAM user passwords must contain at least one of the following non-alphanumeric characters.",
+            "type": "boolean"
+        },
+        "AllowUsersToChangePassword": {
+            "description": "Allows all IAM users in your account to use the AWS Management Console to change their own passwords.",
+            "type": "boolean"
+        },
+        "PasswordReusePrevention": {
+            "description": "Specifies the number of previous passwords that IAM users are prevented from reusing.",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 24
+        },
+        "MaxPasswordAge": {
+            "description": "The number of days that an IAM user password is valid.",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 1095
+        },
+        "HardExpiry": {
+            "description": "Prevents IAM users from setting a new password after their password has expired.",
+            "type": "boolean"
+        }
+    },
+    "additionalProperties": false,
+    "readOnlyProperties": [
+        "/properties/PhysicalId"
+    ],
+    "primaryIdentifier": [
+        "/properties/PhysicalId"
+    ],
+    "handlers": {
+        "create": {
+            "permissions": [
+                "iam:UpdateAccountPasswordPolicy"
+            ]
+        },
+        "update": {
+            "permissions": [
+                "iam:UpdateAccountPasswordPolicy"
+            ]
+        },
+        "read": {
+            "permissions": [
+                "iam:GetAccountPasswordPolicy"
+            ]
+        },
+        "delete": {
+            "permissions": [
+                "iam:DeleteAccountPasswordPolicy"
+            ]
+        }
+    }
+}
