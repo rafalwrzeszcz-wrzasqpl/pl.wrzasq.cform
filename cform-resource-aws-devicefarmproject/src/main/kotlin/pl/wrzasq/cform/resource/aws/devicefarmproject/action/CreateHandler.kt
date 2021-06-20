@@ -5,16 +5,13 @@
  * @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
-package pl.wrzasq.cform.resource.aws.organizationalunit.action
+package pl.wrzasq.cform.resource.aws.devicefarmproject.action
 
 import pl.wrzasq.cform.commons.action.ActionHandler
-import pl.wrzasq.cform.resource.aws.organizationalunit.config.ResourcesFactory
-import pl.wrzasq.cform.resource.aws.organizationalunit.model.ResourceModel
-import pl.wrzasq.cform.resource.aws.organizationalunit.model.toCreateRequest
+import pl.wrzasq.cform.resource.aws.devicefarmproject.config.ResourcesFactory
+import pl.wrzasq.cform.resource.aws.devicefarmproject.model.ResourceModel
+import pl.wrzasq.cform.resource.aws.devicefarmproject.model.toCreateRequest
 import software.amazon.awssdk.awscore.exception.AwsServiceException
-import software.amazon.awssdk.services.organizations.model.DuplicateOrganizationalUnitException
-import software.amazon.awssdk.services.organizations.model.Tag
-import software.amazon.cloudformation.exceptions.CfnAlreadyExistsException
 import software.amazon.cloudformation.exceptions.CfnGeneralServiceException
 import software.amazon.cloudformation.proxy.AmazonWebServicesClientProxy
 import software.amazon.cloudformation.proxy.Logger
@@ -47,7 +44,7 @@ class CreateHandler(
             // step 1 - create/stabilize progress chain - required for resource creation
             .then {
                 proxy.initiate(
-                    "WrzasqPl-AWS-OrganizationalUnit::Create",
+                    "WrzasqPl-AWS-DeviceFarmProject::Create",
                     proxyClient,
                     it.resourceModel,
                     it.callbackContext
@@ -56,19 +53,15 @@ class CreateHandler(
                     .makeServiceCall { awsRequest, client ->
                         try {
                             client.injectCredentialsAndInvokeV2(
-                                awsRequest.copy { copy ->
-                                    copy.tags(convertTagsToAwsModel(request.desiredResourceTags))
-                                },
-                                client.client()::createOrganizationalUnit
+                                awsRequest,
+                                client.client()::createTestGridProject
                             ).also { awsResponse ->
                                 logger.log("${ResourceModel.TYPE_NAME} successfully created.")
                                 // any more idiomatic way?
                                 request.desiredResourceState = ResourceModel().apply {
-                                    id = awsResponse.organizationalUnit().id()
+                                    arn = awsResponse.testGridProject().arn()
                                 }
                             }
-                        } catch (error: DuplicateOrganizationalUnitException) {
-                            throw CfnAlreadyExistsException(ResourceModel.TYPE_NAME, it.resourceModel.name, error)
                         } catch (error: AwsServiceException) {
                             throw CfnGeneralServiceException(ResourceModel.TYPE_NAME, error)
                         }
@@ -78,17 +71,4 @@ class CreateHandler(
             // step 2 - return the resource model
             .then { readHandler.handleRequest(proxy, request, callbackContext, logger) }
     }
-}
-
-/**
- * Converts resource model tags to AWS service call model.
- *
- * @param tags Tags map.
- * @return AWS request model.
- */
-fun convertTagsToAwsModel(tags: Map<String, String>) = tags.map {
-    Tag.builder()
-        .key(it.key)
-        .value(it.value)
-        .build()
 }

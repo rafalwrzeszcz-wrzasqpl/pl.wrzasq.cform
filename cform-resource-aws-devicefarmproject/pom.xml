@@ -14,7 +14,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <!-- core project settings -->
-    <artifactId>cform-resource-aws-organizationalunit</artifactId>
+    <artifactId>cform-resource-aws-devicefarmproject</artifactId>
     <packaging>jar</packaging>
     <parent>
         <groupId>pl.wrzasq.cform</groupId>
@@ -24,9 +24,9 @@
     </parent>
 
     <!-- project meta info -->
-    <name>WrzasqPl::AWS::OrganizationalUnit resource</name>
-    <url>https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.cform/cform-resource-aws-organizationalunit/</url>
-    <description>AWS CloudFormation resource handler for organizational units.</description>
+    <name>WrzasqPl::AWS::DeviceFarmProject resource</name>
+    <url>https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.cform/cform-resource-aws-devicefarmproject/</url>
+    <description>AWS CloudFormation resource handler for Device Farm project.</description>
     <inceptionYear>2021</inceptionYear>
 
     <!-- plugins configuration -->
@@ -49,8 +49,8 @@
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <configuration>
                     <excludes>
-                        <exclude>pl/wrzasq/cform/resource/aws/organizationalunit/config/**/*.class</exclude>
-                        <exclude>pl/wrzasq/cform/resource/aws/organizationalunit/model/**/*.class</exclude>
+                        <exclude>pl/wrzasq/cform/resource/aws/devicefarmproject/config/**/*.class</exclude>
+                        <exclude>pl/wrzasq/cform/resource/aws/devicefarmproject/model/**/*.class</exclude>
                     </excludes>
                 </configuration>
             </plugin>
@@ -128,13 +128,7 @@
 
         <dependency>
             <groupId>software.amazon.awssdk</groupId>
-            <artifactId>http-client-spi</artifactId>
-            <version>2.16.63</version>
-        </dependency>
-
-        <dependency>
-            <groupId>software.amazon.awssdk</groupId>
-            <artifactId>organizations</artifactId>
+            <artifactId>devicefarm</artifactId>
             <version>2.16.63</version>
             <exclusions>
                 <exclusion>
@@ -146,13 +140,13 @@
 
         <dependency>
             <groupId>software.amazon.awssdk</groupId>
-            <artifactId>regions</artifactId>
+            <artifactId>http-client-spi</artifactId>
             <version>2.16.63</version>
         </dependency>
 
         <dependency>
             <groupId>software.amazon.awssdk</groupId>
-            <artifactId>sdk-core</artifactId>
+            <artifactId>regions</artifactId>
             <version>2.16.63</version>
         </dependency>
 
@@ -185,7 +179,7 @@
                         <groupId>org.graalvm.nativeimage</groupId>
                         <artifactId>native-image-maven-plugin</artifactId>
                         <configuration>
-                            <mainClass>pl.wrzasq.cform.resource.aws.organizationalunit.config.LambdaResourcesFactory</mainClass>
+                            <mainClass>pl.wrzasq.cform.resource.aws.devicefarmproject.config.LambdaResourcesFactory</mainClass>
                             <buildArgs>
                                 --no-fallback
                                 --no-server

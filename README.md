@@ -23,6 +23,10 @@ this source code.
 
 ## Resource handlers
 
+### [WrzasqPl::AWS::DeviceFarmProject](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.cform/cform-resource-aws-devicefarmproject/)
+
+AWS DeviceFarm project handler.
+
 ### [WrzasqPl::AWS::Organization](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.cform/cform-resource-aws-organization/)
 
 Manage AWS Organizations setup.
