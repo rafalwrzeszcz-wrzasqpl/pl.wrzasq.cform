@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>BaseLambdaResourcesFactory.kt</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">WrzasqPl::AWS::DeviceFarmProject resource</a> &gt; <a href="../index.html" class="el_bundle">cform-commons</a> &gt; <a href="index.source.html" class="el_package">pl.wrzasq.cform.commons.config</a> &gt; <span class="el_source">BaseLambdaResourcesFactory.kt</span></div><h1>BaseLambdaResourcesFactory.kt</h1><pre class="source lang-java linenums">/**
+ * This file is part of the pl.wrzasq.cform.
+ *
+ * @license http://mit-license.org/ The MIT license
+ * @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+ */
+
+package pl.wrzasq.cform.commons.config
+
+import com.fasterxml.jackson.core.type.TypeReference
+import pl.wrzasq.cform.commons.ResourceLambdaHandler
+import pl.wrzasq.cform.commons.action.ActionHandler
+import pl.wrzasq.commons.aws.runtime.NativeLambdaApi
+import pl.wrzasq.commons.json.ObjectMapperFactory
+import software.amazon.cloudformation.Action
+import software.amazon.cloudformation.proxy.HandlerRequest
+import software.amazon.cloudformation.proxy.StdCallbackContext
+
+/**
+ * Generic provider for resource handlers.
+ */
+<span class="nc" id="L22">abstract class BaseLambdaResourcesFactory&lt;ResourceType&gt; : BaseResourcesFactory&lt;ResourceType&gt; {</span>
+<span class="nc" id="L23">    override val api: NativeLambdaApi by lazy { NativeLambdaApi(objectMapper) }</span>
+
+<span class="nc" id="L25">    override val lambdaHandler by lazy {</span>
+        // we can't have it as constructor arguments of ResourceLambdaHandler as these methods are called by super
+        // constructor before any of the child classes assignments occur
+<span class="nc" id="L28">        object : ResourceLambdaHandler&lt;ResourceType&gt;(</span>
+<span class="nc" id="L29">            configuration,</span>
+<span class="nc" id="L30">            buildHandlers()</span>
+        ) {
+<span class="nc" id="L32">            override fun getTypeReference() = getRequestTypeReference()</span>
+
+<span class="nc" id="L34">            override fun getModelTypeReference() = getResourceTypeReference()</span>
+        }
+    }
+
+<span class="nc" id="L38">    private val objectMapper by lazy { ObjectMapperFactory.createObjectMapper() }</span>
+
+<span class="nc" id="L40">    protected val configuration by lazy { LambdaConfiguration() }</span>
+
+    protected abstract fun getRequestTypeReference(): TypeReference&lt;HandlerRequest&lt;ResourceType?, StdCallbackContext&gt;&gt;
+
+    protected abstract fun getResourceTypeReference(): TypeReference&lt;ResourceType?&gt;
+
+    protected abstract fun buildHandlers(): Map&lt;Action, ActionHandler&lt;ResourceType&gt;&gt;
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

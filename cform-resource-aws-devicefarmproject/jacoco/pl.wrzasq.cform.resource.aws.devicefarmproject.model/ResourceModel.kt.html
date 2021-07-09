@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ResourceModel.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">WrzasqPl::AWS::DeviceFarmProject resource</a> &gt; <a href="index.source.html" class="el_package">pl.wrzasq.cform.resource.aws.devicefarmproject.model</a> &gt; <span class="el_source">ResourceModel.kt</span></div><h1>ResourceModel.kt</h1><pre class="source lang-java linenums">/**
+ * This file is part of the pl.wrzasq.cform.
+ *
+ * @license http://mit-license.org/ The MIT license
+ * @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+ */
+
+package pl.wrzasq.cform.resource.aws.devicefarmproject.model
+
+import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonProperty
+import org.json.JSONObject
+import software.amazon.awssdk.services.devicefarm.model.CreateTestGridProjectRequest
+import software.amazon.awssdk.services.devicefarm.model.DeleteTestGridProjectRequest
+import software.amazon.awssdk.services.devicefarm.model.GetTestGridProjectRequest
+import software.amazon.awssdk.services.devicefarm.model.GetTestGridProjectResponse
+import software.amazon.awssdk.services.devicefarm.model.UpdateTestGridProjectRequest
+
+/**
+ * AWS DeviceFarm TestGrid project resource description.
+ */
+<span class="fc" id="L22">class ResourceModel {</span>
+    /**
+     * Project ARN.
+     */
+    @JsonProperty(&quot;Arn&quot;)
+<span class="fc" id="L27">    var arn: String? = null</span>
+
+    /**
+     * Project name.
+     */
+    @JsonProperty(&quot;Name&quot;)
+<span class="fc" id="L33">    var name: String? = null</span>
+
+    /**
+     * Description.
+     */
+    @JsonProperty(&quot;Description&quot;)
+<span class="fc" id="L39">    var description: String? = null</span>
+
+    /**
+     * Primary identifier of the resource.
+     */
+    @get:JsonIgnore
+    val primaryIdentifier: JSONObject?
+        get() {
+<span class="nc" id="L47">            val identifier = JSONObject()</span>
+
+<span class="nc bnc" id="L49" title="All 2 branches missed.">            if (arn != null) {</span>
+<span class="nc" id="L50">                identifier.put(IDENTIFIER_KEY_ARN, arn)</span>
+            }
+
+            // only return the identifier if it can be used, i.e. if all components are present
+<span class="nc bnc" id="L54" title="All 2 branches missed.">            return if (identifier.isEmpty) null else identifier</span>
+        }
+
+    /**
+     * All of the unique identifiers.
+     */
+    @get:JsonIgnore
+<span class="nc" id="L61">    val additionalIdentifiers: List&lt;Any&gt;? = null</span>
+
+    companion object {
+        /**
+         * CloudFormation resource type.
+         */
+        @JsonIgnore
+<span class="fc" id="L68">        val TYPE_NAME = &quot;WrzasqPl::AWS::DeviceFarmProject&quot;</span>
+
+        /**
+         * Property path to ARN.
+         */
+        @JsonIgnore
+<span class="pc" id="L74">        val IDENTIFIER_KEY_ARN = &quot;/properties/Arn&quot;</span>
+    }
+}
+
+/**
+ * Request to read a resource.
+ *
+ * @return AWS service request to read resource.
+ */
+<span class="fc" id="L83">fun ResourceModel.toReadRequest(): GetTestGridProjectRequest = GetTestGridProjectRequest.builder()</span>
+<span class="fc" id="L84">    .projectArn(arn)</span>
+<span class="fc" id="L85">    .build()</span>
+
+/**
+ * Request to create a resource.
+ *
+ * @return AWS service request to create a resource.
+ */
+<span class="fc" id="L92">fun ResourceModel.toCreateRequest(): CreateTestGridProjectRequest = CreateTestGridProjectRequest.builder()</span>
+<span class="fc" id="L93">    .name(name)</span>
+<span class="fc" id="L94">    .description(description)</span>
+<span class="fc" id="L95">    .build()</span>
+
+/**
+ * Request to update a resource.
+ *
+ * @return AWS service request to update a resource.
+ */
+<span class="fc" id="L102">fun ResourceModel.toUpdateRequest(): UpdateTestGridProjectRequest = UpdateTestGridProjectRequest.builder()</span>
+<span class="fc" id="L103">    .projectArn(arn)</span>
+<span class="fc" id="L104">    .name(name)</span>
+<span class="fc" id="L105">    .description(description)</span>
+<span class="fc" id="L106">    .build()</span>
+
+/**
+ * Request to delete a resource.
+ *
+ * @return AWS service request to delete a resource.
+ */
+<span class="fc" id="L113">fun ResourceModel.toDeleteRequest(): DeleteTestGridProjectRequest = DeleteTestGridProjectRequest.builder()</span>
+<span class="fc" id="L114">    .projectArn(arn)</span>
+<span class="fc" id="L115">    .build()</span>
+
+/**
+ * Translates resource object from SDK into a resource model.
+ *
+ * @param describeResponse AWS service describe resource response.
+ * @return Resource model.
+ */
+<span class="fc" id="L123">fun fromReadResponse(describeResponse: GetTestGridProjectResponse) = ResourceModel().apply {</span>
+<span class="fc" id="L124">    arn = describeResponse.testGridProject().arn()</span>
+<span class="fc" id="L125">    name = describeResponse.testGridProject().name()</span>
+<span class="fc" id="L126">    description = describeResponse.testGridProject().description()</span>
+<span class="fc" id="L127">}</span>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

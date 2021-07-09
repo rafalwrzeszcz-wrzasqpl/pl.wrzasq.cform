@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CreateHandler.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">WrzasqPl::AWS::Organization resource</a> &gt; <a href="index.source.html" class="el_package">pl.wrzasq.cform.resource.aws.organizationalunit.action</a> &gt; <span class="el_source">CreateHandler.kt</span></div><h1>CreateHandler.kt</h1><pre class="source lang-java linenums">/**
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CreateHandler.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">WrzasqPl::AWS::OrganizationalUnit resource</a> &gt; <a href="index.source.html" class="el_package">pl.wrzasq.cform.resource.aws.organizationalunit.action</a> &gt; <span class="el_source">CreateHandler.kt</span></div><h1>CreateHandler.kt</h1><pre class="source lang-java linenums">/**
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
@@ -63,18 +63,20 @@ import software.amazon.cloudformation.proxy.StdCallbackContext
 <span class="fc" id="L63">                            ).also { awsResponse -&gt;</span>
 <span class="fc" id="L64">                                logger.log(&quot;${ResourceModel.TYPE_NAME} successfully created.&quot;)</span>
                                 // any more idiomatic way?
-<span class="pc bpc" id="L66" title="1 of 2 branches missed.">                                request.desiredResourceState?.id = awsResponse.organizationalUnit().id()</span>
-<span class="fc" id="L67">                            }</span>
-<span class="fc" id="L68">                        } catch (error: DuplicateOrganizationalUnitException) {</span>
-<span class="fc" id="L69">                            throw CfnAlreadyExistsException(ResourceModel.TYPE_NAME, it.resourceModel.name, error)</span>
-<span class="fc" id="L70">                        } catch (error: AwsServiceException) {</span>
-<span class="fc" id="L71">                            throw CfnGeneralServiceException(ResourceModel.TYPE_NAME, error)</span>
+<span class="fc" id="L66">                                request.desiredResourceState = ResourceModel().apply {</span>
+<span class="fc" id="L67">                                    id = awsResponse.organizationalUnit().id()</span>
+<span class="fc" id="L68">                                }</span>
+<span class="fc" id="L69">                            }</span>
+<span class="fc" id="L70">                        } catch (error: DuplicateOrganizationalUnitException) {</span>
+<span class="fc" id="L71">                            throw CfnAlreadyExistsException(ResourceModel.TYPE_NAME, it.resourceModel.name, error)</span>
+<span class="fc" id="L72">                        } catch (error: AwsServiceException) {</span>
+<span class="fc" id="L73">                            throw CfnGeneralServiceException(ResourceModel.TYPE_NAME, error)</span>
                         }
                     }
-<span class="fc" id="L74">                    .progress()</span>
+<span class="fc" id="L76">                    .progress()</span>
             }
             // step 2 - return the resource model
-<span class="fc" id="L77">            .then { readHandler.handleRequest(proxy, request, callbackContext, logger) }</span>
+<span class="fc" id="L79">            .then { readHandler.handleRequest(proxy, request, callbackContext, logger) }</span>
     }
 }
 
@@ -84,10 +86,10 @@ import software.amazon.cloudformation.proxy.StdCallbackContext
  * @param tags Tags map.
  * @return AWS request model.
  */
-<span class="fc" id="L87">fun convertTagsToAwsModel(tags: Map&lt;String, String&gt;) = tags.map {</span>
-<span class="fc" id="L88">    Tag.builder()</span>
-<span class="fc" id="L89">        .key(it.key)</span>
-<span class="fc" id="L90">        .value(it.value)</span>
-<span class="fc" id="L91">        .build()</span>
-<span class="fc" id="L92">}</span>
+<span class="fc" id="L89">fun convertTagsToAwsModel(tags: Map&lt;String, String&gt;) = tags.map {</span>
+<span class="fc" id="L90">    Tag.builder()</span>
+<span class="fc" id="L91">        .key(it.key)</span>
+<span class="fc" id="L92">        .value(it.value)</span>
+<span class="fc" id="L93">        .build()</span>
+<span class="fc" id="L94">}</span>
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

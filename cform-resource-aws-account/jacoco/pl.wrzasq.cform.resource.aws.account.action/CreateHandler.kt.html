@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CreateHandler.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">WrzasqPl::AWS::Account resource</a> &gt; <a href="index.source.html" class="el_package">pl.wrzasq.cform.resource.aws.account.action</a> &gt; <span class="el_source">CreateHandler.kt</span></div><h1>CreateHandler.kt</h1><pre class="source lang-java linenums">/**
+ * This file is part of the pl.wrzasq.cform.
+ *
+ * @license http://mit-license.org/ The MIT license
+ * @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+ */
+
+package pl.wrzasq.cform.resource.aws.account.action
+
+import pl.wrzasq.cform.commons.action.ActionHandler
+import pl.wrzasq.cform.resource.aws.account.config.ResourcesFactory
+import pl.wrzasq.cform.resource.aws.account.model.ResourceModel
+import pl.wrzasq.cform.resource.aws.account.model.toCreateRequest
+import pl.wrzasq.cform.resource.aws.account.model.toInviteRequest
+import software.amazon.awssdk.awscore.exception.AwsServiceException
+import software.amazon.awssdk.services.organizations.model.CreateAccountState
+import software.amazon.awssdk.services.organizations.model.DescribeCreateAccountStatusRequest
+import software.amazon.awssdk.services.organizations.model.DescribeHandshakeRequest
+import software.amazon.awssdk.services.organizations.model.HandshakeState
+import software.amazon.awssdk.services.organizations.model.Tag
+import software.amazon.cloudformation.exceptions.CfnGeneralServiceException
+import software.amazon.cloudformation.exceptions.CfnNotStabilizedException
+import software.amazon.cloudformation.proxy.AmazonWebServicesClientProxy
+import software.amazon.cloudformation.proxy.Logger
+import software.amazon.cloudformation.proxy.ProgressEvent
+import software.amazon.cloudformation.proxy.ResourceHandlerRequest
+import software.amazon.cloudformation.proxy.StdCallbackContext
+import software.amazon.cloudformation.proxy.delay.Constant
+import java.time.Duration
+
+<span class="fc" id="L31">private val delay = Constant.of()</span>
+<span class="fc" id="L32">    .delay(Duration.ofSeconds(60))</span>
+<span class="fc" id="L33">    .timeout(Duration.ofHours(4))</span>
+<span class="fc" id="L34">    .build()</span>
+
+/**
+ * Resource creation handler.
+ *
+ * @param factory Dependent resource factory.
+ * @param updateHandler Resource update handler.
+ */
+<span class="fc" id="L42">class CreateHandler(</span>
+<span class="fc" id="L43">    private val factory: ResourcesFactory,</span>
+<span class="fc" id="L44">    private val updateHandler: ActionHandler&lt;ResourceModel&gt;</span>
+) : ActionHandler&lt;ResourceModel&gt; {
+    override fun handleRequest(
+        proxy: AmazonWebServicesClientProxy,
+        request: ResourceHandlerRequest&lt;ResourceModel?&gt;,
+        callbackContext: StdCallbackContext,
+        logger: Logger
+    ): ProgressEvent&lt;ResourceModel?, StdCallbackContext&gt; {
+<span class="fc" id="L52">        val proxyClient = factory.getClient(proxy)</span>
+
+<span class="fc" id="L54">        return ProgressEvent.progress(</span>
+<span class="fc bfc" id="L55" title="All 2 branches covered.">            requireNotNull(request.desiredResourceState),</span>
+<span class="fc" id="L56">            callbackContext</span>
+        )
+            // step 1 - create/stabilize progress chain - required for resource creation
+<span class="fc" id="L59">            .then {</span>
+<span class="fc bfc" id="L60" title="All 2 branches covered.">                if (it.resourceModel.id == null) {</span>
+<span class="fc" id="L61">                    proxy.initiate(</span>
+<span class="fc" id="L62">                        &quot;WrzasqPl-AWS-Account::Create&quot;,</span>
+<span class="fc" id="L63">                        proxyClient,</span>
+<span class="fc" id="L64">                        it.resourceModel,</span>
+<span class="fc" id="L65">                        it.callbackContext</span>
+                    )
+<span class="fc" id="L67">                        .translateToServiceRequest(ResourceModel::toCreateRequest)</span>
+<span class="fc" id="L68">                        .backoffDelay(delay)</span>
+<span class="fc" id="L69">                        .makeServiceCall { awsRequest, client -&gt;</span>
+<span class="fc" id="L70">                            try {</span>
+<span class="fc" id="L71">                                client.injectCredentialsAndInvokeV2(</span>
+<span class="fc" id="L72">                                    awsRequest,</span>
+<span class="fc" id="L73">                                    client.client()::createAccount</span>
+                                )
+<span class="fc" id="L75">                            } catch (error: AwsServiceException) {</span>
+<span class="fc" id="L76">                                throw CfnGeneralServiceException(ResourceModel.TYPE_NAME, error)</span>
+                            }
+                        }
+<span class="fc" id="L79">                        .stabilize { _, response, client, model, _ -&gt;</span>
+<span class="fc" id="L80">                            var status = client.injectCredentialsAndInvokeV2(</span>
+<span class="fc" id="L81">                                DescribeCreateAccountStatusRequest.builder()</span>
+<span class="fc" id="L82">                                    .createAccountRequestId(response.createAccountStatus().id())</span>
+<span class="fc" id="L83">                                    .build(),</span>
+<span class="fc" id="L84">                                client.client()::describeCreateAccountStatus</span>
+<span class="fc" id="L85">                            ).createAccountStatus()</span>
+
+                            // we need to loop for it now, before we return first status as we need primary identifier
+<span class="fc bfc" id="L88" title="All 4 branches covered.">                            while (status.accountId() == null &amp;&amp; status.state() == CreateAccountState.IN_PROGRESS) {</span>
+<span class="fc" id="L89">                                status = client.injectCredentialsAndInvokeV2(</span>
+<span class="fc" id="L90">                                    DescribeCreateAccountStatusRequest.builder()</span>
+<span class="fc" id="L91">                                        .createAccountRequestId(response.createAccountStatus().id())</span>
+<span class="fc" id="L92">                                        .build(),</span>
+<span class="fc" id="L93">                                    client.client()::describeCreateAccountStatus</span>
+<span class="fc" id="L94">                                ).createAccountStatus()</span>
+                            }
+<span class="fc" id="L96">                            model.id = status.accountId()</span>
+
+<span class="pc bpc" id="L98" title="1 of 5 branches missed.">                            when (status.state()) {</span>
+                                CreateAccountState.SUCCEEDED -&gt; {
+                                    // pass account ID to read handler
+<span class="pc bpc" id="L101" title="1 of 2 branches missed.">                                    request.desiredResourceState?.id = status.accountId()</span>
+<span class="fc" id="L102">                                    true</span>
+                                }
+<span class="fc" id="L104">                                CreateAccountState.IN_PROGRESS -&gt; false</span>
+                                else -&gt; {
+<span class="fc" id="L106">                                    logger.log(&quot;Failed to create account for ${model.email} (${model.name}) - reason:&quot; +</span>
+<span class="fc" id="L107">                                        &quot; ${status.failureReasonAsString()}&quot;)</span>
+<span class="fc" id="L108">                                    throw CfnNotStabilizedException(ResourceModel.TYPE_NAME, model.email)</span>
+                                }
+                            }
+                        }
+                } else {
+<span class="fc" id="L113">                    proxy.initiate(</span>
+<span class="fc" id="L114">                        &quot;WrzasqPl-AWS-Account::Invite&quot;,</span>
+<span class="fc" id="L115">                        proxyClient,</span>
+<span class="fc" id="L116">                        it.resourceModel,</span>
+<span class="fc" id="L117">                        it.callbackContext</span>
+                    )
+<span class="fc" id="L119">                        .translateToServiceRequest(ResourceModel::toInviteRequest)</span>
+<span class="fc" id="L120">                        .backoffDelay(delay)</span>
+<span class="fc" id="L121">                        .makeServiceCall { awsRequest, client -&gt;</span>
+<span class="fc" id="L122">                            try {</span>
+<span class="fc" id="L123">                                client.injectCredentialsAndInvokeV2(</span>
+<span class="fc" id="L124">                                    awsRequest,</span>
+<span class="fc" id="L125">                                    client.client()::inviteAccountToOrganization</span>
+                                )
+<span class="fc" id="L127">                            } catch (error: AwsServiceException) {</span>
+<span class="fc" id="L128">                                throw CfnGeneralServiceException(ResourceModel.TYPE_NAME, error)</span>
+                            }
+                        }
+<span class="fc" id="L131">                        .stabilize { _, response, client, model, _ -&gt;</span>
+<span class="fc" id="L132">                            val handshake = client.injectCredentialsAndInvokeV2(</span>
+<span class="fc" id="L133">                                DescribeHandshakeRequest.builder()</span>
+<span class="fc" id="L134">                                    .handshakeId(response.handshake().id())</span>
+<span class="fc" id="L135">                                    .build(),</span>
+<span class="fc" id="L136">                                client.client()::describeHandshake</span>
+<span class="fc" id="L137">                            ).handshake()</span>
+
+<span class="pc bpc" id="L139" title="1 of 5 branches missed.">                            when (handshake.state()) {</span>
+<span class="fc" id="L140">                                HandshakeState.ACCEPTED -&gt; true</span>
+                                HandshakeState.OPEN,
+<span class="fc" id="L142">                                HandshakeState.REQUESTED -&gt; false</span>
+                                else -&gt; {
+<span class="fc" id="L144">                                    logger.log(&quot;Failed to invite account ${model.id} - status: ${handshake.state()}.&quot;)</span>
+<span class="fc" id="L145">                                    throw CfnNotStabilizedException(ResourceModel.TYPE_NAME, model.id)</span>
+                                }
+                            }
+                        }
+                }
+<span class="fc" id="L150">                    .progress()</span>
+            }
+            // step 2 - return the resource model
+<span class="fc" id="L153">            .then { updateHandler.handleRequest(proxy, request, callbackContext, logger) }</span>
+    }
+}
+
+/**
+ * Converts resource model tags to AWS service call model.
+ *
+ * @param tags Tags map.
+ * @return AWS request model.
+ */
+<span class="fc" id="L163">fun convertTagsToAwsModel(tags: Map&lt;String, String&gt;) = tags.map {</span>
+<span class="fc" id="L164">    Tag.builder()</span>
+<span class="fc" id="L165">        .key(it.key)</span>
+<span class="fc" id="L166">        .value(it.value)</span>
+<span class="fc" id="L167">        .build()</span>
+<span class="fc" id="L168">}</span>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

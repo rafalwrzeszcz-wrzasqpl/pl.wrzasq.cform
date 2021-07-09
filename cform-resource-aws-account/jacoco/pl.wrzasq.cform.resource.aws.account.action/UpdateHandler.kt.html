@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UpdateHandler.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">WrzasqPl::AWS::Account resource</a> &gt; <a href="index.source.html" class="el_package">pl.wrzasq.cform.resource.aws.account.action</a> &gt; <span class="el_source">UpdateHandler.kt</span></div><h1>UpdateHandler.kt</h1><pre class="source lang-java linenums">/**
+ * This file is part of the pl.wrzasq.cform.
+ *
+ * @license http://mit-license.org/ The MIT license
+ * @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+ */
+
+package pl.wrzasq.cform.resource.aws.account.action
+
+import pl.wrzasq.cform.commons.action.ActionHandler
+import pl.wrzasq.cform.resource.aws.account.config.ResourcesFactory
+import pl.wrzasq.cform.resource.aws.account.model.ResourceModel
+import pl.wrzasq.cform.resource.aws.account.model.toReadParentsRequest
+import pl.wrzasq.cform.resource.aws.account.model.toUpdateRequest
+import software.amazon.awssdk.awscore.exception.AwsServiceException
+import software.amazon.awssdk.services.organizations.model.ChildNotFoundException
+import software.amazon.awssdk.services.organizations.model.Parent
+import software.amazon.awssdk.services.organizations.model.TagResourceRequest
+import software.amazon.awssdk.services.organizations.model.UntagResourceRequest
+import software.amazon.cloudformation.exceptions.CfnGeneralServiceException
+import software.amazon.cloudformation.exceptions.CfnNotFoundException
+import software.amazon.cloudformation.proxy.AmazonWebServicesClientProxy
+import software.amazon.cloudformation.proxy.Logger
+import software.amazon.cloudformation.proxy.ProgressEvent
+import software.amazon.cloudformation.proxy.ResourceHandlerRequest
+import software.amazon.cloudformation.proxy.StdCallbackContext
+
+/**
+ * Resource modification handler.
+ *
+ * @param factory Dependent resource factory.
+ * @param readHandler Resource reading handler.
+ */
+<span class="fc" id="L34">class UpdateHandler(</span>
+<span class="fc" id="L35">    private val factory: ResourcesFactory,</span>
+<span class="fc" id="L36">    private val readHandler: ActionHandler&lt;ResourceModel&gt;</span>
+) : ActionHandler&lt;ResourceModel&gt; {
+    override fun handleRequest(
+        proxy: AmazonWebServicesClientProxy,
+        request: ResourceHandlerRequest&lt;ResourceModel?&gt;,
+        callbackContext: StdCallbackContext,
+        logger: Logger
+    ): ProgressEvent&lt;ResourceModel?, StdCallbackContext&gt; {
+<span class="fc" id="L44">        val proxyClient = factory.getClient(proxy)</span>
+
+<span class="fc" id="L46">        return ProgressEvent.progress(</span>
+<span class="fc bfc" id="L47" title="All 2 branches covered.">            requireNotNull(request.desiredResourceState),</span>
+<span class="fc" id="L48">            callbackContext</span>
+        )
+            // step 1 - check if resource already exists
+<span class="fc" id="L51">            .then {</span>
+<span class="fc" id="L52">                proxy.initiate(</span>
+<span class="fc" id="L53">                    &quot;WrzasqPl-AWS-Account::Update::PreExistanceCheck&quot;,</span>
+<span class="fc" id="L54">                    proxyClient,</span>
+<span class="fc" id="L55">                    it.resourceModel,</span>
+<span class="fc" id="L56">                    it.callbackContext</span>
+                )
+<span class="fc" id="L58">                    .translateToServiceRequest(ResourceModel::toReadParentsRequest)</span>
+<span class="fc" id="L59">                    .makeServiceCall { awsRequest, client -&gt;</span>
+<span class="fc" id="L60">                        client.injectCredentialsAndInvokeV2(</span>
+<span class="fc" id="L61">                            awsRequest,</span>
+<span class="fc" id="L62">                            client.client()::listParents</span>
+<span class="fc" id="L63">                        ).also { response -&gt;</span>
+<span class="fc" id="L64">                            logger.log(&quot;${ResourceModel.TYPE_NAME} has successfully been read.&quot;)</span>
+<span class="fc" id="L65">                            logger.log(&quot;Parents: ${response.parents().joinToString(transform = Parent::id)}&quot;)</span>
+<span class="fc" id="L66">                            request.previousResourceState = ResourceModel().apply {</span>
+<span class="fc" id="L67">                                ouId = response.parents().first().id()</span>
+<span class="fc" id="L68">                            }</span>
+<span class="fc" id="L69">                        }</span>
+                    }
+<span class="fc" id="L71">                    .handleError { _, exception, _, _, _ -&gt;</span>
+<span class="fc bfc" id="L72" title="All 2 branches covered.">                        if (exception is ChildNotFoundException) {</span>
+<span class="fc" id="L73">                            throw CfnNotFoundException(ResourceModel.TYPE_NAME, it.resourceModel.id, exception)</span>
+                        } else {
+<span class="fc" id="L75">                            throw exception</span>
+                        }
+                    }
+<span class="fc" id="L78">                    .progress()</span>
+            }
+            // step 2 - create/stabilize progress chain - required for resource creation
+<span class="fc" id="L81">            .then {</span>
+<span class="pc bpc" id="L82" title="1 of 2 branches missed.">                logger.log(&quot;Current OU: ${request.previousResourceState?.ouId}&quot;)</span>
+<span class="fc" id="L83">                logger.log(&quot;Desired OU: ${it.resourceModel.ouId}&quot;)</span>
+<span class="pc bpc" id="L84" title="1 of 2 branches missed.">                val ouId = request.previousResourceState?.ouId</span>
+<span class="fc bfc" id="L85" title="All 2 branches covered.">                if (ouId == it.resourceModel.ouId) {</span>
+<span class="fc" id="L86">                    it</span>
+                } else {
+<span class="fc" id="L88">                    proxy.initiate(</span>
+<span class="fc" id="L89">                        &quot;WrzasqPl-AWS-Account::Update&quot;,</span>
+<span class="fc" id="L90">                        proxyClient,</span>
+<span class="fc" id="L91">                        it.resourceModel,</span>
+<span class="fc" id="L92">                        it.callbackContext</span>
+                    )
+<span class="fc" id="L94">                        .translateToServiceRequest { model -&gt;</span>
+<span class="fc bfc" id="L95" title="All 2 branches covered.">                            model.toUpdateRequest(ouId ?: &quot;&quot;)</span>
+                        }
+<span class="fc" id="L97">                        .makeServiceCall { awsRequest, client -&gt;</span>
+<span class="fc" id="L98">                            try {</span>
+<span class="fc" id="L99">                                client.injectCredentialsAndInvokeV2(</span>
+<span class="fc" id="L100">                                    awsRequest,</span>
+<span class="fc" id="L101">                                    client.client()::moveAccount</span>
+<span class="fc" id="L102">                                ).also {</span>
+<span class="fc" id="L103">                                    logger.log(&quot;${ResourceModel.TYPE_NAME} successfully updated.&quot;)</span>
+<span class="fc" id="L104">                                }</span>
+<span class="fc" id="L105">                            } catch (error: AwsServiceException) {</span>
+<span class="fc" id="L106">                                throw CfnGeneralServiceException(ResourceModel.TYPE_NAME, error)</span>
+                            }
+                        }
+<span class="fc" id="L109">                        .progress()</span>
+                }
+            }
+            // step 3 - manage tags
+<span class="fc" id="L113">            .then {</span>
+<span class="fc bfc" id="L114" title="All 2 branches covered.">                if (request.desiredResourceTags == request.previousResourceTags) {</span>
+<span class="fc" id="L115">                    it</span>
+                } else {
+<span class="fc" id="L117">                    val remove = request.previousResourceTags.keys - request.desiredResourceTags.keys</span>
+
+<span class="fc" id="L119">                    proxy.initiate(</span>
+<span class="fc" id="L120">                        &quot;WrzasqPl-AWS-Account::Update::Tag&quot;,</span>
+<span class="fc" id="L121">                        proxyClient,</span>
+<span class="fc" id="L122">                        it.resourceModel,</span>
+<span class="fc" id="L123">                        it.callbackContext</span>
+                    )
+<span class="fc" id="L125">                        .translateToServiceRequest { model -&gt;</span>
+<span class="fc" id="L126">                            Pair(</span>
+<span class="fc bfc" id="L127" title="All 2 branches covered.">                                if (remove.isEmpty()) null else {</span>
+<span class="fc" id="L128">                                    UntagResourceRequest.builder()</span>
+<span class="fc" id="L129">                                        .resourceId(model.id)</span>
+<span class="fc" id="L130">                                        .tagKeys(remove)</span>
+<span class="fc" id="L131">                                        .build()</span>
+                                },
+<span class="fc" id="L133">                                TagResourceRequest.builder()</span>
+<span class="fc" id="L134">                                    .resourceId(model.id)</span>
+<span class="fc" id="L135">                                    .tags(convertTagsToAwsModel(request.desiredResourceTags))</span>
+<span class="fc" id="L136">                                    .build()</span>
+                            )
+                        }
+<span class="fc" id="L139">                        .makeServiceCall { awsRequest, client -&gt;</span>
+<span class="fc" id="L140">                            try {</span>
+<span class="fc" id="L141">                                Pair(</span>
+<span class="fc bfc" id="L142" title="All 2 branches covered.">                                    awsRequest.first?.let { first -&gt;</span>
+<span class="fc" id="L143">                                        client.injectCredentialsAndInvokeV2(</span>
+<span class="fc" id="L144">                                            first,</span>
+<span class="fc" id="L145">                                            client.client()::untagResource</span>
+<span class="fc" id="L146">                                        ).also {</span>
+<span class="fc" id="L147">                                            logger.log(&quot;${ResourceModel.TYPE_NAME} successfully removed tags.&quot;)</span>
+<span class="fc" id="L148">                                        }</span>
+                                    },
+<span class="fc" id="L150">                                    client.injectCredentialsAndInvokeV2(</span>
+<span class="fc" id="L151">                                        awsRequest.second,</span>
+<span class="fc" id="L152">                                        client.client()::tagResource</span>
+<span class="fc" id="L153">                                    ).also {</span>
+<span class="fc" id="L154">                                        logger.log(&quot;${ResourceModel.TYPE_NAME} successfully saved tags.&quot;)</span>
+<span class="fc" id="L155">                                    }</span>
+                                )
+<span class="fc" id="L157">                            } catch (error: AwsServiceException) {</span>
+<span class="fc" id="L158">                                throw CfnGeneralServiceException(ResourceModel.TYPE_NAME, error)</span>
+                            }
+                        }
+<span class="fc" id="L161">                        .progress()</span>
+                }
+            }
+            // step 4 - return the resource model
+<span class="fc" id="L165">            .then { readHandler.handleRequest(proxy, request, callbackContext, logger) }</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

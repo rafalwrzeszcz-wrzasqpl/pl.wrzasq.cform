@@ -1,0 +1,18 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+WrzasqPl::AWS::DeviceFarmProject resource,pl.wrzasq.cform.resource.aws.devicefarmproject.action,DeleteHandler,0,138,0,2,0,25,0,6,0,5
+WrzasqPl::AWS::DeviceFarmProject resource,pl.wrzasq.cform.resource.aws.devicefarmproject.action,UpdateHandler,0,253,0,4,0,45,0,10,0,8
+WrzasqPl::AWS::DeviceFarmProject resource,pl.wrzasq.cform.resource.aws.devicefarmproject.action,CreateHandler,0,202,0,2,0,29,0,6,0,5
+WrzasqPl::AWS::DeviceFarmProject resource,pl.wrzasq.cform.resource.aws.devicefarmproject.action,ReadHandler,0,120,0,2,0,20,0,5,0,4
+WrzasqPl::AWS::DeviceFarmProject resource,pl.wrzasq.cform.resource.aws.devicefarmproject.model,ResourceModelKt,0,102,0,0,0,20,0,5,0,5
+WrzasqPl::AWS::DeviceFarmProject resource,pl.wrzasq.cform.resource.aws.devicefarmproject.model,ResourceModel,23,34,4,0,5,6,4,8,2,8
+WrzasqPl::AWS::DeviceFarmProject resource,pl.wrzasq.cform.resource.aws.devicefarmproject.model,ResourceModel.Companion,2,2,0,0,1,1,1,1,1,1
+WrzasqPl::AWS::DeviceFarmProject resource,pl.wrzasq.cform.resource.aws.devicefarmproject.config,LambdaResourcesFactory.readHandler.new Function0() {...},7,0,0,0,1,0,1,0,1,0
+WrzasqPl::AWS::DeviceFarmProject resource,pl.wrzasq.cform.resource.aws.devicefarmproject.config,LambdaResourcesFactory.getResourceTypeReference.new TypeReference() {...},3,0,0,0,1,0,1,0,1,0
+WrzasqPl::AWS::DeviceFarmProject resource,pl.wrzasq.cform.resource.aws.devicefarmproject.config,LambdaResourcesFactory.lambdaHandler.2.new ResourceLambdaHandler() {...},17,0,0,0,5,0,3,0,3,0
+WrzasqPl::AWS::DeviceFarmProject resource,pl.wrzasq.cform.resource.aws.devicefarmproject.config,LambdaResourcesFactory.getRequestTypeReference.new TypeReference() {...},3,0,0,0,1,0,1,0,1,0
+WrzasqPl::AWS::DeviceFarmProject resource,pl.wrzasq.cform.resource.aws.devicefarmproject.config,LambdaResourcesFactory.updateHandler.new Function0() {...},11,0,0,0,1,0,1,0,1,0
+WrzasqPl::AWS::DeviceFarmProject resource,pl.wrzasq.cform.resource.aws.devicefarmproject.config,LambdaResourcesFactory.createHandler.new Function0() {...},11,0,0,0,1,0,1,0,1,0
+WrzasqPl::AWS::DeviceFarmProject resource,pl.wrzasq.cform.resource.aws.devicefarmproject.config,LambdaResourcesFactory,157,0,0,0,19,0,12,0,12,0
+WrzasqPl::AWS::DeviceFarmProject resource,pl.wrzasq.cform.resource.aws.devicefarmproject.config,LambdaResourcesFactory.Companion,17,0,0,0,3,0,1,0,1,0
+WrzasqPl::AWS::DeviceFarmProject resource,pl.wrzasq.cform.resource.aws.devicefarmproject.config,LambdaResourcesFactory.deleteHandler.new Function0() {...},7,0,0,0,1,0,1,0,1,0
+WrzasqPl::AWS::DeviceFarmProject resource,pl.wrzasq.cform.resource.aws.devicefarmproject.config,LambdaResourcesFactory.lambdaHandler.new Function0() {...},16,0,0,0,3,0,1,0,1,0

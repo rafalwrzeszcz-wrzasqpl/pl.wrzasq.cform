@@ -7,8 +7,8 @@ WrzasqPl::AppSync::GraphQlApi data provider,pl.wrzasq.cform.data.appsync.graphql
 WrzasqPl::AppSync::GraphQlApi data provider,pl.wrzasq.cform.data.appsync.graphqlapi.model,ResourceModelKt,0,80,0,4,0,11,0,5,0,3
 WrzasqPl::AppSync::GraphQlApi data provider,pl.wrzasq.cform.data.appsync.graphqlapi.config,LambdaResourcesFactory.createHandler.new Function0() {...},8,0,0,0,1,0,1,0,1,0
 WrzasqPl::AppSync::GraphQlApi data provider,pl.wrzasq.cform.data.appsync.graphqlapi.config,LambdaResourcesFactory,110,0,0,0,14,0,10,0,10,0
-WrzasqPl::AppSync::GraphQlApi data provider,pl.wrzasq.cform.data.appsync.graphqlapi.config,LambdaResourcesFactory.Companion,17,0,0,0,3,0,1,0,1,0
 WrzasqPl::AppSync::GraphQlApi data provider,pl.wrzasq.cform.data.appsync.graphqlapi.config,LambdaResourcesFactory.deleteHandler.new Function0() {...},4,0,0,0,1,0,1,0,1,0
+WrzasqPl::AppSync::GraphQlApi data provider,pl.wrzasq.cform.data.appsync.graphqlapi.config,LambdaResourcesFactory.Companion,17,0,0,0,3,0,1,0,1,0
 WrzasqPl::AppSync::GraphQlApi data provider,pl.wrzasq.cform.data.appsync.graphqlapi.config,LambdaResourcesFactory.getResourceTypeReference.new TypeReference() {...},3,0,0,0,1,0,1,0,1,0
-WrzasqPl::AppSync::GraphQlApi data provider,pl.wrzasq.cform.data.appsync.graphqlapi.config,LambdaResourcesFactory.readHandler.new Function0() {...},7,0,0,0,1,0,1,0,1,0
 WrzasqPl::AppSync::GraphQlApi data provider,pl.wrzasq.cform.data.appsync.graphqlapi.config,LambdaResourcesFactory.getRequestTypeReference.new TypeReference() {...},3,0,0,0,1,0,1,0,1,0
+WrzasqPl::AppSync::GraphQlApi data provider,pl.wrzasq.cform.data.appsync.graphqlapi.config,LambdaResourcesFactory.readHandler.new Function0() {...},7,0,0,0,1,0,1,0,1,0
