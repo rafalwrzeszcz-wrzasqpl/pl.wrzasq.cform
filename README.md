@@ -23,6 +23,10 @@ this source code.
 
 ## Resource handlers
 
+### [WrzasqPl::AWS::Account](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.cform/cform-resource-aws-account/)
+
+AWS account creation handler.
+
 ### [WrzasqPl::AWS::DeviceFarmProject](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.cform/cform-resource-aws-devicefarmproject/)
 
 AWS DeviceFarm project handler.

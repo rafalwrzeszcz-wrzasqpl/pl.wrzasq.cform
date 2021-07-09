@@ -88,7 +88,7 @@ class CreateHandlerTest {
         val result = CreateHandler(factory, readHandler).handleRequest(proxy, request, callbackContext, logger)
 
         assertEquals(OperationStatus.SUCCESS, result.status)
-        assertEquals(ID, result.resourceModel?.id)
+        assertEquals(ID, request.desiredResourceState?.id)
     }
 
     @Test

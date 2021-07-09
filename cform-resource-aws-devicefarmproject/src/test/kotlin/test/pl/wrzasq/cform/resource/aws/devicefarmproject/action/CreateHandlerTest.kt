@@ -47,9 +47,7 @@ class CreateHandlerTest {
 
     @Test
     fun handleRequest() {
-        val model = ResourceModel().apply {
-            arn = ARN
-        }
+        val model = ResourceModel()
 
         val request = ResourceHandlerRequest<ResourceModel?>().apply {
             desiredResourceState = model
@@ -81,7 +79,7 @@ class CreateHandlerTest {
         val result = CreateHandler(factory, readHandler).handleRequest(proxy, request, callbackContext, logger)
 
         assertEquals(OperationStatus.SUCCESS, result.status)
-        assertEquals(ARN, result.resourceModel?.arn)
+        assertEquals(ARN, request.desiredResourceState?.arn)
     }
 
     @Test
