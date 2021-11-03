@@ -49,6 +49,12 @@ Reads AppSync GraphQl endpoint information.
 
 Reads Cognito custom domain information.
 
+## Additional resources
+
+### [CloudFormation macro](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.cform/cform-macro/)
+
+Template processing macro.
+
 # Resources
 
 -   [GitHub page with API documentation](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.cform)

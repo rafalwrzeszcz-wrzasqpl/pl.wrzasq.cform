@@ -121,6 +121,7 @@
         <module>cform-commons</module>
         <module>cform-data-appsync-graphqlapi</module>
         <module>cform-data-cognito-domain</module>
+        <module>cform-macro</module>
         <module>cform-resource-aws-account</module>
         <module>cform-resource-aws-organization</module>
         <module>cform-resource-aws-organizationalunit</module>
