@@ -23,12 +23,9 @@ class CodeBuildSetup : ResourceHandler {
     override fun handledResourceTypes() = listOf("AWS::CodeBuild::Project")
 
     override fun handle(entry: ResourceDefinition) = fallback + entry.properties.mapSelected(
-        mapOf(
-            "Artifacts" to { value -> handleArtifacts(asMap(value)) },
-            "Cache" to ::expandCache,
-            "Environment" to { value -> handleEnvironment(asMap(value)) },
-            "Source" to { value -> handleSource(asMap(value)) }
-        )
+        "Artifacts" to { value -> handleArtifacts(asMap(value)) },
+        "Cache" to ::expandCache,
+        "Environment" to { value -> handleEnvironment(asMap(value)) }
     )
 
     private fun handleArtifacts(input: Map<String, Any>): Any {
@@ -37,23 +34,6 @@ class CodeBuildSetup : ResourceHandler {
         // only S3 uses Location, specifying it manually is redundant
         if ("Location" in input) {
             output.putIfAbsent("Type", "S3")
-        }
-
-        return output
-    }
-
-    private fun handleSource(input: Map<String, Any>): Any {
-        val output = input.toMutableMap()
-
-        // for now just detect GitHub, but it's easy to add more
-        if ("Type" !in input) {
-            input["Location"]?.toString()?.let {
-                if (it.startsWith("https://github.com/")) {
-                    output["Type"] = "GITHUB"
-                } else if (it.startsWith("https://bitbucket.com/")) {
-                    output["Type"] = "BITBUCKET"
-                }
-            }
         }
 
         return output

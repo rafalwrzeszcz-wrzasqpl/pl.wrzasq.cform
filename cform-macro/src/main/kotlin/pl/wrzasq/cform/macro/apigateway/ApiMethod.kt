@@ -46,8 +46,10 @@ class ApiMethod(
                 computed["AuthorizerId"] = authorizer.ref()
                 computed["AuthorizationType"] = authorizer.authorizationType
             })
-            .popProperty("Integration", { computed["Integration"] = initIntegration(asMap(it)) })
-            .mapSelected("MethodResponses", ::unfoldResponses)
+            .mapSelected(
+                "Integration" to { initIntegration(asMap(it)) },
+                "MethodResponses" to ::unfoldResponses
+            )
 
         properties = leftover + computed
     }

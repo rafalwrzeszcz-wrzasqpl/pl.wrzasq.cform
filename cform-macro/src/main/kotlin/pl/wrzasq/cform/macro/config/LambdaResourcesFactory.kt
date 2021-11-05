@@ -14,7 +14,7 @@ import pl.wrzasq.cform.macro.processors.DelegatingResourceProcessor
 import pl.wrzasq.cform.macro.processors.FnToolkit
 import pl.wrzasq.cform.macro.processors.types.CodeBuildSetup
 import pl.wrzasq.cform.macro.processors.types.DynamoDbAttributesDefinitions
-import pl.wrzasq.cform.macro.processors.types.IamRoleStatements
+import pl.wrzasq.cform.macro.processors.types.IamStatements
 import pl.wrzasq.cform.macro.processors.types.PipelineDefinition
 import pl.wrzasq.cform.macro.template.CallsExpander
 import pl.wrzasq.commons.aws.runtime.NativeLambdaApi
@@ -47,7 +47,7 @@ class LambdaResourcesFactory : ResourcesFactory {
         DelegatingResourceProcessor(
             codeBuildSetupProcessor,
             dynamoDbAttributesDefinitionsProcessor,
-            iamRoleStatementsProcessor,
+            iamStatementsProcessor,
             pipelineDefinitionProcessor
         )
     }
@@ -58,7 +58,7 @@ class LambdaResourcesFactory : ResourcesFactory {
 
     private val dynamoDbAttributesDefinitionsProcessor by lazy { DynamoDbAttributesDefinitions() }
 
-    private val iamRoleStatementsProcessor by lazy { IamRoleStatements() }
+    private val iamStatementsProcessor by lazy { IamStatements() }
 
     private val pipelineDefinitionProcessor by lazy { PipelineDefinition() }
 

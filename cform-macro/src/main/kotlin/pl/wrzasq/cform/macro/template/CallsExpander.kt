@@ -22,11 +22,9 @@ class CallsExpander(
      * @return Processed template.
      */
     fun processTemplate(input: Map<String, Any>) = input.mapSelected(
-        mapOf(
-            // these are the only sections where any function applies
-            SECTION_RESOURCES to ::traverse,
-            SECTION_OUTPUTS to ::traverse
-        )
+        // these are the only sections where any function applies
+        SECTION_RESOURCES to ::traverse,
+        SECTION_OUTPUTS to ::traverse
     )
 
     private fun traverse(input: Any): Any = when (input) {

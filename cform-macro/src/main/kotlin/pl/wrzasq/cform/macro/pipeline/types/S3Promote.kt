@@ -37,7 +37,6 @@ class S3Promote(
     override fun buildConfiguration(configuration: MutableMap<String, Any>) {
         super.buildConfiguration(configuration)
 
-        configuration["ObjectKey"] = objectKey
         configuration["Extract"] = false
         configuration["CannedACL"] = "bucket-owner-full-control"
     }

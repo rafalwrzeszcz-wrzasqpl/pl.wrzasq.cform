@@ -19,11 +19,9 @@ class PipelineDefinition : ResourceHandler {
     override fun handledResourceTypes() = listOf("AWS::CodePipeline::Pipeline")
 
     override fun handle(entry: ResourceDefinition) = entry.properties.mapSelected(
-        mapOf(
-            "ArtifactStore" to ::handleStore,
-            "ArtifactStores" to ::handleStores,
-            "Stages" to ::processPipeline
-        )
+        "ArtifactStore" to ::handleStore,
+        "ArtifactStores" to ::handleStores,
+        "Stages" to ::processPipeline
     )
 
     private fun handleStore(input: Any) = if (input !is Map<*, *> || input.size == 1) {

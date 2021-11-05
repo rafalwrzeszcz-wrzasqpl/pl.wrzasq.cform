@@ -66,10 +66,8 @@ abstract class BaseAction(
         }
 
         input.mapSelected(
-            mapOf(
-                "InputArtifacts" to ::buildArtifacts,
-                "OutputArtifacts" to ::buildArtifacts
-            )
+            "InputArtifacts" to ::buildArtifacts,
+            "OutputArtifacts" to ::buildArtifacts
         )
 
         return conditional(properties + input, condition)

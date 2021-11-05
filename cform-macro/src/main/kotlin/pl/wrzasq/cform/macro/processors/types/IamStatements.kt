@@ -14,7 +14,7 @@ import pl.wrzasq.cform.macro.template.mapSelected
 /**
  * Simplifies IAM policies declaration.
  */
-class IamRoleStatements : ResourceHandler {
+class IamStatements : ResourceHandler {
     override fun handledResourceTypes() = listOf(
         "AWS::IAM::Group",
         "AWS::IAM::ManagedPolicy",
@@ -30,10 +30,8 @@ class IamRoleStatements : ResourceHandler {
         entry.properties.mapSelected("PolicyDocument", ::expandPolicyDocument)
     } else {
         entry.properties.mapSelected(
-            mapOf(
-                "Policies" to ::expandPolicies,
-                "AssumeRolePolicyDocument" to ::expandPolicyDocument
-            )
+            "Policies" to ::expandPolicies,
+            "AssumeRolePolicyDocument" to ::expandPolicyDocument
         )
     }
 

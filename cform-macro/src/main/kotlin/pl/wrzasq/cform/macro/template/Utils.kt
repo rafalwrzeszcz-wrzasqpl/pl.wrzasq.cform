@@ -76,8 +76,8 @@ fun Map<String, Any>.popProperty(key: String, then: (Any) -> Unit, defaultValue:
  * @param handlers Mappers for selected keys.
  * @return Mapped structure.
  */
-fun Map<String, Any>.mapSelected(handlers: Map<String, (Any) -> Any>) = mapValues {
-    handlers[it.key]?.invoke(it.value) ?: it.value
+fun Map<String, Any>.mapSelected(vararg handlers: Pair<String, (Any) -> Any>) = mapValues {
+    mapOf(*handlers)[it.key]?.invoke(it.value) ?: it.value
 }
 
 /**
@@ -87,7 +87,7 @@ fun Map<String, Any>.mapSelected(handlers: Map<String, (Any) -> Any>) = mapValue
  * @param handler Mapping function.
  * @return Mapped structure.
  */
-fun Map<String, Any>.mapSelected(key: String, handler: (Any) -> Any) = mapSelected(mapOf(key to handler))
+fun Map<String, Any>.mapSelected(key: String, handler: (Any) -> Any) = mapSelected(key to handler)
 
 /**
  * Rebuilds resource definition with different properties.
