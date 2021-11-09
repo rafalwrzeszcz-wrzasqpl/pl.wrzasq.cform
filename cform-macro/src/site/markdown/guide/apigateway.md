@@ -226,7 +226,7 @@ RestApis:
                                 Authorizer: "TokenAuthorizer"
                                 RequestValidator: "BODY_AND_PARAMETERS"
                                 RequestModels:
-                                    application/json: !Ref "RestApi:V1:Model:TenantInfo"
+                                    application/json: !Ref "RestApi:V1:Model:AccountInfo"
                                 RequestParameters:
                                     method.request.header.Authorization: true
                                     method.request.path.accountId: true

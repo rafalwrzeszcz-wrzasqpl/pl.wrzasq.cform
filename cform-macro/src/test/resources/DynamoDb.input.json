@@ -1,0 +1,41 @@
+{
+    "Resources": {
+        "SomeTable": {
+            "Type": "AWS::DynamoDB::Table",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+                "AttributeDefinitions": [
+                    {
+                        "AttributeName": "version",
+                        "AttributeType": "N"
+                    }
+                ],
+                "KeySchema": [
+                    {
+                        "AttributeName": "clientId",
+                        "KeyType": "HASH"
+                    },
+                    {
+                        "AttributeName": "version",
+                        "KeyType": "RANGE"
+                    }
+                ],
+                "GlobalSecondaryIndexes": [
+                    {
+                        "IndexName": "keys",
+                        "KeySchema": [
+                            {
+                                "AttributeName": "clientId",
+                                "KeyType": "HASH"
+                            },
+                            {
+                                "AttributeName": "apiKey",
+                                "KeyType": "RANGE"
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+    }
+}

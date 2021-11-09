@@ -46,7 +46,8 @@ class ApiModel(
         properties = leftover + computed
     }
 
-    override val resourceId = "${api.resourceId}Model$id"
+    override val resourceId
+        get() = "${api.resourceId}Model$id"
 
     /**
      * Builds resource definition.

@@ -23,7 +23,8 @@ class ApiRequestValidator(
     private val validateRequestBody: Boolean,
     private val validateParameters: Boolean
 ) : ApiTemplateResource {
-    override val resourceId = "${api.resourceId}Validator$id"
+    override val resourceId
+        get() = "${api.resourceId}Validator$id"
 
     /**
      * Builds resource definition.

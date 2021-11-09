@@ -1,0 +1,126 @@
+{
+    "Resources": {
+        "DeployPipeline": {
+            "Type": "AWS::CodePipeline::Pipeline",
+            "Properties": {
+                "ArtifactStores": [
+                    {
+                        "Region": {
+                            "Ref": "AWS::Region"
+                        },
+                        "ArtifactStore": {
+                            "Fn::ImportValue": "codepipeline:artifacts-bucket:name"
+                        }
+                    },
+                    {
+                        "Region": {
+                            "Ref": "us-east-1"
+                        },
+                        "ArtifactStore": {
+                            "Fn::Sub": "${Import:codepipeline:artifacts-bucket:name}-us-east-1"
+                        }
+                    }
+                ],
+                "Stages": [
+                    {
+                        "Name": "Checkout",
+                        "Actions": {
+                            "Checkout": {
+                                "Condition": "HasCheckout",
+                                "ActionTypeId": {
+                                    "Owner": "ThirdParty",
+                                    "Category": "Source",
+                                    "Provider": "GitHub"
+                                },
+                                "OutputArtifacts": [
+                                    "source"
+                                ]
+                            },
+                            "Download": {
+                                "Condition": "HasPreviousStage",
+                                "ActionType": "S3Source",
+                                "Bucket": {
+                                    "Ref": "SourceBucket"
+                                },
+                                "ObjectKey": {
+                                    "Fn::ImportValue": "CodePipeline:ArtifactName"
+                                },
+                                "OutputArtifacts": [
+                                    "checkout"
+                                ]
+                            }
+                        }
+                    },
+                    {
+                        "Name": "Deploy",
+                        "Actions": {
+                            "Build": {
+                                "ActionType": "CodeBuild",
+                                "Project": "BuildProjectName"
+                            },
+                            "Db": {
+                                "ActionType": "CloudFormationDeploy",
+                                "Configuration": {
+                                    "TemplatePath": "checkout::db.yaml"
+                                },
+                                "Parameters": {
+                                    "TableName": {
+                                        "Ref": "TableName"
+                                    },
+                                    "BuildId": "#{Deploy:Build.Id}"
+                                }
+                            },
+                            "Deploy": {
+                                "ActionType": "CloudFormationDeploy",
+                                "Configuration": {
+                                    "TemplatePath": "checkout::service.yaml"
+                                },
+                                "Parameters": {
+                                    "TableArn": "#{Deploy:Db.Arn}",
+                                    "RoleArn": {
+                                        "Fn::GetAtt": "ServiceRole.Arn"
+                                    },
+                                    "Title": {
+                                        "Fn::Sub": "Hello ${World}!"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "Name": "Promote",
+                        "Condition": "HasNextStage",
+                        "Actions": {
+                            "Approve": {
+                                "ActionTypeId": {
+                                    "Category": "Approval",
+                                    "Provider": "Manual"
+                                },
+                                "RunOrder": 1
+                            },
+                            "Promote": {
+                                "ActionType": "S3Promote",
+                                "Source": "Checkout:Download",
+                                "Bucket": {
+                                    "Ref": "NextStageBucket"
+                                },
+                                "RunOrder": 2
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        "OtherPipeline": {
+            "Type": "AWS::CodePipeline::Pipeline",
+            "Properties": {
+                "ArtifactStore": {
+                    "Type": "S3",
+                    "Location": {
+                        "Fn::ImportValue": "codepipeline:artifacts-bucket:name"
+                    }
+                }
+            }
+        }
+    }
+}

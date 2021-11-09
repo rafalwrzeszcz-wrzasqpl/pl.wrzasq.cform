@@ -54,7 +54,8 @@ class ApiMethod(
         properties = leftover + computed
     }
 
-    override val resourceId = "${api.resourceId}Method$id"
+    override val resourceId
+        get() = "${api.resourceId}Method$id"
 
     /**
      * Builds resource definition.

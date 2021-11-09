@@ -38,5 +38,5 @@ class CallsExpander(
         handler.expand(input.entries.first().toPair())
     } else {
         input
-    }.mapValues(::traverse)
+    }.mapValuesOnly(::traverse)
 }

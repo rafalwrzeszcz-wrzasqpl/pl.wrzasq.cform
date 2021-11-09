@@ -1,0 +1,59 @@
+{
+    "Resources": {
+        "MyFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+                "Runtime": "provided.al2",
+                "MemorySize": 1024,
+                "Timeout": 10
+            }
+        },
+        "MyLoggingFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+                "Runtime": "provided.al2",
+                "MemorySize": 1024,
+                "Timeout": 10,
+                "LogsRetentionInDays": 14
+            }
+        },
+        "MyServerlessFunction": {
+            "Type": "AWS::Serverless::Function",
+            "Properties": {
+                "Runtime": "provided.al2",
+                "MemorySize": 1024,
+                "Timeout": 10
+            }
+        },
+        "MyServerlessLoggingFunction": {
+            "Type": "AWS::Serverless::Function",
+            "Properties": {
+                "Runtime": "provided.al2",
+                "MemorySize": 1024,
+                "Timeout": 10,
+                "LogsRetentionInDays": 14
+            }
+        },
+        "MyProject": {
+            "Type": "AWS::CodeBuild::Project",
+            "Properties": {
+                "Environment": {
+                    "Image": "maven:3.6.2-jdk-11",
+                    "Type": "LINUX_CONTAINER",
+                    "ComputeType": "BUILD_GENERAL1_SMALL"
+                }
+            }
+        },
+        "MyLoggingProject": {
+            "Type": "AWS::CodeBuild::Project",
+            "Properties": {
+                "Environment": {
+                    "Image": "maven:3.6.2-jdk-11",
+                    "Type": "LINUX_CONTAINER",
+                    "ComputeType": "BUILD_GENERAL1_SMALL"
+                },
+                "LogsRetentionInDays": 14
+            }
+        }
+    }
+}

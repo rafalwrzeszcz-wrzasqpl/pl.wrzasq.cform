@@ -22,7 +22,6 @@ class S3Promote(
     condition: String?
 ) : S3Deploy(name, input, condition) {
     private val source: String = properties.remove("Source").toString()
-    lateinit var objectKey: Any
 
     override fun compile(manager: PipelineManager) {
         val action = manager.resolve(source)

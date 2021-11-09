@@ -90,6 +90,14 @@ fun Map<String, Any>.mapSelected(vararg handlers: Pair<String, (Any) -> Any>) = 
 fun Map<String, Any>.mapSelected(key: String, handler: (Any) -> Any) = mapSelected(key to handler)
 
 /**
+ * Performs mapping of only values of each pair.
+ *
+ * @param transform Mapping function.
+ * @return Mapped structure.
+ */
+fun Map<String, Any>.mapValuesOnly(transform: (Any) -> Any) = mapValues { transform(it.value) }
+
+/**
  * Rebuilds resource definition with different properties.
  *
  * @param input Initial resource definition.
@@ -107,7 +115,7 @@ fun rebuildResource(
  * @param model Resource model.
  * @return Resource structure.
  */
-fun createResource(model: ResourceDefinition): Pair<String, Any> {
+fun createResource(model: ResourceDefinition): Pair<String, Map<String, Any>> {
     val resource = mutableMapOf<String, Any>(PROPERTY_KEY_TYPE to model.type)
     if (!model.condition.isNullOrEmpty()) {
         resource[PROPERTY_KEY_CONDITION] = model.condition

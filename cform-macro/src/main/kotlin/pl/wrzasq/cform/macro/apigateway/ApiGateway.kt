@@ -52,7 +52,8 @@ class ApiGateway(
             })
     }
 
-    override val resourceId = "ApiGateway$id"
+    override val resourceId
+        get() = "ApiGateway$id"
 
     /**
      * Returns validator of given type.

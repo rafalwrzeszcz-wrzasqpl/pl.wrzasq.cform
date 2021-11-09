@@ -10,10 +10,11 @@ package pl.wrzasq.cform.macro.pipeline.types
 import pl.wrzasq.cform.macro.pipeline.PipelineManager
 import pl.wrzasq.cform.macro.template.Fn
 import pl.wrzasq.cform.macro.template.asMap
+import pl.wrzasq.cform.macro.template.mapValuesOnly
 import pl.wrzasq.commons.json.ObjectMapperFactory
 
 // action and stage names can contain `.` so we need to match last one
-private val REFERENCE = Regex("#\\{([^:]+):([^}]+).([^.]+)}")
+private val REFERENCE = Regex("#\\{([^:]+):([^.]+).([^}]+)}")
 private val OBJECT_MAPPER = ObjectMapperFactory.createObjectMapper()
 
 /**
@@ -72,7 +73,7 @@ class CloudFormationDeploy(
             var plainText = true
             var index = 0
             val params = mutableMapOf<String, Any>()
-            val final = compiled.mapValues {
+            val final = compiled.mapValuesOnly {
                 if (it is Map<*, *> && it.size == 1) {
                     plainText = false
                     val (key, value) = asMap(it).entries.first()
@@ -84,14 +85,14 @@ class CloudFormationDeploy(
                         key == "Fn::Sub" && value is String -> value
                         key == "Fn::Sub" && value is List<*> -> {
                             params.putAll(asMap(value[1] ?: emptyMap<String, Any>()))
-                            value[0]
+                            value[0] ?: ""
                         }
                         // this is our notation - it will be handled afterwards
                         key == "Fn::ImportValue" && value is String -> "\${Import:${value}}"
                         else -> generateParamPlaceholder(++index, value, params)
                     }
                 } else {
-                    it.value
+                    it
                 }
             }
             val json = OBJECT_MAPPER.writeValueAsString(final)

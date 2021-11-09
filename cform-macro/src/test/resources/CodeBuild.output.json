@@ -1,0 +1,56 @@
+{
+    "Resources": {
+        "PipelineProject": {
+            "Type": "AWS::CodeBuild::Project",
+            "Properties": {
+                "ServiceRole": {
+                    "Fn::ImportValue": "root:v1:codebuild:role:name"
+                },
+                "Environment": {
+                    "Image": "maven:3.6.2-jdk-11",
+                    "Type": "LINUX_CONTAINER",
+                    "ComputeType": "BUILD_GENERAL1_SMALL"
+                },
+                "Source": {
+                    "Type": "CODEPIPELINE"
+                },
+                "Artifacts": {
+                    "Type": "CODEPIPELINE"
+                },
+                "Cache": {
+                    "Type": "S3",
+                    "Location": {
+                        "Fn::Sub": "${CacheBucketName}/integrations"
+                    }
+                }
+            }
+        },
+        "S3Project": {
+            "Type": "AWS::CodeBuild::Project",
+            "Properties": {
+                "ServiceRole": {
+                    "Fn::ImportValue": "root:v1:codebuild:role:name"
+                },
+                "Environment": {
+                    "Image": "maven:3.6.2-jdk-11",
+                    "Type": "ARM_CONTAINER",
+                    "ComputeType": "BUILD_GENERAL1_MEDIUM"
+                },
+                "Source": {
+                    "Type": "S3"
+                },
+                "Artifacts": {
+                    "Type": "S3",
+                    "Location": {
+                        "Fn::ImportValue": "root:v1:codepipeline:artifacts-bucket:name"
+                    },
+                    "Path": {
+                        "Ref": "ProjectName"
+                    },
+                    "Name": "checkout.zip",
+                    "Packaging": "ZIP"
+                }
+            }
+        }
+    }
+}

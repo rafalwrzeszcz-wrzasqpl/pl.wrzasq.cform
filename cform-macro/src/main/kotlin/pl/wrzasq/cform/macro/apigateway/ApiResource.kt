@@ -23,7 +23,8 @@ class ApiResource(
     private val parent: Any,
     private val path: String
 ) : ApiTemplateResource {
-    override val resourceId = "${api.resourceId}Resource$id"
+    override val resourceId
+        get() = "${api.resourceId}Resource$id"
 
     /**
      * Builds resource definition.

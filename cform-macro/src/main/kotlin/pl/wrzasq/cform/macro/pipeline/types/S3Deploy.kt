@@ -20,7 +20,7 @@ open class S3Deploy(
     condition: String?
 ) : BaseAction(name, input, condition) {
     private val bucket: Any? = properties.remove("Bucket")
-    private val objectKey: Any? = properties.remove("ObjectKey")
+    protected var objectKey: Any? = properties.remove("ObjectKey")
 
     override fun buildActionTypeId() = buildAwsActionTypeId("Deploy", "S3")
 

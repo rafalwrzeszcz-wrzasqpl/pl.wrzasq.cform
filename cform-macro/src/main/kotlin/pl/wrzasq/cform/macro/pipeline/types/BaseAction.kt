@@ -65,12 +65,12 @@ abstract class BaseAction(
             input["Configuration"] = configuration
         }
 
-        input.mapSelected(
+        val definition = properties + input.mapSelected(
             "InputArtifacts" to ::buildArtifacts,
             "OutputArtifacts" to ::buildArtifacts
         )
 
-        return conditional(properties + input, condition)
+        return conditional(definition, condition)
     }
 }
 

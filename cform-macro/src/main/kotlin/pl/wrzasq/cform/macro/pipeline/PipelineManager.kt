@@ -10,6 +10,7 @@ package pl.wrzasq.cform.macro.pipeline
 import pl.wrzasq.cform.macro.pipeline.types.CloudFormationDeploy
 import pl.wrzasq.cform.macro.pipeline.types.CodeBuild
 import pl.wrzasq.cform.macro.pipeline.types.S3Deploy
+import pl.wrzasq.cform.macro.pipeline.types.S3Promote
 import pl.wrzasq.cform.macro.pipeline.types.S3Source
 import pl.wrzasq.cform.macro.pipeline.types.fromMap
 import pl.wrzasq.cform.macro.template.Fn.fnIf
@@ -69,6 +70,7 @@ class PipelineManager {
                     "CloudFormationDeploy" -> ::CloudFormationDeploy
                     "CodeBuild" -> ::CodeBuild
                     "S3Deploy" -> ::S3Deploy
+                    "S3Promote" -> ::S3Promote
                     "S3Source" -> ::S3Source
                     else -> throw IllegalArgumentException("Unknown action type `$it`")
                 }
@@ -153,11 +155,11 @@ class PipelineManager {
         // we are using set here so values will be anyway unique
         action.runOrder = (action.dependencies + action.inputs.mapNotNull(artifacts::get))
             // actions from previous steps are anyway executed upfront and actions from further steps are not yet keyed
-            .filterNot { it.startsWith("$stageName:") }
+            .filter { it.startsWith("$stageName:") }
             .mapNotNull(all::get)
             // first we need to know order of all downstream actions
             .onEach { calculateActionOrder(it, stageName, visited) }
-            .maxOfOrNull { it.runOrder ?: 1 }
+            .maxOfOrNull { (it.runOrder ?: 1) + 1 }
 
         // we need to remove it from currently visited path as same node can be visited multiple times
         visited.remove(action)

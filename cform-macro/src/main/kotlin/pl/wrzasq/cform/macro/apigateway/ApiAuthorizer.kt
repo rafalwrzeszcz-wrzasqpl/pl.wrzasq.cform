@@ -40,7 +40,8 @@ class ApiAuthorizer(
 
     val authorizationType = if (type == "COGNITO_USER_POOLS") type else "CUSTOM"
 
-    override val resourceId = "${api.resourceId}Authorizer$id"
+    override val resourceId
+        get() = "${api.resourceId}Authorizer$id"
 
     /**
      * Builds resource definition.

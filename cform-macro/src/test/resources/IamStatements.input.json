@@ -1,0 +1,107 @@
+{
+    "Resources": {
+        "ApiLambdaRole": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+                "AssumeRolePolicyDocument": [
+                    {
+                        "Action": "sts:AssumeRole",
+                        "Effect": "Allow",
+                        "Principal": {
+                            "Service": [
+                                "lambda.amazonaws.com"
+                            ]
+                        }
+                    }
+                ],
+                "ManagedPolicyArns": [
+                    "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+                    "arn:aws:iam::aws:policy/AWSXrayWriteOnlyAccess"
+                ],
+                "Policies": {
+                    "AllowUsingSomeTable": [
+                        {
+                            "Action": [
+                                "dynamodb:Query"
+                            ],
+                            "Effect": "Allow",
+                            "Resource": [
+                                {
+                                    "Fn::Sub": "${SomeTable.Arn}/index/keys"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        },
+        "TechUser": {
+            "Type": "AWS::IAM::User",
+            "Properties": {
+                "UserName": "deploy-user",
+                "Policies": {
+                    "AllowSavingToSomeTable": [
+                        {
+                            "Action": [
+                                "dynamodb:PutItem"
+                            ],
+                            "Effect": "Allow",
+                            "Resource": [
+                                {
+                                    "Fn::Sub": "${SomeTable.Arn}/index/keys"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        },
+        "DataAdminGroup": {
+            "Type": "AWS::IAM::Group",
+            "Properties": {
+                "GroupName": "DataAdministrators",
+                "Policies": {
+                    "AllowSavingToSomeTable": [
+                        {
+                            "Action": [
+                                "s3:*"
+                            ],
+                            "Effect": "Allow",
+                            "Resource": "*"
+                        }
+                    ]
+                }
+            }
+        },
+        "DataManagementPolicy": {
+            "Type": "AWS::IAM::ManagedPolicy",
+            "Properties": {
+                "ManagedPolicyName": "DataManage",
+                "PolicyDocument": [
+                    {
+                        "Action": [
+                            "s3:*"
+                        ],
+                        "Effect": "Allow",
+                        "Resource": "*"
+                    }
+                ]
+            }
+        },
+        "DataAccessPolicy": {
+            "Type": "AWS::IAM::Policy",
+            "Properties": {
+                "PolicyName": "DataAccess",
+                "PolicyDocument": [
+                    {
+                        "Action": [
+                            "s3:Get*"
+                        ],
+                        "Effect": "Allow",
+                        "Resource": "*"
+                    }
+                ]
+            }
+        }
+    }
+}

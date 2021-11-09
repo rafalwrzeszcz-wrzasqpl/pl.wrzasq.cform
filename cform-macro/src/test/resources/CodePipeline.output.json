@@ -1,0 +1,216 @@
+{
+    "Resources": {
+        "DeployPipeline": {
+            "Type": "AWS::CodePipeline::Pipeline",
+            "Properties": {
+                "ArtifactStores": [
+                    {
+                        "Region": {
+                            "Ref": "AWS::Region"
+                        },
+                        "ArtifactStore": {
+                            "Type": "S3",
+                            "Location": {
+                                "Fn::ImportValue": "codepipeline:artifacts-bucket:name"
+                            }
+                        }
+                    },
+                    {
+                        "Region": {
+                            "Ref": "us-east-1"
+                        },
+                        "ArtifactStore": {
+                            "Type": "S3",
+                            "Location": {
+                                "Fn::Sub": "${Import:codepipeline:artifacts-bucket:name}-us-east-1"
+                            }
+                        }
+                    }
+                ],
+                "Stages": [
+                    {
+                        "Name": "Checkout",
+                        "Actions": [
+                            {
+                                "Fn::If": [
+                                    "HasCheckout",
+                                    {
+                                        "Name": "Checkout",
+                                        "ActionTypeId": {
+                                            "Owner": "ThirdParty",
+                                            "Category": "Source",
+                                            "Provider": "GitHub",
+                                            "Version": "1"
+                                        },
+                                        "OutputArtifacts": [
+                                            {
+                                                "Name": "source"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "Ref": "AWS::NoValue"
+                                    }
+                                ]
+                            },
+                            {
+                                "Fn::If": [
+                                    "HasPreviousStage",
+                                    {
+                                        "Name": "Download",
+                                        "ActionTypeId": {
+                                            "Owner": "AWS",
+                                            "Category": "Source",
+                                            "Provider": "S3",
+                                            "Version": "1"
+                                        },
+                                        "Configuration": {
+                                            "S3Bucket": {
+                                                "Ref": "SourceBucket"
+                                            },
+                                            "S3ObjectKey": {
+                                                "Fn::ImportValue": "CodePipeline:ArtifactName"
+                                            }
+                                        },
+                                        "OutputArtifacts": [
+                                            {
+                                                "Name": "checkout"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "Ref": "AWS::NoValue"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "Name": "Deploy",
+                        "Actions": [
+                            {
+                                "Name": "Build",
+                                "ActionTypeId": {
+                                    "Owner": "AWS",
+                                    "Category": "Build",
+                                    "Provider": "CodeBuild",
+                                    "Version": "1"
+                                },
+                                "Configuration": {
+                                    "ProjectName": "BuildProjectName"
+                                },
+                                "Namespace": "deploy-build"
+                            },
+                            {
+                                "Name": "Db",
+                                "ActionTypeId": {
+                                    "Owner": "AWS",
+                                    "Category": "Deploy",
+                                    "Provider": "CloudFormation",
+                                    "Version": "1"
+                                },
+                                "Configuration": {
+                                    "ActionMode": "CREATE_UPDATE",
+                                    "Capabilities": "CAPABILITY_NAMED_IAM,CAPABILITY_AUTO_EXPAND",
+                                    "TemplatePath": "checkout::db.yaml",
+                                    "ParameterOverrides": {
+                                        "Fn::Sub": "{\"TableName\":\"${TableName}\",\"BuildId\":\"#{deploy-build.Id}\"}"
+                                    }
+                                },
+                                "InputArtifacts": [
+                                    {
+                                        "Name": "checkout"
+                                    }
+                                ],
+                                "Namespace": "deploy-db",
+                                "RunOrder": 2
+                            },
+                            {
+                                "Name": "Deploy",
+                                "ActionTypeId": {
+                                    "Owner": "AWS",
+                                    "Category": "Deploy",
+                                    "Provider": "CloudFormation",
+                                    "Version": "1"
+                                },
+                                "Configuration": {
+                                    "ActionMode": "CREATE_UPDATE",
+                                    "Capabilities": "CAPABILITY_NAMED_IAM,CAPABILITY_AUTO_EXPAND",
+                                    "TemplatePath": "checkout::service.yaml",
+                                    "ParameterOverrides": {
+                                        "Fn::Sub": "{\"TableArn\":\"#{deploy-db.Arn}\",\"RoleArn\":\"${ServiceRole.Arn}\",\"Title\":\"Hello ${World}!\"}"
+                                    }
+                                },
+                                "InputArtifacts": [
+                                    {
+                                        "Name": "checkout"
+                                    }
+                                ],
+                                "RunOrder": 3
+                            }
+                        ]
+                    },
+                    {
+                        "Fn::If": [
+                            "HasNextStage",
+                            {
+                                "Name": "Promote",
+                                "Actions": [
+                                    {
+                                        "Name": "Approve",
+                                        "ActionTypeId": {
+                                            "Owner": "AWS",
+                                            "Version": "1",
+                                            "Category": "Approval",
+                                            "Provider": "Manual"
+                                        },
+                                        "RunOrder": 1
+                                    },
+                                    {
+                                        "Name": "Promote",
+                                        "ActionTypeId": {
+                                            "Owner": "AWS",
+                                            "Version": "1",
+                                            "Category": "Deploy",
+                                            "Provider": "S3"
+                                        },
+                                        "Configuration": {
+                                            "BucketName": {
+                                                "Ref": "NextStageBucket"
+                                            },
+                                            "ObjectKey": {
+                                                "Fn::ImportValue": "CodePipeline:ArtifactName"
+                                            },
+                                            "Extract": false,
+                                            "CannedACL": "bucket-owner-full-control"
+                                        },
+                                        "InputArtifacts": [
+                                            {
+                                                "Name": "checkout"
+                                            }
+                                        ],
+                                        "RunOrder": 2
+                                    }
+                                ]
+                            },
+                            {
+                                "Ref": "AWS::NoValue"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "OtherPipeline": {
+            "Type": "AWS::CodePipeline::Pipeline",
+            "Properties": {
+                "ArtifactStore": {
+                    "Type": "S3",
+                    "Location": {
+                        "Fn::ImportValue": "codepipeline:artifacts-bucket:name"
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,280 @@
+{
+    "Resources": {
+        "ApiGatewayAccountRole": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+                "AssumeRolePolicyDocument": [
+                    {
+                        "Action": [
+                            "sts:AssumeRole"
+                        ],
+                        "Effect": "Allow",
+                        "Principal": {
+                            "Service": [
+                                "apigateway.amazonaws.com"
+                            ]
+                        }
+                    }
+                ],
+                "ManagedPolicyArns": [
+                    "arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"
+                ]
+            }
+        },
+        "ApiAccount": {
+            "Type": "AWS::ApiGateway::Account",
+            "DependsOn": [
+                "ApiGatewayPublic"
+            ],
+            "Properties": {
+                "CloudWatchRoleArn": {
+                    "Fn::GetAtt": [
+                        "ApiGatewayAccountRole",
+                        "Arn"
+                    ]
+                }
+            }
+        },
+        "ApiGatewayPublic": {
+            "Type": "AWS::ApiGateway::RestApi",
+            "Properties": {
+                "Name": "MyTestApi"
+            }
+        },
+        "ApiGatewayPublicAuthorizerTokenAuthorizer": {
+            "Type": "AWS::ApiGateway::Authorizer",
+            "Properties": {
+                "RestApiId": {
+                    "Ref": "ApiGatewayPublic"
+                },
+                "Name": "TokenAuthorizer",
+                "Type": "TOKEN",
+                "AuthorizerUri": {
+                    "Fn::Sub": "arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:${AWS::Partition}:lambda:${AWS::Region}:${AWS::AccountId}:function:${!stageVariables.AuthorizerLambda}/invocations"
+                },
+                "IdentitySource": "method.request.header.Authorization",
+                "AuthorizerResultTtlInSeconds": 3600
+            }
+        },
+        "ApiGatewayPublicModelAccountInfo": {
+            "Type": "AWS::ApiGateway::Model",
+            "Properties": {
+                "RestApiId": {
+                    "Ref": "ApiGatewayPublic"
+                },
+                "ContentType": "application/json",
+                "Schema": {
+                    "$schema": "http://json-schema.org/draft-04/schema#",
+                    "title": "AccountInfo",
+                    "type": "object",
+                    "properties": {
+                        "accountName": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "accountName"
+                    ],
+                    "additionalProperties": false
+                }
+            }
+        },
+        "ApiGatewayPublicValidatorParametersOnly": {
+            "Type": "AWS::ApiGateway::RequestValidator",
+            "Properties": {
+                "RestApiId": {
+                    "Ref": "ApiGatewayPublic"
+                },
+                "ValidateRequestBody": false,
+                "ValidateRequestParameters": true
+            }
+        },
+        "ApiGatewayPublicValidatorBodyAndParameters": {
+            "Type": "AWS::ApiGateway::RequestValidator",
+            "Properties": {
+                "RestApiId": {
+                    "Ref": "ApiGatewayPublic"
+                },
+                "ValidateRequestBody": true,
+                "ValidateRequestParameters": true
+            }
+        },
+        "ApiGatewayPublicResourceAccounts": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+                "RestApiId": {
+                    "Ref": "ApiGatewayPublic"
+                },
+                "ParentId": {
+                    "Fn::GetAtt": [
+                        "ApiGatewayPublic",
+                        "RootResourceId"
+                    ]
+                },
+                "PathPart": "accounts"
+            }
+        },
+        "ApiGatewayPublicResourceAccountsAccountId": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+                "RestApiId": {
+                    "Ref": "ApiGatewayPublic"
+                },
+                "ParentId": {
+                    "Ref": "ApiGatewayPublicResourceAccounts"
+                },
+                "PathPart": "{accountId}"
+            }
+        },
+        "ApiGatewayPublicResourceAccountsAccountIdKeys": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+                "RestApiId": {
+                    "Ref": "ApiGatewayPublic"
+                },
+                "ParentId": {
+                    "Ref": "ApiGatewayPublicResourceAccountsAccountId"
+                },
+                "PathPart": "keys"
+            }
+        },
+        "ApiGatewayPublicResourceAccountsAccountIdKeysApiKey": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+                "RestApiId": {
+                    "Ref": "ApiGatewayPublic"
+                },
+                "ParentId": {
+                    "Ref": "ApiGatewayPublicResourceAccountsAccountIdKeys"
+                },
+                "PathPart": "{apiKey}"
+            }
+        },
+        "ApiGatewayPublicMethodDELETEAccountsAccountId": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+                "RestApiId": {
+                    "Ref": "ApiGatewayPublic"
+                },
+                "ResourceId": {
+                    "Ref": "ApiGatewayPublicResourceAccountsAccountId"
+                },
+                "Method": "DELETE",
+                "AuthorizerId": {
+                    "Ref": "ApiGatewayPublicAuthorizerTokenAuthorizer"
+                },
+                "AuthorizationType": "CUSTOM",
+                "RequestValidatorId": {
+                    "Ref": "ApiGatewayPublicValidatorParametersOnly"
+                },
+                "RequestParameters": {
+                    "method.request.header.Authorization": true,
+                    "method.request.path.accountId": true
+                },
+                "MethodResponses": [
+                    {
+                        "StatusCode": "202"
+                    }
+                ],
+                "Integration": {
+                    "Type": "AWS",
+                    "IntegrationHttpMethod": "POST",
+                    "Uri": {
+                        "Fn::Sub": "arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:${AWS::Partition}:lambda:${AWS::Region}:${AWS::AccountId}:function:${!stageVariables.AccountDeletionTarget}/invocations"
+                    },
+                    "Credentials": {
+                        "Fn::GetAtt": "ApiGatewayRole.Arn"
+                    },
+                    "RequestTemplates": {
+                        "application/json": "{\"tenantId\":\"$context.authorizer.tenantId\",\"accountId\":\"$input.params('accountId')\"}"
+                    },
+                    "IntegrationResponses": [
+                        {
+                            "StatusCode": "202"
+                        }
+                    ],
+                    "PassthroughBehavior": "NEVER"
+                }
+            }
+        },
+        "ApiGatewayPublicMethodPUTAccountsAccountIdKeysApiKey": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+                "RestApiId": {
+                    "Ref": "ApiGatewayPublic"
+                },
+                "ResourceId": {
+                    "Ref": "ApiGatewayPublicResourceAccountsAccountIdKeysApiKey"
+                },
+                "Method": "PUT",
+                "AuthorizerId": {
+                    "Ref": "ApiGatewayPublicAuthorizerTokenAuthorizer"
+                },
+                "AuthorizationType": "CUSTOM",
+                "RequestValidatorId": {
+                    "Ref": "ApiGatewayPublicValidatorBodyAndParameters"
+                },
+                "RequestModels": {
+                    "application/json": {
+                        "Ref": "ApiGatewayPublicModelAccountInfo"
+                    }
+                },
+                "RequestParameters": {
+                    "method.request.header.Authorization": true,
+                    "method.request.path.accountId": true,
+                    "method.request.path.apiKey": true
+                },
+                "MethodResponses": [
+                    {
+                        "StatusCode": "202"
+                    }
+                ],
+                "Integration": {
+                    "Type": "AWS",
+                    "IntegrationHttpMethod": "POST",
+                    "Uri": {
+                        "Fn::Sub": "arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:${AWS::Partition}:lambda:${AWS::Region}:${AWS::AccountId}:function:${!stageVariables.AccountKeySavingTarget}/invocations"
+                    },
+                    "Credentials": {
+                        "Fn::GetAtt": "ApiGatewayRole.Arn"
+                    },
+                    "RequestTemplates": {
+                        "application/json": "{\"tenantId\":\"$context.authorizer.tenantId\",\"accountId\":\"$input.params('accountId')\",\"apiKey\":\"$input.params('apiKey')\",\"accountInfo\":$input.json('$')}"
+                    },
+                    "IntegrationResponses": [
+                        {
+                            "StatusCode": "202"
+                        }
+                    ],
+                    "PassthroughBehavior": "NEVER"
+                }
+            }
+        },
+        "ApiGatewayPublicDeployment1059817317": {
+            "Type": "AWS::ApiGateway::Deployment",
+            "DependsOn": [
+                "ApiGatewayPublicMethodDELETEAccountsAccountId",
+                "ApiGatewayPublicMethodPUTAccountsAccountIdKeysApiKey"
+            ],
+            "Properties": {
+                "RestApiId": {
+                    "Ref": "ApiGatewayPublic"
+                }
+            }
+        }
+    },
+    "Outputs": {
+        "RestApiId": {
+            "Description": "API Gateway ID.",
+            "Value": {
+                "Ref": "ApiGatewayPublic"
+            }
+        },
+        "AuthorizerId": {
+            "Description": "API Gateway ID.",
+            "Value": {
+                "Ref": "ApiGatewayPublicAuthorizerTokenAuthorizer"
+            }
+        }
+    }
+}

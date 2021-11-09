@@ -1,0 +1,32 @@
+{
+    "Resources": {
+        "Test": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+                "Description": {
+                    "Fn::Sub": [
+                        "Check ${import0} out!",
+                        {
+                            "import0": {
+                                "Fn::ImportValue": "This"
+                            }
+                        }
+                    ]
+                },
+                "Handler": {
+                    "Fn::Sub": [
+                        "not_${Var}_in_${import0}",
+                        {
+                            "Var": {
+                                "Ref": "Param1"
+                            },
+                            "import0": {
+                                "Fn::ImportValue": "root:project"
+                            }
+                        }
+                    ]
+                }
+            }
+        }
+    }
+}

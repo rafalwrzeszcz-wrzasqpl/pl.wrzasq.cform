@@ -1,0 +1,110 @@
+{
+    "Resources": {},
+    "RestApis": {
+        "Public": {
+            "Name": "MyTestApi",
+            "Authorizers": {
+                "TokenAuthorizer": {
+                    "Type": "TOKEN",
+                    "Lambda": "${stageVariables.AuthorizerLambda}",
+                    "IdentitySource": "method.request.header.Authorization",
+                    "AuthorizerResultTtlInSeconds": 3600
+                }
+            },
+            "Models": {
+                "AccountInfo": {
+                    "Schema": {
+                        "type": "object",
+                        "properties": {
+                            "accountName": {
+                                "type": "string"
+                            }
+                        },
+                        "required": [
+                            "accountName"
+                        ],
+                        "additionalProperties": false
+                    }
+                }
+            },
+            "Resources": {
+                "/accounts": {
+                    "/{accountId}": {
+                        "@DELETE": {
+                            "Authorizer": "TokenAuthorizer",
+                            "RequestValidator": "PARAMETERS_ONLY",
+                            "RequestParameters": {
+                                "method.request.header.Authorization": true,
+                                "method.request.path.accountId": true
+                            },
+                            "MethodResponses": {
+                                "202": {}
+                            },
+                            "Integration": {
+                                "Lambda": "${stageVariables.AccountDeletionTarget}",
+                                "Credentials": {
+                                    "Fn::GetAtt": "ApiGatewayRole.Arn"
+                                },
+                                "RequestTemplates": {
+                                    "application/json": "{\"tenantId\":\"$context.authorizer.tenantId\",\"accountId\":\"$input.params('accountId')\"}"
+                                },
+                                "IntegrationResponses": {
+                                    "202": {}
+                                },
+                                "PassthroughBehavior": "NEVER"
+                            }
+                        },
+                        "/keys": {
+                            "/{apiKey}": {
+                                "@PUT": {
+                                    "Authorizer": "TokenAuthorizer",
+                                    "RequestValidator": "BODY_AND_PARAMETERS",
+                                    "RequestModels": {
+                                        "application/json": {
+                                            "Ref": "RestApi:Public:Model:AccountInfo"
+                                        }
+                                    },
+                                    "RequestParameters": {
+                                        "method.request.header.Authorization": true,
+                                        "method.request.path.accountId": true,
+                                        "method.request.path.apiKey": true
+                                    },
+                                    "MethodResponses": {
+                                        "202": {}
+                                    },
+                                    "Integration": {
+                                        "Lambda": "${stageVariables.AccountKeySavingTarget}",
+                                        "Credentials": {
+                                            "Fn::GetAtt": "ApiGatewayRole.Arn"
+                                        },
+                                        "RequestTemplates": {
+                                            "application/json": "{\"tenantId\":\"$context.authorizer.tenantId\",\"accountId\":\"$input.params('accountId')\",\"apiKey\":\"$input.params('apiKey')\",\"accountInfo\":$input.json('$')}"
+                                        },
+                                        "IntegrationResponses": {
+                                            "202": {}
+                                        },
+                                        "PassthroughBehavior": "NEVER"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "Outputs": {
+        "RestApiId": {
+            "Description": "API Gateway ID.",
+            "Value": {
+                "Ref": "RestApi:Public"
+            }
+        },
+        "AuthorizerId": {
+            "Description": "API Gateway ID.",
+            "Value": {
+                "Ref": "RestApi:Public:Authorizer:TokenAuthorizer"
+            }
+        }
+    }
+}

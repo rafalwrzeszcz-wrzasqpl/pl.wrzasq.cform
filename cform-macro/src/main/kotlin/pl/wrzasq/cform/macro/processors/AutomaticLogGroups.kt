@@ -50,7 +50,7 @@ class AutomaticLogGroups {
                     resources += handler.buildLogGroup(id, it).build()
                 })
                     .build()
-
+                    .second
             } else {
                 // just keep original resource
                 resources[id] = resource
