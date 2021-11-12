@@ -29,10 +29,25 @@ const val SECTION_RESOURCES = "Resources"
  */
 const val SECTION_OUTPUTS = "Outputs"
 
-private const val PROPERTY_KEY_TYPE = "Type"
-private const val PROPERTY_KEY_DEPENDSON = "DependsOn"
-private const val PROPERTY_KEY_CONDITION = "Condition"
-private const val PROPERTY_KEY_PROPERTIES = "Properties"
+/**
+ * Type key.
+ */
+const val PROPERTY_KEY_TYPE = "Type"
+
+/**
+ * DependsOn key.
+ */
+const val PROPERTY_KEY_DEPENDSON = "DependsOn"
+
+/**
+ * Condition key.
+ */
+const val PROPERTY_KEY_CONDITION = "Condition"
+
+/**
+ * Properties key.
+ */
+const val PROPERTY_KEY_PROPERTIES = "Properties"
 
 /**
  * Safely converts value to a typed map.
@@ -51,6 +66,14 @@ fun asMap(input: Any): Map<String, Any> {
     }
     return output
 }
+
+/**
+ * Converts optional value to a typed map.
+ *
+ * @param input Input object.
+ * @return Typed map.
+ */
+fun asMapAlways(input: Any?) = input?.let(::asMap) ?: emptyMap()
 
 /**
  * Handles optional property by removing it from generic properties pool.

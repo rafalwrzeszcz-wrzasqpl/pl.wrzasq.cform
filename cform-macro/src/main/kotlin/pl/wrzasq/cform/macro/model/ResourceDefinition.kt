@@ -9,30 +9,17 @@ package pl.wrzasq.cform.macro.model
 
 /**
  * Generic structure of resource in template section.
+ *
+ * @property id Resource logical ID.
+ * @property type Resource type.
+ * @property condition Condition handling.
+ * @property dependsOn List of dependencies.
+ * @property properties Resource properties.
  */
 data class ResourceDefinition(
-    /**
-     * Resource logical ID.
-     */
     val id: String,
-
-    /**
-     * Resource type.
-     */
     val type: String,
-
-    /**
-     * Condition handling.
-     */
     val condition: String? = null,
-
-    /**
-     * List of dependencies.
-     */
     val dependsOn: List<String> = emptyList(),
-
-    /**
-     * Resource properties.
-     */
     val properties: Map<String, Any> = emptyMap()
 )

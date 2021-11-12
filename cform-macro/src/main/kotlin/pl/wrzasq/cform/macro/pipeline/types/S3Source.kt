@@ -19,14 +19,12 @@ class S3Source(
     input: Map<String, Any>,
     condition: String?
 ) : BaseAction(name, input, condition) {
-    private val bucket: Any = properties.remove("Bucket")
-        ?: throw IllegalStateException("$name action misses bucket definition")
+    private val bucket = checkNotNull(properties.remove("Bucket")) { "$name action misses bucket definition" }
 
     /**
      * S3 object key.
      */
-    val objectKey: Any = properties.remove("ObjectKey")
-        ?: throw IllegalStateException("$name action misses object key definition")
+    val objectKey = checkNotNull(properties.remove("ObjectKey")) { "$name action misses object key definition" }
 
     override fun buildActionTypeId() = buildAwsActionTypeId("Source", "S3")
 

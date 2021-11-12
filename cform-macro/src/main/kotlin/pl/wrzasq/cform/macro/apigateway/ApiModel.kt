@@ -8,7 +8,6 @@
 package pl.wrzasq.cform.macro.apigateway
 
 import pl.wrzasq.cform.macro.model.ResourceDefinition
-import pl.wrzasq.cform.macro.template.Fn
 import pl.wrzasq.cform.macro.template.asMap
 import pl.wrzasq.cform.macro.template.popProperty
 

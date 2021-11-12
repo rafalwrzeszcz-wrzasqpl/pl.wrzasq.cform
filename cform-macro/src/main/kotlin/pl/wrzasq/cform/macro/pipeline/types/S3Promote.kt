@@ -25,12 +25,10 @@ class S3Promote(
 
     override fun compile(manager: PipelineManager) {
         val action = manager.resolve(source)
-        if (action is S3Source) {
-            objectKey = action.objectKey
-            inputs.addAll(action.outputs)
-        } else {
-            throw IllegalStateException("$name refers to $source which is not S3 source")
-        }
+        check(action is S3Source) { "$name refers to $source which is not S3 source" }
+
+        objectKey = action.objectKey
+        inputs.addAll(action.outputs)
     }
 
     override fun buildConfiguration(configuration: MutableMap<String, Any>) {

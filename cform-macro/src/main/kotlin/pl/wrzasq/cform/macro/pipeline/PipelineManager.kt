@@ -88,9 +88,9 @@ class PipelineManager {
      * @param reference Action location (by stage and action names).
      * @return Action definition.
      */
-    fun resolve(reference: String) = all[reference] ?: throw IllegalStateException(
+    fun resolve(reference: String) = checkNotNull(all[reference]) {
         "Unknown action `$reference` - it may happen that you refer to action from further stage"
-    )
+    }
 
     /**
      * Resolves namespace by key.
@@ -146,9 +146,7 @@ class PipelineManager {
             return
         }
 
-        if (action in visited) {
-            throw IllegalStateException("Circular artifact dependency for ${action.name}")
-        }
+        check(action !in visited) { "Circular artifact dependency for ${action.name}" }
 
         visited.add(action)
 

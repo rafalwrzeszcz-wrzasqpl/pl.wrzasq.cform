@@ -48,9 +48,11 @@
                                 "RequestTemplates": {
                                     "application/json": "{\"tenantId\":\"$context.authorizer.tenantId\",\"accountId\":\"$input.params('accountId')\"}"
                                 },
-                                "IntegrationResponses": {
-                                    "202": {}
-                                },
+                                "IntegrationResponses": [
+                                    {
+                                        "StatusCode": "202"
+                                    }
+                                ],
                                 "PassthroughBehavior": "NEVER"
                             }
                         },
@@ -101,9 +103,21 @@
             }
         },
         "AuthorizerId": {
-            "Description": "API Gateway ID.",
+            "Description": "API Gateway token authorizer ID.",
             "Value": {
                 "Ref": "RestApi:Public:Authorizer:TokenAuthorizer"
+            }
+        },
+        "DeploymentId": {
+            "Description": "API Gateway deployment ID.",
+            "Value": {
+                "Ref": "RestApi:Public:Deployment"
+            }
+        },
+        "SomeValue": {
+            "Description": "Unrealistic !Sub test.",
+            "Value": {
+                "Fn::Sub": "deployment=${RestApi:Public:Validator:PARAMETERS_ONLY.Arn}"
             }
         }
     }

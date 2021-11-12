@@ -10,6 +10,7 @@ package pl.wrzasq.cform.macro.pipeline.types
 import pl.wrzasq.cform.macro.pipeline.PipelineManager
 import pl.wrzasq.cform.macro.template.Fn
 import pl.wrzasq.cform.macro.template.asMap
+import pl.wrzasq.cform.macro.template.asMapAlways
 import pl.wrzasq.cform.macro.template.mapValuesOnly
 import pl.wrzasq.commons.json.ObjectMapperFactory
 
@@ -29,11 +30,11 @@ class CloudFormationDeploy(
     input: Map<String, Any>,
     condition: String?
 ) : BaseAction(name, input, condition) {
-    private val parameters = asMap(properties.remove("Parameters") ?: emptyMap<String, Any>())
+    private val parameters = asMapAlways(properties.remove("Parameters"))
     private val compiled = mutableMapOf<String, Any>()
 
     init {
-        val configuration = asMap(properties["Configuration"] ?: emptyMap<String, Any>())
+        val configuration = asMapAlways(properties["Configuration"])
 
         // try to figure out input artifacts
         configuration["TemplatePath"]?.let(::includeArtifact)
@@ -79,17 +80,18 @@ class CloudFormationDeploy(
                     val (key, value) = asMap(it).entries.first()
 
                     when {
-                        key == "Ref" || (key == "Fn::GetAtt" && value is String) -> "\${${value}}"
+                        key == "Ref" || key == "Fn::GetAtt" && value is String -> "\${${value}}"
                         key == "Fn::GetAtt" && value is List<*> -> "\${${value[0]}.${value[1]}}"
                         // this is the simples one - just elevate encapsulation
                         key == "Fn::Sub" && value is String -> value
                         key == "Fn::Sub" && value is List<*> -> {
-                            params.putAll(asMap(value[1] ?: emptyMap<String, Any>()))
+                            params.putAll(asMapAlways(value[1]))
                             value[0] ?: ""
                         }
                         // this is our notation - it will be handled afterwards
                         key == "Fn::ImportValue" && value is String -> "\${Import:${value}}"
-                        else -> generateParamPlaceholder(++index, value, params)
+                        key == "Fn::GetParam" -> it
+                        else -> generateParamPlaceholder(++index, it, params)
                     }
                 } else {
                     it

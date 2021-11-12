@@ -9,19 +9,24 @@ package test.pl.wrzasq.cform.macro.processors
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertInstanceOf
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import pl.wrzasq.cform.macro.processors.FnToolkit
 import pl.wrzasq.cform.macro.template.Fn
-import pl.wrzasq.cform.macro.template.asMap
+import pl.wrzasq.cform.macro.template.asMapAlways
+import test.pl.wrzasq.cform.macro.template.CALL_REF
+import test.pl.wrzasq.cform.macro.template.CALL_SUB
+
+private const val IMPORT_KEY = "import0"
 
 class FnToolkitTest {
     @Test
     fun canHandle() {
         val toolkit = FnToolkit()
 
-        assertTrue(toolkit.canHandle("Fn::Sub"))
-        assertFalse(toolkit.canHandle("Ref"))
+        assertTrue(toolkit.canHandle(CALL_SUB))
+        assertFalse(toolkit.canHandle(CALL_REF))
     }
 
     @Test
@@ -30,13 +35,13 @@ class FnToolkitTest {
 
         val output = toolkit.expand("" to "\${Import:Test}").values.first()
 
-        assertTrue(output is List<*>)
+        assertInstanceOf(List::class.java, output)
         if (output is List<*>) {
-            val params = asMap(output.last() ?: emptyMap<String, Any>())
+            val params = asMapAlways(output.last())
 
-            assertEquals("\${import0}", output.first())
-            assertTrue("import0" in params)
-            assertEquals(Fn.importValue("Test"), params["import0"])
+            assertEquals("\${$IMPORT_KEY}", output.first())
+            assertTrue(IMPORT_KEY in params)
+            assertEquals(Fn.importValue("Test"), params[IMPORT_KEY])
         }
     }
 
@@ -46,14 +51,14 @@ class FnToolkitTest {
 
         val output = toolkit.expand("" to listOf("\${Import:Test}", mapOf("Foo" to "Bar"))).values.first()
 
-        assertTrue(output is List<*>)
+        assertInstanceOf(List::class.java, output)
         if (output is List<*>) {
-            val params = asMap(output.last() ?: emptyMap<String, Any>())
+            val params = asMapAlways(output.last())
 
-            assertEquals("\${import0}", output.first())
+            assertEquals("\${$IMPORT_KEY}", output.first())
             assertTrue("Foo" in params)
-            assertTrue("import0" in params)
-            assertEquals(Fn.importValue("Test"), params["import0"])
+            assertTrue(IMPORT_KEY in params)
+            assertEquals(Fn.importValue("Test"), params[IMPORT_KEY])
         }
     }
 

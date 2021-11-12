@@ -9,8 +9,11 @@ package pl.wrzasq.cform.macro.pipeline.types
 
 import pl.wrzasq.cform.macro.pipeline.PipelineAction
 import pl.wrzasq.cform.macro.pipeline.conditional
-import pl.wrzasq.cform.macro.template.asMap
+import pl.wrzasq.cform.macro.template.asMapAlways
 import pl.wrzasq.cform.macro.template.mapSelected
+
+private const val OPTION_INPUTARTIFACTS = "InputArtifacts"
+private const val OPTION_OUTPUTARTIFACTS = "OutputArtifacts"
 
 /**
  * Common setup for action types.
@@ -35,12 +38,22 @@ abstract class BaseAction(
     override var runOrder: Int? = properties["RunOrder"]?.toString()?.toInt()
 
     init {
-        properties["InputArtifacts"]?.let { readArtifacts(it, inputs) }
-        properties["OutputArtifacts"]?.let { readArtifacts(it, outputs) }
+        properties[OPTION_INPUTARTIFACTS]?.let { readArtifacts(it, inputs) }
+        properties[OPTION_OUTPUTARTIFACTS]?.let { readArtifacts(it, outputs) }
     }
 
+    /**
+     * Generates `ActionTypeId` clause.
+     *
+     * @return Template fragment.
+     */
     abstract fun buildActionTypeId(): Map<String, Any>
 
+    /**
+     * Action configuration hook.
+     *
+     * @param configuration Initial configuration structure.
+     */
     open fun buildConfiguration(configuration: MutableMap<String, Any>) {}
 
     override fun buildDefinition(): Map<String, Any> {
@@ -49,25 +62,25 @@ abstract class BaseAction(
             "ActionTypeId" to buildActionTypeId()
         )
 
-        val configuration = asMap(properties["Configuration"] ?: emptyMap<String, Any>()).toMutableMap()
+        val configuration = asMapAlways(properties["Configuration"]).toMutableMap()
         buildConfiguration(configuration)
 
         // we do these as conditional `.put()` calls as these stuff might be in `.properties` when defined by hand
         namespace?.let { input["Namespace"] = it }
         runOrder?.let { input["RunOrder"] = it }
         if (inputs.isNotEmpty()) {
-            input["InputArtifacts"] = inputs.sorted()
+            input[OPTION_INPUTARTIFACTS] = inputs.sorted()
         }
         if (outputs.isNotEmpty()) {
-            input["OutputArtifacts"] = outputs.sorted()
+            input[OPTION_OUTPUTARTIFACTS] = outputs.sorted()
         }
         if (configuration.isNotEmpty()) {
             input["Configuration"] = configuration
         }
 
-        val definition = properties + input.mapSelected(
-            "InputArtifacts" to ::buildArtifacts,
-            "OutputArtifacts" to ::buildArtifacts
+        val definition = (properties + input).mapSelected(
+            OPTION_INPUTARTIFACTS to ::buildArtifacts,
+            OPTION_OUTPUTARTIFACTS to ::buildArtifacts
         )
 
         return conditional(definition, condition)

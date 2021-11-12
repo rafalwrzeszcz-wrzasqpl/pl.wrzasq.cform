@@ -9,20 +9,13 @@ package pl.wrzasq.cform.macro.model
 
 /**
  * CloudFormation template macro processing response structure.
+ *
+ * @property requestId Request ID.
+ * @property status Operation status.
+ * @property fragment Template fragment.
  */
 data class CloudFormationMacroResponse(
-    /**
-     * Request ID.
-     */
     val requestId: String,
-
-    /**
-     * Operation status.
-     */
     val status: String = "SUCCESS",
-
-    /**
-     * Template fragment.
-     */
     val fragment: Map<String, Any>
 )

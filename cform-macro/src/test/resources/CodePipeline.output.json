@@ -89,6 +89,31 @@
                         "Name": "Deploy",
                         "Actions": [
                             {
+                                "Name": "Assets",
+                                "ActionTypeId": {
+                                    "Owner": "AWS",
+                                    "Version": "1",
+                                    "Category": "Deploy",
+                                    "Provider": "S3"
+                                },
+                                "Configuration": {
+                                    "BucketName": "WebBucket",
+                                    "ObjectKey": "script.js"
+                                },
+                                "InputArtifacts": {
+                                    "Fn::If": [
+                                        "Test",
+                                        {
+                                            "Name": "other"
+                                        },
+                                        {
+                                            "Ref": "AWS::NoValue"
+                                        }
+                                    ]
+                                },
+                                "Namespace": "assets"
+                            },
+                            {
                                 "Name": "Build",
                                 "ActionTypeId": {
                                     "Owner": "AWS",
@@ -113,6 +138,7 @@
                                     "ActionMode": "CREATE_UPDATE",
                                     "Capabilities": "CAPABILITY_NAMED_IAM,CAPABILITY_AUTO_EXPAND",
                                     "TemplatePath": "checkout::db.yaml",
+                                    "TemplateConfiguration": "checkout::config.json",
                                     "ParameterOverrides": {
                                         "Fn::Sub": "{\"TableName\":\"${TableName}\",\"BuildId\":\"#{deploy-build.Id}\"}"
                                     }
@@ -138,12 +164,18 @@
                                     "Capabilities": "CAPABILITY_NAMED_IAM,CAPABILITY_AUTO_EXPAND",
                                     "TemplatePath": "checkout::service.yaml",
                                     "ParameterOverrides": {
-                                        "Fn::Sub": "{\"TableArn\":\"#{deploy-db.Arn}\",\"RoleArn\":\"${ServiceRole.Arn}\",\"Title\":\"Hello ${World}!\"}"
+                                        "Fn::Sub": "{\"TableArn\":\"#{deploy-db.Arn}\",\"RoleArn\":\"${ServiceRole.Arn}\",\"Title\":\"Hello ${World}!\",\"ParamValue\":{\"Fn::GetParam\":[\"artifact\",\"output.json\",\"ParamName\"]}}"
                                     }
                                 },
                                 "InputArtifacts": [
                                     {
+                                        "Name": "artifact"
+                                    },
+                                    {
                                         "Name": "checkout"
+                                    },
+                                    {
+                                        "Name": "other"
                                     }
                                 ],
                                 "RunOrder": 3

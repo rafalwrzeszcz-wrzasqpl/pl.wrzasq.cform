@@ -26,6 +26,9 @@ class ApiGateway(
 ) : ApiTemplateResource {
     private val properties: Map<String, Any>
 
+    /**
+     * Map of authorizers registered in current API.
+     */
     val authorizers: MutableMap<String, ApiAuthorizer> = mutableMapOf()
     private val models: MutableMap<String, ApiModel> = mutableMapOf()
     private val validators: MutableMap<String, ApiRequestValidator> = mutableMapOf()
@@ -154,6 +157,12 @@ class ApiGateway(
         return id
     }
 
+    /**
+     * Resolves resource reference.
+     *
+     * @param path Local resource identifier.
+     * @return CloudFormation resource identifier.
+     */
     fun resolve(path: List<String>): String {
         if (path.isEmpty()) {
             // root element reference
@@ -183,4 +192,5 @@ class ApiGateway(
 }
 
 // since in API gateway only full path parts are allowed as fragments this is only pattern possibility
-private fun unescapeReference(reference: String) = reference.replace("/%", "/{").replace("%/", "}/")
+// %/ won't work for top-level placeholder resources, but after first replacement only trailing `%` will be left
+private fun unescapeReference(reference: String) = reference.replace("/%", "/{").replace("%", "}")

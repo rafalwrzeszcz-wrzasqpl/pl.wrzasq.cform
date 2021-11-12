@@ -21,14 +21,21 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import pl.wrzasq.cform.macro.model.ResourceDefinition
+import pl.wrzasq.cform.macro.template.PROPERTY_KEY_CONDITION
+import pl.wrzasq.cform.macro.template.PROPERTY_KEY_DEPENDSON
+import pl.wrzasq.cform.macro.template.PROPERTY_KEY_PROPERTIES
+import pl.wrzasq.cform.macro.template.PROPERTY_KEY_TYPE
 import pl.wrzasq.cform.macro.template.asDefinition
 import pl.wrzasq.cform.macro.template.asMap
+import pl.wrzasq.cform.macro.template.asMapAlways
 import pl.wrzasq.cform.macro.template.build
 import pl.wrzasq.cform.macro.template.createResource
 import pl.wrzasq.cform.macro.template.mapSelected
 import pl.wrzasq.cform.macro.template.mapValuesOnly
 import pl.wrzasq.cform.macro.template.popProperty
 import pl.wrzasq.cform.macro.template.rebuildResource
+
+private const val OTHER = "Other"
 
 private val input = ResourceDefinition(
     id = "Test1",
@@ -39,7 +46,7 @@ private val input = ResourceDefinition(
         "E" to "F"
     ),
     condition = "HasIt",
-    dependsOn = listOf("Other")
+    dependsOn = listOf(OTHER)
 )
 
 @ExtendWith(MockKExtension::class)
@@ -68,6 +75,23 @@ class UtilsTest {
     }
 
     @Test
+    fun asMapAlwaysValue() {
+        val output = asMap(
+            mapOf(
+                "Some" to "Value"
+            )
+        )
+
+        assertTrue("Some" in output)
+        assertEquals("Value", output["Some"])
+    }
+
+    @Test
+    fun asMapAlwaysNull() {
+        assertTrue(asMapAlways(null).isEmpty())
+    }
+
+    @Test
     fun popPropertyExists() {
         every { propertyHandler(any()) } just runs
 
@@ -83,14 +107,14 @@ class UtilsTest {
         every { propertyHandler(any()) } just runs
 
         val fallback = "Test"
-        input.properties.popProperty("Other", propertyHandler, fallback)
+        input.properties.popProperty(OTHER, propertyHandler, fallback)
 
         verify { propertyHandler(fallback) }
     }
 
     @Test
     fun popPropertyMissing() {
-        input.properties.popProperty("Other", propertyHandler)
+        input.properties.popProperty(OTHER, propertyHandler)
 
         verify { propertyHandler wasNot called }
     }
@@ -100,12 +124,12 @@ class UtilsTest {
         val output = input.properties.mapSelected(
             "A" to { 5 },
             "C" to { 6 },
-            "Other" to { 7}
+            OTHER to { 7 }
         )
         assertEquals(5, output["A"])
         assertEquals(6, output["C"])
         assertEquals("F", output["E"])
-        assertFalse("Other" in output)
+        assertFalse(OTHER in output)
     }
 
     @Test
@@ -124,7 +148,7 @@ class UtilsTest {
     @Test
     fun rebuildResourceOverrides() {
         val output = rebuildResource(input.build(), mapOf("Foo" to "Bar"))
-        val properties = asMap(output["Properties"] ?: emptyMap<String, Any>())
+        val properties = asMapAlways(output[PROPERTY_KEY_PROPERTIES])
 
         assertFalse("A" in properties)
         assertTrue("Foo" in properties)
@@ -136,13 +160,13 @@ class UtilsTest {
         val output = createResource(input)
 
         assertEquals(input.id, output.first)
-        assertEquals(input.type, output.second["Type"])
-        assertTrue("Condition" in output.second)
-        assertEquals(input.condition, output.second["Condition"])
-        assertTrue("DependsOn" in output.second)
-        assertEquals(input.dependsOn, output.second["DependsOn"])
-        assertTrue("Properties" in output.second)
-        assertEquals(input.properties, output.second["Properties"])
+        assertEquals(input.type, output.second[PROPERTY_KEY_TYPE])
+        assertTrue(PROPERTY_KEY_CONDITION in output.second)
+        assertEquals(input.condition, output.second[PROPERTY_KEY_CONDITION])
+        assertTrue(PROPERTY_KEY_DEPENDSON in output.second)
+        assertEquals(input.dependsOn, output.second[PROPERTY_KEY_DEPENDSON])
+        assertTrue(PROPERTY_KEY_PROPERTIES in output.second)
+        assertEquals(input.properties, output.second[PROPERTY_KEY_PROPERTIES])
     }
 
     @Test
@@ -150,19 +174,19 @@ class UtilsTest {
         val output = createResource(ResourceDefinition(id = input.id, type = input.type))
 
         assertEquals(input.id, output.first)
-        assertEquals(input.type, output.second["Type"])
-        assertFalse("Condition" in output.second)
-        assertFalse("DependsOn" in output.second)
-        assertFalse("Properties" in output.second)
+        assertEquals(input.type, output.second[PROPERTY_KEY_TYPE])
+        assertFalse(PROPERTY_KEY_CONDITION in output.second)
+        assertFalse(PROPERTY_KEY_DEPENDSON in output.second)
+        assertFalse(PROPERTY_KEY_PROPERTIES in output.second)
     }
 
     @Test
     fun asDefinitionWithInputs() {
         val output = asDefinition(input.id, mapOf(
-            "Type" to input.type,
-            "Condition" to input.condition,
-            "DependsOn" to input.dependsOn,
-            "Properties" to input.properties
+            PROPERTY_KEY_TYPE to input.type,
+            PROPERTY_KEY_CONDITION to input.condition,
+            PROPERTY_KEY_DEPENDSON to input.dependsOn,
+            PROPERTY_KEY_PROPERTIES to input.properties
         ))
 
         assertEquals(input.id, output.id)
@@ -185,7 +209,7 @@ class UtilsTest {
 
     @Test
     fun asDefinitionStrangeDependsOn() {
-        val output = asDefinition(input.id, mapOf("DependsOn" to 1))
+        val output = asDefinition(input.id, mapOf(PROPERTY_KEY_DEPENDSON to 1))
         assertTrue(output.dependsOn.isEmpty())
     }
 
@@ -194,9 +218,9 @@ class UtilsTest {
         val output = input.build()
 
         assertEquals(input.id, output.first)
-        assertEquals(input.type, output.second["Type"])
-        assertTrue("DependsOn" in output.second)
-        assertEquals("D", asMap(output.second["Properties"] ?: emptyMap<String, Any>())["C"])
+        assertEquals(input.type, output.second[PROPERTY_KEY_TYPE])
+        assertTrue(PROPERTY_KEY_DEPENDSON in output.second)
+        assertEquals("D", asMapAlways(output.second[PROPERTY_KEY_PROPERTIES])["C"])
     }
 
     @Test

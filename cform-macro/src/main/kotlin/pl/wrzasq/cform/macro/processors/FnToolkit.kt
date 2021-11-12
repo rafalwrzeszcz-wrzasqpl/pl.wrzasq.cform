@@ -9,7 +9,7 @@ package pl.wrzasq.cform.macro.processors
 
 import pl.wrzasq.cform.macro.template.ExpansionHandler
 import pl.wrzasq.cform.macro.template.Fn
-import pl.wrzasq.cform.macro.template.asMap
+import pl.wrzasq.cform.macro.template.asMapAlways
 
 private val PATTERN_SUB_IMPORT = Regex("\\\$\\{Import:(.*?)}")
 
@@ -23,7 +23,7 @@ class FnToolkit : ExpansionHandler {
 
     private fun resolve(input: Any): Any {
         val (inputTemplate, inputParams) = if (input is List<*>) {
-            input.first().toString() to asMap(input.last() ?: emptyMap<String, Any>())
+            input.first().toString() to asMapAlways(input.last())
         } else {
             input.toString() to emptyMap()
         }

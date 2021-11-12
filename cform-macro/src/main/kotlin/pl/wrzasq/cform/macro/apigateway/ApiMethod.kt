@@ -10,6 +10,7 @@ package pl.wrzasq.cform.macro.apigateway
 import pl.wrzasq.cform.macro.model.ResourceDefinition
 import pl.wrzasq.cform.macro.template.Fn
 import pl.wrzasq.cform.macro.template.asMap
+import pl.wrzasq.cform.macro.template.asMapAlways
 import pl.wrzasq.cform.macro.template.mapSelected
 import pl.wrzasq.cform.macro.template.popProperty
 
@@ -89,7 +90,7 @@ class ApiMethod(
 
 private fun unfoldResponses(input: Any) = if (input is Map<*, *>) {
     asMap(input).toSortedMap().map {
-        asMap(it.value ?: emptyMap<String, Any>()) + mapOf("StatusCode" to it.key)
+        asMapAlways(it.value) + mapOf("StatusCode" to it.key)
     }
 } else {
     input

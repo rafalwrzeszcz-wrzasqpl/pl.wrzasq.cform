@@ -38,6 +38,9 @@ class ApiAuthorizer(
         type = properties["Type"].toString()
     }
 
+    /**
+     * Integration authorization type.
+     */
     val authorizationType = if (type == "COGNITO_USER_POOLS") type else "CUSTOM"
 
     override val resourceId

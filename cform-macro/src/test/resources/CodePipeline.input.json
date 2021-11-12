@@ -61,7 +61,8 @@
                             "Db": {
                                 "ActionType": "CloudFormationDeploy",
                                 "Configuration": {
-                                    "TemplatePath": "checkout::db.yaml"
+                                    "TemplatePath": "checkout::db.yaml",
+                                    "TemplateConfiguration": "checkout::config.json"
                                 },
                                 "Parameters": {
                                     "TableName": {
@@ -82,8 +83,37 @@
                                     },
                                     "Title": {
                                         "Fn::Sub": "Hello ${World}!"
+                                    },
+                                    "ParamValue": {
+                                        "Fn::GetParam": [
+                                            "artifact",
+                                            "output.json",
+                                            "ParamName"
+                                        ]
                                     }
-                                }
+                                },
+                                "InputArtifacts": [
+                                    {
+                                        "Name": "other"
+                                    }
+                                ]
+                            },
+                            "Assets": {
+                                "ActionType": "S3Deploy",
+                                "Bucket": "WebBucket",
+                                "ObjectKey": "script.js",
+                                "InputArtifacts": {
+                                    "Fn::If": [
+                                        "Test",
+                                        {
+                                            "Name": "other"
+                                        },
+                                        {
+                                            "Ref": "AWS::NoValue"
+                                        }
+                                    ]
+                                },
+                                "Namespace": "assets"
                             }
                         }
                     },

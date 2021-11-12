@@ -12,7 +12,7 @@ import pl.wrzasq.cform.macro.template.ExpansionHandler
 import pl.wrzasq.cform.macro.template.Fn
 
 // final dot allows to make !GetAtt and !Sub calls to attributes directly in expression
-private const val REF_PATTERN = "RestApi:([^}]+)(\\.[^}]+)?"
+private const val REF_PATTERN = "RestApi:([^.}]+)(\\.[^}]+)?"
 private val REF_MATCH_FULL = Regex("^${REF_PATTERN}\$")
 private val REF_MATCH_PATTERN = Regex("\\\$\\{${REF_PATTERN}}")
 
@@ -97,7 +97,9 @@ class ApiGatewayManager : ExpansionHandler {
     // if any of the cases match, we don't need further tests
     private fun expandString(input: String) = when {
         REF_MATCH_FULL.matches(input) -> REF_MATCH_FULL.replace(input) { resolve(it.groupValues) }
-        REF_MATCH_PATTERN.matches(input) -> REF_MATCH_PATTERN.replace(input) { "\${${resolve(it.groupValues)}}" }
+        REF_MATCH_PATTERN.containsMatchIn(input) -> REF_MATCH_PATTERN.replace(input) {
+            "\${${resolve(it.groupValues)}}"
+        }
         else -> input
     }
 
@@ -109,7 +111,7 @@ class ApiGatewayManager : ExpansionHandler {
         // distinguish between our references and other cases
         val parts = match.split(":")
         val apiId = parts.first()
-        val api = apis[apiId] ?: throw IllegalStateException("Reference to `$match` of unknown API ID `$apiId`")
+        val api = checkNotNull(apis[apiId]) { "Reference to `$match` of unknown API ID `$apiId`" }
 
         return api.resolve(parts.drop(1))
     }
