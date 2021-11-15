@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="Date-Revision-yyyymmdd" content="20211115" />
     <meta http-equiv="Content-Language" content="en" />
-    <title>CloudFormation macro processor. &#x2013; CloudFormation deployment</title>
+    <title>CloudFormation macro processor. &#x2013; Serverless repository</title>
     <link rel="stylesheet" href="../css/apache-maven-fluido-1.6.min.css" />
     <link rel="stylesheet" href="../css/site.css" />
     <link rel="stylesheet" href="../css/print.css" media="print" />
@@ -69,8 +69,25 @@
 # @license http://mit-license.org/ The MIT license
 # @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
 -->
-<h1>CloudFormation deployment</h1>
-<p>You need to upload packaged macro handler (<code>cform-macro.zip</code> from <a class="externalLink" href="https://github.com/rafalwrzeszcz-wrzasqpl/pl.wrzasq.cform/releases">GitHub Releases</a>) to your <b>S3</b> bucket. Afterwards you can just execute following template:</p>
+<h1>Serverless repository</h1>
+<p>Macro is available in AWS Serverless Repository as <a class="externalLink" href="https://eu-central-1.console.aws.amazon.com/lambda/home?region=eu-central-1#/create/app?applicationId=arn:aws:serverlessrepo:eu-central-1:117504620086:applications/wrzasqpl-cform-macro"><code>wrzasqpl-cform-macro</code> application</a>.</p><section>
+<h2><a name="CloudFormation_deployment"></a>CloudFormation deployment</h2>
+<p>You can deploy it using <b>CloudFormation</b> by referring to repository:</p>
+
+<div class="source">
+<div class="source"><pre class="prettyprint">WrzasqPlCformMacro:
+    Type: &quot;AWS::Serverless::Application&quot;
+    Properties:
+        Location:
+            ApplicationId: &quot;arn:aws:serverlessrepo:us-east-1:012345678901:applications/my-application&quot;
+            SemanticVersion: &quot;1.1.0&quot;
+        # `Parameters` section is optional, default name is `WrzasqPlCformMacro` - you can define custom name here
+        Parameters:
+            MacroName: &quot;NameItCformMacro&quot;
+</pre></div></div>
+
+<h1>CloudFormation manual deployment</h1>
+<p>Alternatively, if you need full control over artifacts, you may handle the process entirely on your side - you need to upload packaged macro handler (<code>cform-macro.zip</code> from <a class="externalLink" href="https://github.com/rafalwrzeszcz-wrzasqpl/pl.wrzasq.cform/releases">GitHub Releases</a>) to your <b>S3</b> bucket. Afterwards you can just execute following template:</p>
 
 <div class="source">
 <div class="source"><pre class="prettyprint">Resources:
@@ -100,7 +117,7 @@
             # name it however you want
             Name: &quot;WrzasqPlCForm&quot;
             FunctionName: !GetAtt &quot;MacroFunction.Arn&quot;
-</pre></div></div>
+</pre></div></div></section>
         </div>
       </div>
     </div>
@@ -111,7 +128,7 @@
             <p>Copyright &copy;2021
 <a href="https://wrzasq.pl/">Rafał Wrzeszcz - Wrzasq.pl</a>.
 All rights reserved.        <li id="publishDate" class="pull-right">Last Published: 2021-11-15</li>
-          <li id="projectVersion" class="pull-right">Version: 1.1.0</li>
+          <li id="projectVersion" class="pull-right">Version: 1.1.1</li>
 </p>
         </div>
         </div>
