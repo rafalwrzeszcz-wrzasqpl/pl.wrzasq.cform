@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DelegatingResourceProcessor.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CloudFormation macro processor.</a> &gt; <a href="index.source.html" class="el_package">pl.wrzasq.cform.macro.processors</a> &gt; <span class="el_source">DelegatingResourceProcessor.kt</span></div><h1>DelegatingResourceProcessor.kt</h1><pre class="source lang-java linenums">/**
+ * This file is part of the pl.wrzasq.cform.
+ *
+ * @license http://mit-license.org/ The MIT license
+ * @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+ */
+
+package pl.wrzasq.cform.macro.processors
+
+import pl.wrzasq.cform.macro.processors.types.ResourceHandler
+import pl.wrzasq.cform.macro.template.SECTION_RESOURCES
+import pl.wrzasq.cform.macro.template.asDefinition
+import pl.wrzasq.cform.macro.template.asMap
+import pl.wrzasq.cform.macro.template.mapSelected
+import pl.wrzasq.cform.macro.template.rebuildResource
+
+/**
+ * Single visitor that delegates resource processing by type.
+ *
+ * @param handlers Resource types handlers.
+ */
+<span class="fc" id="L22">class DelegatingResourceProcessor(vararg handlers: ResourceHandler) {</span>
+<span class="fc" id="L23">    private val typeHandles = mutableMapOf&lt;String, ResourceHandler&gt;()</span>
+
+<span class="fc" id="L25">    init {</span>
+<span class="fc" id="L26">        handlers.forEach(::register)</span>
+<span class="fc" id="L27">    }</span>
+
+    /**
+     * Handles input template.
+     *
+     * @param input Current template state.
+     * @return Processed template.
+     */
+<span class="fc" id="L35">    fun process(input: Map&lt;String, Any&gt;) = input.mapSelected(SECTION_RESOURCES) { processResources(asMap(it)) }</span>
+
+    // all the changes should be in-place scoped to single resource
+<span class="fc" id="L38">    private fun processResources(input: Map&lt;String, Any&gt;) = input.mapValues {</span>
+<span class="fc" id="L39">        val entry = asDefinition(it.key, it.value)</span>
+
+<span class="fc bfc" id="L41" title="All 4 branches covered.">        typeHandles[entry.type]?.let { handler -&gt; rebuildResource(it.value, handler.handle(entry)) } ?: it.value</span>
+<span class="fc" id="L42">    }</span>
+
+    private fun register(handler: ResourceHandler) {
+<span class="fc" id="L45">        handler.handledResourceTypes().forEach { typeHandles[it] = handler }</span>
+<span class="fc" id="L46">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

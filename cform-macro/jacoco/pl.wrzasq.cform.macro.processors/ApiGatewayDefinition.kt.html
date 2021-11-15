@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ApiGatewayDefinition.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CloudFormation macro processor.</a> &gt; <a href="index.source.html" class="el_package">pl.wrzasq.cform.macro.processors</a> &gt; <span class="el_source">ApiGatewayDefinition.kt</span></div><h1>ApiGatewayDefinition.kt</h1><pre class="source lang-java linenums">/**
+ * This file is part of the pl.wrzasq.cform.
+ *
+ * @license http://mit-license.org/ The MIT license
+ * @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+ */
+
+package pl.wrzasq.cform.macro.processors
+
+import pl.wrzasq.cform.macro.apigateway.ApiGatewayManager
+import pl.wrzasq.cform.macro.model.ResourceDefinition
+import pl.wrzasq.cform.macro.template.CallsExpander
+import pl.wrzasq.cform.macro.template.SECTION_RESOURCES
+import pl.wrzasq.cform.macro.template.asMap
+import pl.wrzasq.cform.macro.template.build
+import pl.wrzasq.cform.macro.template.mapSelected
+import pl.wrzasq.cform.macro.template.popProperty
+
+/**
+ * Simplified API Gateway structure definition.
+ */
+<span class="fc" id="L22">class ApiGatewayDefinition {</span>
+    /**
+     * Handles input template.
+     *
+     * @param input Current template state.
+     * @return Processed template.
+     */
+    fun process(input: Map&lt;String, Any&gt;): Map&lt;String, Any&gt; {
+<span class="fc" id="L30">        val manager = ApiGatewayManager()</span>
+<span class="fc" id="L31">        val rest = input.popProperty(&quot;RestApis&quot;, {</span>
+<span class="fc bfc" id="L32" title="All 2 branches covered.">            for ((id, api) in asMap(it)) {</span>
+<span class="fc" id="L33">                manager.buildApi(id, asMap(api))</span>
+            }
+<span class="fc" id="L35">        })</span>
+
+        // avoid unnecessary work and resources
+<span class="fc bfc" id="L38" title="All 2 branches covered.">        return if (manager.isEmpty()) {</span>
+<span class="fc" id="L39">            input</span>
+        } else {
+<span class="fc" id="L41">            val callsExpander = CallsExpander(manager)</span>
+
+            // take rest of the template and append all of the generated API resources
+<span class="fc" id="L44">            callsExpander.processTemplate(</span>
+<span class="fc" id="L45">                rest.mapSelected(SECTION_RESOURCES) {</span>
+<span class="fc" id="L46">                    asMap(it) + manager.generateResources().map(ResourceDefinition::build)</span>
+                }
+            )
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

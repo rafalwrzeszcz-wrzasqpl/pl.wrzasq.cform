@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Handler.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CloudFormation macro processor.</a> &gt; <a href="index.source.html" class="el_package">pl.wrzasq.cform.macro</a> &gt; <span class="el_source">Handler.kt</span></div><h1>Handler.kt</h1><pre class="source lang-java linenums">/**
+ * This file is part of the pl.wrzasq.cform.
+ *
+ * @license http://mit-license.org/ The MIT license
+ * @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+ */
+
+package pl.wrzasq.cform.macro
+
+import com.amazonaws.services.lambda.runtime.Context
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
+import pl.wrzasq.cform.macro.model.CloudFormationMacroRequest
+import pl.wrzasq.cform.macro.model.CloudFormationMacroResponse
+import java.io.InputStream
+import java.io.OutputStream
+
+typealias TemplateProcessor = (Map&lt;String, Any&gt;) -&gt; Map&lt;String, Any&gt;
+
+/**
+ * API key retrieval entry point.
+ *
+ * Required memory: 256MB.
+ *
+ * @param objectMapper JSON (de)serialization handler.
+ * @param templateProcessors Template processors.
+ */
+<span class="fc" id="L28">class Handler(</span>
+<span class="fc" id="L29">    private val objectMapper: ObjectMapper,</span>
+<span class="fc" id="L30">    private val templateProcessors: Collection&lt;TemplateProcessor&gt;</span>
+) {
+    /**
+     * Handles invocation.
+     *
+     * @param inputStream Request input.
+     * @param outputStream Output stream.
+     * @param context Execution context.
+     * @throws java.io.IOException When JSON loading/dumping fails.
+     */
+    fun handle(inputStream: InputStream, outputStream: OutputStream, context: Context) {
+<span class="fc" id="L41">        val request: CloudFormationMacroRequest = objectMapper.readValue(inputStream)</span>
+
+<span class="fc" id="L43">        objectMapper.writeValue(</span>
+<span class="fc" id="L44">            outputStream,</span>
+<span class="fc" id="L45">            CloudFormationMacroResponse(</span>
+<span class="fc" id="L46">                requestId = request.requestId,</span>
+<span class="fc" id="L47">                fragment =  templateProcessors.fold(request.fragment) { state, fn -&gt; fn(state) }</span>
+            )
+        )
+<span class="fc" id="L50">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

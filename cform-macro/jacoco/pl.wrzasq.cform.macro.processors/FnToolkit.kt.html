@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FnToolkit.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CloudFormation macro processor.</a> &gt; <a href="index.source.html" class="el_package">pl.wrzasq.cform.macro.processors</a> &gt; <span class="el_source">FnToolkit.kt</span></div><h1>FnToolkit.kt</h1><pre class="source lang-java linenums">/**
+ * This file is part of the pl.wrzasq.cform.
+ *
+ * @license http://mit-license.org/ The MIT license
+ * @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+ */
+
+package pl.wrzasq.cform.macro.processors
+
+import pl.wrzasq.cform.macro.template.ExpansionHandler
+import pl.wrzasq.cform.macro.template.Fn
+import pl.wrzasq.cform.macro.template.asMapAlways
+
+<span class="fc" id="L14">private val PATTERN_SUB_IMPORT = Regex(&quot;\\\$\\{Import:(.*?)}&quot;)</span>
+
+/**
+ * Custom functions.
+ */
+<span class="fc" id="L19">class FnToolkit : ExpansionHandler {</span>
+<span class="fc" id="L20">    override fun canHandle(function: String) = function == &quot;Fn::Sub&quot;</span>
+
+<span class="fc" id="L22">    override fun expand(input: Pair&lt;String, Any&gt;) = Fn.sub(resolve(input.second))</span>
+
+    private fun resolve(input: Any): Any {
+<span class="fc bfc" id="L25" title="All 2 branches covered.">        val (inputTemplate, inputParams) = if (input is List&lt;*&gt;) {</span>
+<span class="fc" id="L26">            input.first().toString() to asMapAlways(input.last())</span>
+        } else {
+<span class="fc" id="L28">            input.toString() to emptyMap()</span>
+        }
+
+        // look for all occurrences of import calls
+<span class="fc" id="L32">        val imports = PATTERN_SUB_IMPORT.findAll(inputTemplate).map { it.groupValues[1] }.toList()</span>
+
+        // check if there is any need to modify existing structure - if not, simply leave it untouched
+<span class="fc bfc" id="L35" title="All 2 branches covered.">        return if (imports.isEmpty()) {</span>
+<span class="fc" id="L36">            input</span>
+        } else {
+<span class="fc" id="L38">            val params = inputParams.toMutableMap()</span>
+<span class="fc" id="L39">            val template = imports.foldIndexed(inputTemplate) { index, buffer, import -&gt;</span>
+<span class="fc" id="L40">                val key = &quot;import$index&quot;</span>
+<span class="fc" id="L41">                params[key] = Fn.importValue(import)</span>
+
+<span class="fc" id="L43">                buffer.replace(&quot;\${Import:${import}}&quot;, &quot;\${$key}&quot;)</span>
+            }
+
+<span class="fc" id="L46">            listOf(template, params)</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PipelineManager.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CloudFormation macro processor.</a> &gt; <a href="index.source.html" class="el_package">pl.wrzasq.cform.macro.pipeline</a> &gt; <span class="el_source">PipelineManager.kt</span></div><h1>PipelineManager.kt</h1><pre class="source lang-java linenums">/**
+ * This file is part of the pl.wrzasq.cform.
+ *
+ * @license http://mit-license.org/ The MIT license
+ * @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+ */
+
+package pl.wrzasq.cform.macro.pipeline
+
+import pl.wrzasq.cform.macro.pipeline.types.CloudFormationDeploy
+import pl.wrzasq.cform.macro.pipeline.types.CodeBuild
+import pl.wrzasq.cform.macro.pipeline.types.S3Deploy
+import pl.wrzasq.cform.macro.pipeline.types.S3Promote
+import pl.wrzasq.cform.macro.pipeline.types.S3Source
+import pl.wrzasq.cform.macro.pipeline.types.fromMap
+import pl.wrzasq.cform.macro.template.Fn.fnIf
+import pl.wrzasq.cform.macro.template.NO_VALUE
+import pl.wrzasq.cform.macro.template.asMap
+import pl.wrzasq.cform.macro.template.popProperty
+
+/**
+ * Pipeline schema definition.
+ */
+<span class="fc" id="L24">class PipelineManager {</span>
+    // order of stages is important, so they are a list
+<span class="fc" id="L26">    private val stages = mutableListOf&lt;PipelineStage&gt;()</span>
+    // these will be computed during compilation
+<span class="fc" id="L28">    private val namespaces = mutableMapOf&lt;String, String&gt;()</span>
+<span class="fc" id="L29">    private val artifacts = mutableMapOf&lt;String, String&gt;()</span>
+<span class="fc" id="L30">    private val all = mutableMapOf&lt;String, PipelineAction&gt;()</span>
+
+    /**
+     * Tries to load stage definition.
+     *
+     * @param input Stage definition.
+     * @return Operation status.
+     */
+    fun handleStage(input: Map&lt;String, Any&gt;): Boolean {
+<span class="fc" id="L39">        var name: String? = null</span>
+<span class="fc" id="L40">        var condition: String? = null</span>
+<span class="fc" id="L41">        val actions = mutableMapOf&lt;String, PipelineAction&gt;()</span>
+
+<span class="fc" id="L43">        val leftover = input</span>
+<span class="fc" id="L44">            .popProperty(&quot;Name&quot;, { name = it.toString() })</span>
+<span class="fc" id="L45">            .popProperty(&quot;Condition&quot;, { condition = it.toString() })</span>
+<span class="fc" id="L46">            .popProperty(&quot;Actions&quot;, {</span>
+<span class="fc bfc" id="L47" title="All 2 branches covered.">                for ((key, value) in asMap(it)) {</span>
+<span class="fc bfc" id="L48" title="All 2 branches covered.">                    handleAction(key, asMap(value))?.let { action -&gt; actions[key] = action }</span>
+                }
+<span class="fc" id="L50">            })</span>
+
+<span class="fc bfc" id="L52" title="All 2 branches covered.">        if (actions.isEmpty()) {</span>
+<span class="fc" id="L53">            return false</span>
+        }
+
+<span class="fc bfc" id="L56" title="All 2 branches covered.">        stages.add(PipelineStage(name ?: return false, actions, leftover, condition))</span>
+
+<span class="fc" id="L58">        return true</span>
+    }
+
+    private fun handleAction(name: String, input: Map&lt;String, Any&gt;): PipelineAction? {
+<span class="fc" id="L62">        var condition: String? = null</span>
+<span class="fc" id="L63">        var creator: ((String, Map&lt;String, Any&gt;, String?) -&gt; PipelineAction)? = null</span>
+
+<span class="fc" id="L65">        val leftover = input</span>
+<span class="fc" id="L66">            .popProperty(&quot;Condition&quot;, { condition = it.toString() })</span>
+<span class="fc" id="L67">            .popProperty(&quot;ActionTypeId&quot;, { creator = fromMap(asMap(it)) })</span>
+<span class="fc" id="L68">            .popProperty(&quot;ActionType&quot;, {</span>
+<span class="fc" id="L69">                creator = when (it) {</span>
+<span class="fc bfc" id="L70" title="All 2 branches covered.">                    &quot;CloudFormationDeploy&quot; -&gt; ::CloudFormationDeploy</span>
+<span class="fc bfc" id="L71" title="All 2 branches covered.">                    &quot;CodeBuild&quot; -&gt; ::CodeBuild</span>
+<span class="fc bfc" id="L72" title="All 2 branches covered.">                    &quot;S3Deploy&quot; -&gt; ::S3Deploy</span>
+<span class="fc bfc" id="L73" title="All 2 branches covered.">                    &quot;S3Promote&quot; -&gt; ::S3Promote</span>
+<span class="fc bfc" id="L74" title="All 2 branches covered.">                    &quot;S3Source&quot; -&gt; ::S3Source</span>
+<span class="fc" id="L75">                    else -&gt; throw IllegalArgumentException(&quot;Unknown action type `$it`&quot;)</span>
+                }
+<span class="fc" id="L77">            })</span>
+
+        // make sure all required properties are set
+<span class="fc bfc" id="L80" title="All 2 branches covered.">        return creator?.let {</span>
+<span class="fc" id="L81">            it(name, leftover, condition)</span>
+        }
+    }
+
+    /**
+     * Resolves action by key.
+     *
+     * @param reference Action location (by stage and action names).
+     * @return Action definition.
+     */
+<span class="fc bfc" id="L91" title="All 2 branches covered.">    fun resolve(reference: String) = checkNotNull(all[reference]) {</span>
+<span class="fc" id="L92">        &quot;Unknown action `$reference` - it may happen that you refer to action from further stage&quot;</span>
+<span class="fc" id="L93">    }</span>
+
+    /**
+     * Resolves namespace by key.
+     *
+     * @param reference Action location (by stage and action names).
+     * @return Action namespace.
+     */
+    fun resolveNamespace(reference: String): String {
+<span class="fc" id="L102">        val action = resolve(reference)</span>
+<span class="fc bfc" id="L103" title="All 2 branches covered.">        if (action.namespace == null) {</span>
+<span class="fc" id="L104">            val prefix = reference.replace(&quot;:&quot;, &quot;-&quot;).lowercase()</span>
+<span class="fc" id="L105">            var suffix = 0</span>
+<span class="fc" id="L106">            var namespace = prefix</span>
+<span class="fc bfc" id="L107" title="All 2 branches covered.">            while (namespace in namespaces) {</span>
+<span class="fc" id="L108">                namespace = &quot;$namespace${suffix++}&quot;</span>
+            }
+
+            // save generated
+<span class="fc" id="L112">            action.namespace = namespace</span>
+<span class="fc" id="L113">            namespaces[namespace] = reference</span>
+        }
+
+<span class="fc" id="L116">        return action.namespace.toString()</span>
+    }
+
+    /**
+     * Prepares pipeline by filling missing gaps and computing dependencies tree.
+     */
+    fun compile() {
+<span class="fc" id="L123">        stages.forEach { compileStage(it.name, it.actions.values) }</span>
+<span class="fc" id="L124">    }</span>
+
+    private fun compileStage(name: String, actions: Collection&lt;PipelineAction&gt;) {
+        // register all actions - we want to register them stage-by-stage (not in `handleStage()`) so that we can detect
+        // premature references
+<span class="fc" id="L129">        actions.forEach {</span>
+<span class="fc" id="L130">            val ref = &quot;${name}:${it.name}&quot;</span>
+<span class="fc" id="L131">            it.outputs.forEach { artifact -&gt; artifacts[artifact] = ref }</span>
+<span class="fc" id="L132">            all[ref] = it</span>
+<span class="fc" id="L133">        }</span>
+
+        // allow post-processing
+<span class="fc" id="L136">        actions.forEach { it.compile(this) }</span>
+
+        // we can't combine the loops - first all actions need to be post-processed
+<span class="fc" id="L139">        val visited = mutableSetOf&lt;PipelineAction&gt;()</span>
+<span class="fc" id="L140">        actions.forEach { calculateActionOrder(it, name, visited) }</span>
+<span class="fc" id="L141">    }</span>
+
+    private fun calculateActionOrder(action: PipelineAction, stageName: String, visited: MutableSet&lt;PipelineAction&gt;) {
+        // already calculated
+<span class="fc bfc" id="L145" title="All 2 branches covered.">        if (action.runOrder != null) {</span>
+<span class="fc" id="L146">            return</span>
+        }
+
+<span class="fc bfc" id="L149" title="All 4 branches covered.">        check(action !in visited) { &quot;Circular artifact dependency for ${action.name}&quot; }</span>
+
+<span class="fc" id="L151">        visited.add(action)</span>
+
+        // we are using set here so values will be anyway unique
+<span class="fc bfc" id="L154" title="All 2 branches covered.">        action.runOrder = (action.dependencies + action.inputs.mapNotNull(artifacts::get))</span>
+            // actions from previous steps are anyway executed upfront and actions from further steps are not yet keyed
+<span class="fc bfc" id="L156" title="All 2 branches covered.">            .filter { it.startsWith(&quot;$stageName:&quot;) }</span>
+<span class="pc bpc" id="L157" title="1 of 2 branches missed.">            .mapNotNull(all::get)</span>
+            // first we need to know order of all downstream actions
+<span class="fc" id="L159">            .onEach { calculateActionOrder(it, stageName, visited) }</span>
+<span class="pc bpc" id="L160" title="5 of 10 branches missed.">            .maxOfOrNull { (it.runOrder ?: 1) + 1 }</span>
+
+        // we need to remove it from currently visited path as same node can be visited multiple times
+<span class="fc" id="L163">        visited.remove(action)</span>
+<span class="fc" id="L164">    }</span>
+
+    /**
+     * Builds template structure.
+     *
+     * @return Template fragment.
+     */
+<span class="fc" id="L171">    fun buildDefinition() = stages.map(PipelineStage::buildDefinition)</span>
+}
+
+/**
+ * Conditional condition - condition evaluation needs to be postponed to template deployment time.
+ */
+<span class="pc bpc" id="L177" title="1 of 4 branches missed.">fun conditional(input: Map&lt;String, Any&gt;, condition: String?) = condition?.let { fnIf(it, input, NO_VALUE) } ?: input</span>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

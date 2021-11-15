@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ApiGateway.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CloudFormation macro processor.</a> &gt; <a href="index.source.html" class="el_package">pl.wrzasq.cform.macro.apigateway</a> &gt; <span class="el_source">ApiGateway.kt</span></div><h1>ApiGateway.kt</h1><pre class="source lang-java linenums">/**
+ * This file is part of the pl.wrzasq.cform.
+ *
+ * @license http://mit-license.org/ The MIT license
+ * @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+ */
+
+package pl.wrzasq.cform.macro.apigateway
+
+import pl.wrzasq.cform.macro.model.ResourceDefinition
+import pl.wrzasq.cform.macro.template.Fn
+import pl.wrzasq.cform.macro.template.asMap
+import pl.wrzasq.cform.macro.template.popProperty
+
+<span class="fc" id="L15">private val SLUG_FILTER = Regex(&quot;\\W&quot;)</span>
+
+/**
+ * API Gateway definition.
+ *
+ * @param id Resource logical ID.
+ * @param input Resource specification.
+ */
+<span class="fc" id="L23">class ApiGateway(</span>
+<span class="pc" id="L24">    val id: String,</span>
+    input: Map&lt;String, Any&gt;
+) : ApiTemplateResource {
+    private val properties: Map&lt;String, Any&gt;
+
+    /**
+     * Map of authorizers registered in current API.
+     */
+<span class="fc" id="L32">    val authorizers: MutableMap&lt;String, ApiAuthorizer&gt; = mutableMapOf()</span>
+<span class="fc" id="L33">    private val models: MutableMap&lt;String, ApiModel&gt; = mutableMapOf()</span>
+<span class="fc" id="L34">    private val validators: MutableMap&lt;String, ApiRequestValidator&gt; = mutableMapOf()</span>
+<span class="fc" id="L35">    private val resources: MutableMap&lt;String, ApiResource&gt; = mutableMapOf()</span>
+<span class="fc" id="L36">    private val methods: MutableMap&lt;String, ApiMethod&gt; = mutableMapOf()</span>
+<span class="fc" id="L37">    private val resourceIds: MutableSet&lt;String&gt; = mutableSetOf()</span>
+
+    private lateinit var deploymentHash: String
+
+<span class="fc" id="L41">    init {</span>
+<span class="fc" id="L42">        properties = input</span>
+<span class="fc" id="L43">            .popProperty(&quot;Authorizers&quot;, {</span>
+<span class="fc bfc" id="L44" title="All 2 branches covered.">                for ((authorizerId, definition) in asMap(it)) {</span>
+<span class="fc" id="L45">                    authorizers[authorizerId] = ApiAuthorizer(this, authorizerId, asMap(definition))</span>
+                }
+<span class="fc" id="L47">            })</span>
+<span class="fc" id="L48">            .popProperty(&quot;Models&quot;, {</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">                for ((modelId, definition) in asMap(it)) {</span>
+<span class="fc" id="L50">                    models[modelId] = ApiModel(this, modelId, asMap(definition))</span>
+                }
+<span class="fc" id="L52">            })</span>
+<span class="fc" id="L53">            .popProperty(&quot;Resources&quot;, {</span>
+<span class="fc" id="L54">                initTree(Fn.getAtt(resourceId, &quot;RootResourceId&quot;), asMap(it))</span>
+<span class="fc" id="L55">            })</span>
+<span class="fc" id="L56">    }</span>
+
+    override val resourceId
+<span class="fc" id="L59">        get() = &quot;ApiGateway$id&quot;</span>
+
+    /**
+     * Returns validator of given type.
+     *
+     * @param validatorType Type of validation.
+     * @return Validator resource.
+     */
+<span class="fc" id="L67">    fun getValidator(validatorType: String) = validators.computeIfAbsent(validatorType) {</span>
+<span class="fc bfc" id="L68" title="All 4 branches covered.">        when (it) {</span>
+<span class="fc" id="L69">            &quot;BODY_ONLY&quot; -&gt; ApiRequestValidator(this, &quot;BodyOnly&quot;, true, false)</span>
+<span class="fc" id="L70">            &quot;PARAMETERS_ONLY&quot; -&gt; ApiRequestValidator(this, &quot;ParametersOnly&quot;, false, true)</span>
+<span class="fc" id="L71">            &quot;BODY_AND_PARAMETERS&quot; -&gt; ApiRequestValidator(this, &quot;BodyAndParameters&quot;, true, true)</span>
+<span class="fc" id="L72">            else -&gt; throw IllegalArgumentException(&quot;Unsupported validator type `$it`&quot;)</span>
+        }
+<span class="fc" id="L74">    }</span>
+
+    /**
+     * Builds resources definitions.
+     *
+     * @return List of resource entries.
+     */
+    fun generateResources(): List&lt;ResourceDefinition&gt; {
+<span class="fc" id="L82">        val definitions = mutableListOf&lt;ResourceDefinition&gt;()</span>
+
+        // api resource
+<span class="fc" id="L85">        definitions.add(</span>
+<span class="fc" id="L86">            ResourceDefinition(</span>
+<span class="fc" id="L87">                id = resourceId,</span>
+<span class="fc" id="L88">                type = &quot;AWS::ApiGateway::RestApi&quot;,</span>
+<span class="fc" id="L89">                properties = properties</span>
+            )
+        )
+
+        // sorted resources to ensure consistent order for hash computation
+<span class="fc" id="L94">        definitions.addAll(authorizers.toSortedMap().values.map(ApiAuthorizer::generateResource))</span>
+<span class="fc" id="L95">        definitions.addAll(models.toSortedMap().values.map(ApiModel::generateResource))</span>
+<span class="fc" id="L96">        definitions.addAll(validators.toSortedMap().values.map(ApiRequestValidator::generateResource))</span>
+<span class="fc" id="L97">        definitions.addAll(resources.toSortedMap().values.map(ApiResource::generateResource))</span>
+<span class="fc" id="L98">        definitions.addAll(methods.toSortedMap().values.map(ApiMethod::generateResource))</span>
+
+        // deployment
+<span class="fc" id="L101">        definitions.add(</span>
+<span class="fc" id="L102">            ResourceDefinition(</span>
+<span class="fc" id="L103">                id = &quot;${resourceId}Deployment${computeDeploymentHash(definitions)}&quot;,</span>
+<span class="fc" id="L104">                type = &quot;AWS::ApiGateway::Deployment&quot;,</span>
+<span class="fc" id="L105">                dependsOn = methods.values.map(ApiMethod::resourceId).sorted(),</span>
+<span class="fc" id="L106">                properties = mapOf(&quot;RestApiId&quot; to ref())</span>
+            )
+        )
+
+<span class="fc" id="L110">        return definitions</span>
+    }
+
+    private fun computeDeploymentHash(definitions: List&lt;ResourceDefinition&gt;): String {
+<span class="fc" id="L114">        deploymentHash = definitions.hashCode().toString().replace(&quot;-&quot;, &quot;_&quot;)</span>
+<span class="fc" id="L115">        return deploymentHash</span>
+    }
+
+<span class="fc" id="L118">    private fun initTree(</span>
+        parent: Any,
+        input: Map&lt;String, Any&gt;,
+<span class="fc" id="L121">        scopePath: String = &quot;&quot;,</span>
+<span class="fc" id="L122">        scopeId: String = &quot;&quot;</span>
+    ) {
+<span class="fc bfc" id="L124" title="All 2 branches covered.">        for ((key, value) in input) {</span>
+<span class="fc" id="L125">            when (key[0]) {</span>
+                // sub-resource
+<span class="fc bfc" id="L127" title="All 2 branches covered.">                '/' -&gt; {</span>
+<span class="fc" id="L128">                    val part = key.substring(1)</span>
+<span class="fc" id="L129">                    val path = &quot;$scopePath$key&quot;</span>
+<span class="fc" id="L130">                    val id = generateResourceId(scopeId, part)</span>
+
+<span class="fc" id="L132">                    val resource = ApiResource(this, id, parent, part)</span>
+<span class="fc" id="L133">                    resources[path] = resource</span>
+<span class="fc" id="L134">                    resourceIds.add(id)</span>
+
+                    // https://knowyourmeme.com/memes/we-need-to-go-deeper
+<span class="fc" id="L137">                    initTree(resource.ref(), asMap(value), path, id)</span>
+                }
+                // method
+<span class="fc bfc" id="L140" title="All 2 branches covered.">                '@' -&gt; {</span>
+<span class="fc" id="L141">                    val method = key.substring(1)</span>
+<span class="fc" id="L142">                    methods[&quot;$method$scopePath&quot;] = ApiMethod(this, &quot;$method$scopeId&quot;, parent, method, asMap(value))</span>
+                }
+<span class="fc" id="L144">                else -&gt; throw IllegalArgumentException(&quot;`$key` is not a valid API structure entry&quot;)</span>
+            }
+        }
+<span class="fc" id="L147">    }</span>
+
+    private fun generateResourceId(scope: String, part: String): String {
+<span class="pc bpc" id="L150" title="2 of 4 branches missed.">        val slug = SLUG_FILTER.replace(part, &quot;&quot;).replaceFirstChar { it.uppercase() }</span>
+<span class="fc" id="L151">        var id = &quot;$scope$slug&quot;</span>
+
+<span class="pc bpc" id="L153" title="1 of 2 branches missed.">        while (id in resourceIds) {</span>
+<span class="nc" id="L154">            id += &quot;_&quot;</span>
+        }
+
+<span class="fc" id="L157">        return id</span>
+    }
+
+    /**
+     * Resolves resource reference.
+     *
+     * @param path Local resource identifier.
+     * @return CloudFormation resource identifier.
+     */
+    fun resolve(path: List&lt;String&gt;): String {
+<span class="fc bfc" id="L167" title="All 2 branches covered.">        if (path.isEmpty()) {</span>
+            // root element reference
+<span class="fc" id="L169">            return resourceId</span>
+<span class="fc bfc" id="L170" title="All 2 branches covered.">        } else if (path.first() == &quot;Deployment&quot;) {</span>
+            // resolving takes place after resources construction so hash will be available
+<span class="fc" id="L172">            return &quot;${resourceId}Deployment${deploymentHash}&quot;</span>
+        }
+
+<span class="fc" id="L175">        val lookupId = path[1]</span>
+
+<span class="fc bfc" id="L177" title="All 6 branches covered.">        return when (path.first()) {</span>
+<span class="fc bfc" id="L178" title="All 2 branches covered.">            &quot;Authorizer&quot; -&gt; authorizers[lookupId] ?: throw IllegalArgumentException(&quot;Unknown authorizer $lookupId&quot;)</span>
+<span class="fc bfc" id="L179" title="All 2 branches covered.">            &quot;Validator&quot; -&gt; validators[lookupId] ?: throw IllegalArgumentException(&quot;Unknown validator $lookupId&quot;)</span>
+<span class="fc bfc" id="L180" title="All 2 branches covered.">            &quot;Model&quot; -&gt; models[lookupId] ?: throw IllegalArgumentException(&quot;Unknown model $lookupId&quot;)</span>
+            &quot;Resource&quot; -&gt; {
+<span class="fc" id="L182">                val key = unescapeReference(lookupId)</span>
+<span class="fc bfc" id="L183" title="All 2 branches covered.">                resources[key] ?: throw IllegalArgumentException(&quot;Unknown resource $key&quot;)</span>
+            }
+            &quot;Method&quot; -&gt; {
+<span class="fc" id="L186">                val key = unescapeReference(lookupId)</span>
+<span class="fc bfc" id="L187" title="All 2 branches covered.">                methods[key] ?: throw IllegalArgumentException(&quot;Unknown resource method $key&quot;)</span>
+            }
+<span class="fc" id="L189">            else -&gt; throw IllegalArgumentException(&quot;Unknown resource type reference ${path.first()}&quot;)</span>
+<span class="fc" id="L190">        }.resourceId</span>
+    }
+}
+
+// since in API gateway only full path parts are allowed as fragments this is only pattern possibility
+// %/ won't work for top-level placeholder resources, but after first replacement only trailing `%` will be left
+<span class="fc" id="L196">private fun unescapeReference(reference: String) = reference.replace(&quot;/%&quot;, &quot;/{&quot;).replace(&quot;%&quot;, &quot;}&quot;)</span>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

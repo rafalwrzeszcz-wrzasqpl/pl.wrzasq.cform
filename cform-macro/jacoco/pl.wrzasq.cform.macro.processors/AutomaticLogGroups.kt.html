@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AutomaticLogGroups.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CloudFormation macro processor.</a> &gt; <a href="index.source.html" class="el_package">pl.wrzasq.cform.macro.processors</a> &gt; <span class="el_source">AutomaticLogGroups.kt</span></div><h1>AutomaticLogGroups.kt</h1><pre class="source lang-java linenums">/**
+ * This file is part of the pl.wrzasq.cform.
+ *
+ * @license http://mit-license.org/ The MIT license
+ * @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+ */
+
+package pl.wrzasq.cform.macro.processors
+
+import pl.wrzasq.cform.macro.processors.loggroups.DefaultLogGroupHandler
+import pl.wrzasq.cform.macro.template.SECTION_RESOURCES
+import pl.wrzasq.cform.macro.template.asDefinition
+import pl.wrzasq.cform.macro.template.asMap
+import pl.wrzasq.cform.macro.template.build
+import pl.wrzasq.cform.macro.template.mapSelected
+import pl.wrzasq.cform.macro.template.popProperty
+
+<span class="fc" id="L18">private val logGroupsHandlers = mapOf(</span>
+<span class="fc" id="L19">    &quot;AWS::Lambda::Function&quot; to DefaultLogGroupHandler(&quot;lambda&quot;),</span>
+<span class="fc" id="L20">    &quot;AWS::CodeBuild::Project&quot; to DefaultLogGroupHandler(&quot;codebuild&quot;),</span>
+<span class="fc" id="L21">    &quot;AWS::Serverless::Function&quot; to DefaultLogGroupHandler(&quot;lambda&quot;)</span>
+)
+
+/**
+ * Automatically declares LogGroups for certain types of resources.
+ *
+ * Currently Lambda functions (including Serverless transform) and CodeBuild projects are handled.
+ */
+<span class="fc" id="L29">class AutomaticLogGroups {</span>
+    /**
+     * Handles input template.
+     *
+     * @param input Current template state.
+     * @return Processed template.
+     */
+<span class="fc" id="L36">    fun process(input: Map&lt;String, Any&gt;) = input.mapSelected(SECTION_RESOURCES) { processResources(asMap(it)) }</span>
+
+    private fun processResources(input: Map&lt;String, Any&gt;): Map&lt;String, Any&gt; {
+        // we keep old resources anyway, will just add more to it
+<span class="fc" id="L40">        val resources = mutableMapOf&lt;String, Any&gt;()</span>
+
+<span class="fc bfc" id="L42" title="All 2 branches covered.">        for ((id, resource) in input) {</span>
+<span class="fc" id="L43">            val entry = asDefinition(id, resource)</span>
+<span class="fc" id="L44">            val handler = logGroupsHandlers[entry.type]</span>
+
+            // check if resource type is handled
+<span class="pc bpc" id="L47" title="1 of 4 branches missed.">            if (handler != null &amp;&amp; entry.properties.containsKey(handler.propertyName)) {</span>
+                // create copy of old resource but drop the non-standard property
+<span class="fc" id="L49">                resources[id] = entry.popProperty(handler.propertyName, {</span>
+<span class="fc" id="L50">                    resources += handler.buildLogGroup(id, it).build()</span>
+<span class="fc" id="L51">                })</span>
+<span class="fc" id="L52">                    .build()</span>
+<span class="fc" id="L53">                    .second</span>
+            } else {
+                // just keep original resource
+<span class="fc" id="L56">                resources[id] = resource</span>
+            }
+        }
+
+<span class="fc" id="L60">        return resources</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
