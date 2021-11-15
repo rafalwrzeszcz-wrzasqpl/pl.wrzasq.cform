@@ -18,8 +18,8 @@ WrzasqPlCformMacro:
     Type: "AWS::Serverless::Application"
     Properties:
         Location:
-            ApplicationId: "arn:aws:serverlessrepo:us-east-1:012345678901:applications/my-application"
-            SemanticVersion: "1.1.0"
+            ApplicationId: "arn:aws:serverlessrepo:eu-central-1:117504620086:applications/wrzasqpl-cform-macro"
+            SemanticVersion: "1.1.2"
         # `Parameters` section is optional, default name is `WrzasqPlCformMacro` - you can define custom name here
         Parameters:
             MacroName: "NameItCformMacro"
