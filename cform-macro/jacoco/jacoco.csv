@@ -1,70 +1,70 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
 CloudFormation macro processor.,pl.wrzasq.cform.macro.apigateway,ApiMethod,3,193,0,0,0,32,1,4,1,4
-CloudFormation macro processor.,pl.wrzasq.cform.macro.apigateway,ApiRequestValidator,3,76,0,0,0,14,1,3,1,3
-CloudFormation macro processor.,pl.wrzasq.cform.macro.apigateway,ApiGateway,10,785,3,33,1,79,4,29,1,11
-CloudFormation macro processor.,pl.wrzasq.cform.macro.apigateway,ApiTemplateResourceKt,12,8,0,0,1,1,1,1,1,1
-CloudFormation macro processor.,pl.wrzasq.cform.macro.apigateway,ApiMethodKt,0,26,0,2,0,5,0,2,0,1
-CloudFormation macro processor.,pl.wrzasq.cform.macro.apigateway,ApiGatewayManager.expandString.new Function1() {...},0,10,0,0,0,1,0,1,0,1
-CloudFormation macro processor.,pl.wrzasq.cform.macro.apigateway,ApiGatewayManager.expandString.new Function1() {...},0,19,0,0,0,1,0,1,0,1
-CloudFormation macro processor.,pl.wrzasq.cform.macro.apigateway,ApiResource,3,80,0,0,0,14,1,3,1,3
-CloudFormation macro processor.,pl.wrzasq.cform.macro.apigateway,ApiAuthorizer.leftover.new Function1() {...},0,22,0,0,0,1,0,1,0,1
 CloudFormation macro processor.,pl.wrzasq.cform.macro.apigateway,ApiAuthorizer,0,121,0,2,0,20,0,6,0,5
+CloudFormation macro processor.,pl.wrzasq.cform.macro.apigateway,ApiRequestValidator,3,76,0,0,0,14,1,3,1,3
 CloudFormation macro processor.,pl.wrzasq.cform.macro.apigateway,ApiModel,0,100,0,0,0,17,0,4,0,4
 CloudFormation macro processor.,pl.wrzasq.cform.macro.apigateway,ApiGateway.new Function1() {...},0,56,0,2,0,3,0,2,0,1
 CloudFormation macro processor.,pl.wrzasq.cform.macro.apigateway,ApiGateway.new Function1() {...},0,56,0,2,0,3,0,2,0,1
 CloudFormation macro processor.,pl.wrzasq.cform.macro.apigateway,ApiGateway.new Function1() {...},0,19,0,0,0,2,0,1,0,1
 CloudFormation macro processor.,pl.wrzasq.cform.macro.apigateway,ApiGatewayKt,0,20,0,0,0,2,0,2,0,2
 CloudFormation macro processor.,pl.wrzasq.cform.macro.apigateway,UtilsKt,0,14,0,0,0,2,0,1,0,1
+CloudFormation macro processor.,pl.wrzasq.cform.macro.apigateway,ApiGateway,10,785,3,33,1,79,4,29,1,11
+CloudFormation macro processor.,pl.wrzasq.cform.macro.apigateway,ApiTemplateResourceKt,12,8,0,0,1,1,1,1,1,1
+CloudFormation macro processor.,pl.wrzasq.cform.macro.apigateway,ApiMethodKt,0,26,0,2,0,5,0,2,0,1
 CloudFormation macro processor.,pl.wrzasq.cform.macro.apigateway,ApiGatewayManagerKt,0,11,0,0,0,2,0,1,0,1
 CloudFormation macro processor.,pl.wrzasq.cform.macro.apigateway,ApiGatewayManager,4,358,2,20,0,43,2,18,0,9
 CloudFormation macro processor.,pl.wrzasq.cform.macro.apigateway,ApiMethod.leftover.new Function1() {...},0,9,0,0,0,1,0,1,0,1
 CloudFormation macro processor.,pl.wrzasq.cform.macro.apigateway,ApiMethod.leftover.new Function1() {...},0,74,0,2,0,6,0,2,0,1
+CloudFormation macro processor.,pl.wrzasq.cform.macro.apigateway,ApiGatewayManager.expandString.new Function1() {...},0,10,0,0,0,1,0,1,0,1
+CloudFormation macro processor.,pl.wrzasq.cform.macro.apigateway,ApiGatewayManager.expandString.new Function1() {...},0,19,0,0,0,1,0,1,0,1
 CloudFormation macro processor.,pl.wrzasq.cform.macro.apigateway,ApiMethod.initIntegration.leftover.new Function1() {...},0,22,0,0,0,1,0,1,0,1
 CloudFormation macro processor.,pl.wrzasq.cform.macro.apigateway,ApiModel.leftover.new Function1() {...},0,76,2,2,0,7,2,1,0,1
+CloudFormation macro processor.,pl.wrzasq.cform.macro.apigateway,ApiResource,3,80,0,0,0,14,1,3,1,3
+CloudFormation macro processor.,pl.wrzasq.cform.macro.apigateway,ApiAuthorizer.leftover.new Function1() {...},0,22,0,0,0,1,0,1,0,1
 CloudFormation macro processor.,pl.wrzasq.cform.macro.apigateway,ApiMethod.leftover.new Function1() {...},0,25,0,0,0,2,0,1,0,1
 CloudFormation macro processor.,pl.wrzasq.cform.macro,Handler,0,73,0,0,0,10,0,2,0,2
 CloudFormation macro processor.,pl.wrzasq.cform.macro,Handler.handle..inlined.readValue.new TypeReference() {...},0,3,0,0,0,1,0,1,0,1
-CloudFormation macro processor.,pl.wrzasq.cform.macro.config,LambdaResourcesFactory.delegatingResourceProcessor.new Function0() {...},36,0,0,0,5,0,1,0,1,0
-CloudFormation macro processor.,pl.wrzasq.cform.macro.config,LambdaResourcesFactory.objectMapper.new Function0() {...},3,0,0,0,1,0,1,0,1,0
-CloudFormation macro processor.,pl.wrzasq.cform.macro.config,LambdaResourcesFactory,189,0,0,0,13,0,14,0,14,0
-CloudFormation macro processor.,pl.wrzasq.cform.macro.config,LambdaResourcesFactory.dynamoDbAttributesDefinitionsProcessor.new Function0() {...},4,0,0,0,1,0,1,0,1,0
-CloudFormation macro processor.,pl.wrzasq.cform.macro.config,LambdaResourcesFactory.codeBuildSetupProcessor.new Function0() {...},4,0,0,0,1,0,1,0,1,0
-CloudFormation macro processor.,pl.wrzasq.cform.macro.config,LambdaResourcesFactory.pipelineDefinitionProcessor.new Function0() {...},4,0,0,0,1,0,1,0,1,0
 CloudFormation macro processor.,pl.wrzasq.cform.macro.config,LambdaResourcesFactory.processors.new Function0() {...},46,0,0,0,5,0,1,0,1,0
 CloudFormation macro processor.,pl.wrzasq.cform.macro.config,LambdaResourcesFactory.Companion,17,0,0,0,3,0,1,0,1,0
 CloudFormation macro processor.,pl.wrzasq.cform.macro.config,LambdaResourcesFactory.handler.new Function0() {...},11,0,0,0,1,0,1,0,1,0
 CloudFormation macro processor.,pl.wrzasq.cform.macro.config,LambdaResourcesFactory.api.new Function0() {...},10,0,0,0,1,0,1,0,1,0
 CloudFormation macro processor.,pl.wrzasq.cform.macro.config,LambdaResourcesFactory.apiGatewayDefinitionProcessor.new Function0() {...},4,0,0,0,1,0,1,0,1,0
+CloudFormation macro processor.,pl.wrzasq.cform.macro.config,LambdaResourcesFactory.delegatingResourceProcessor.new Function0() {...},36,0,0,0,5,0,1,0,1,0
+CloudFormation macro processor.,pl.wrzasq.cform.macro.config,LambdaResourcesFactory.objectMapper.new Function0() {...},3,0,0,0,1,0,1,0,1,0
 CloudFormation macro processor.,pl.wrzasq.cform.macro.config,LambdaResourcesFactory.fnToolkitProcessor.new Function0() {...},8,0,0,0,1,0,1,0,1,0
+CloudFormation macro processor.,pl.wrzasq.cform.macro.config,LambdaResourcesFactory,189,0,0,0,13,0,14,0,14,0
+CloudFormation macro processor.,pl.wrzasq.cform.macro.config,LambdaResourcesFactory.dynamoDbAttributesDefinitionsProcessor.new Function0() {...},4,0,0,0,1,0,1,0,1,0
+CloudFormation macro processor.,pl.wrzasq.cform.macro.config,LambdaResourcesFactory.codeBuildSetupProcessor.new Function0() {...},4,0,0,0,1,0,1,0,1,0
 CloudFormation macro processor.,pl.wrzasq.cform.macro.config,LambdaResourcesFactory.iamStatementsProcessor.new Function0() {...},4,0,0,0,1,0,1,0,1,0
+CloudFormation macro processor.,pl.wrzasq.cform.macro.config,LambdaResourcesFactory.pipelineDefinitionProcessor.new Function0() {...},4,0,0,0,1,0,1,0,1,0
 CloudFormation macro processor.,pl.wrzasq.cform.macro.config,LambdaResourcesFactory.automaticLogGroupsProcessor.new Function0() {...},4,0,0,0,1,0,1,0,1,0
 CloudFormation macro processor.,pl.wrzasq.cform.macro.pipeline.types,CloudFormationDeploy,0,316,2,18,0,36,2,13,0,5
 CloudFormation macro processor.,pl.wrzasq.cform.macro.pipeline.types,CodeBuild,0,57,0,2,0,6,0,4,0,3
 CloudFormation macro processor.,pl.wrzasq.cform.macro.pipeline.types,CloudFormationDeploy.buildConfiguration.final.new Function1() {...},2,163,5,25,0,14,5,11,0,1
+CloudFormation macro processor.,pl.wrzasq.cform.macro.pipeline.types,CloudFormationDeploy.compile.1.new Function1() {...},0,51,0,0,0,4,0,1,0,1
 CloudFormation macro processor.,pl.wrzasq.cform.macro.pipeline.types,CloudFormationDeployKt,0,34,0,0,0,5,0,2,0,2
 CloudFormation macro processor.,pl.wrzasq.cform.macro.pipeline.types,S3Deploy,3,94,0,4,0,8,1,6,1,4
 CloudFormation macro processor.,pl.wrzasq.cform.macro.pipeline.types,S3Promote,0,106,0,2,0,12,0,4,0,3
 CloudFormation macro processor.,pl.wrzasq.cform.macro.pipeline.types,S3Source,0,111,0,4,0,8,0,6,0,4
-CloudFormation macro processor.,pl.wrzasq.cform.macro.pipeline.types,GenericActionKt.fromMap.new Function3() {...},0,45,0,4,0,8,0,3,0,1
-CloudFormation macro processor.,pl.wrzasq.cform.macro.pipeline.types,GenericActionKt,0,9,0,0,0,2,0,1,0,1
-CloudFormation macro processor.,pl.wrzasq.cform.macro.pipeline.types,CloudFormationDeploy.compile.1.new Function1() {...},0,51,0,0,0,4,0,1,0,1
 CloudFormation macro processor.,pl.wrzasq.cform.macro.pipeline.types,GenericAction,0,46,0,0,0,7,0,2,0,2
 CloudFormation macro processor.,pl.wrzasq.cform.macro.pipeline.types,BaseActionKt,1,136,3,11,0,17,3,8,0,4
-CloudFormation macro processor.,pl.wrzasq.cform.macro.pipeline.types,BaseAction,2,356,1,25,0,31,1,25,0,13
-CloudFormation macro processor.,pl.wrzasq.cform.macro.processors,AutomaticLogGroups.process.new Function1() {...},0,9,0,0,0,1,0,1,0,1
-CloudFormation macro processor.,pl.wrzasq.cform.macro.processors,AutomaticLogGroups,0,109,1,5,0,12,1,5,0,3
-CloudFormation macro processor.,pl.wrzasq.cform.macro.processors,FnToolkit.resolve.imports.new Function1() {...},0,9,0,0,0,1,0,1,0,1
-CloudFormation macro processor.,pl.wrzasq.cform.macro.processors,DelegatingResourceProcessor,0,107,0,4,0,12,0,6,0,4
-CloudFormation macro processor.,pl.wrzasq.cform.macro.processors,FnToolkitKt,0,6,0,0,0,1,0,1,0,1
+CloudFormation macro processor.,pl.wrzasq.cform.macro.pipeline.types,GenericActionKt.fromMap.new Function3() {...},0,45,0,4,0,8,0,3,0,1
+CloudFormation macro processor.,pl.wrzasq.cform.macro.pipeline.types,BaseAction,2,352,1,25,0,31,1,24,0,12
+CloudFormation macro processor.,pl.wrzasq.cform.macro.pipeline.types,GenericActionKt,0,9,0,0,0,2,0,1,0,1
 CloudFormation macro processor.,pl.wrzasq.cform.macro.processors,FnToolkit,0,131,0,4,0,15,0,6,0,4
+CloudFormation macro processor.,pl.wrzasq.cform.macro.processors,AutomaticLogGroups.process.new Function1() {...},0,9,0,0,0,1,0,1,0,1
 CloudFormation macro processor.,pl.wrzasq.cform.macro.processors,ApiGatewayDefinition.process.rest.new Function1() {...},0,42,0,2,0,3,0,2,0,1
 CloudFormation macro processor.,pl.wrzasq.cform.macro.processors,ApiGatewayDefinition,0,44,0,2,0,8,0,3,0,2
 CloudFormation macro processor.,pl.wrzasq.cform.macro.processors,AutomaticLogGroupsKt,0,34,0,0,0,4,0,1,0,1
+CloudFormation macro processor.,pl.wrzasq.cform.macro.processors,AutomaticLogGroups,0,109,1,5,0,12,1,5,0,3
+CloudFormation macro processor.,pl.wrzasq.cform.macro.processors,FnToolkit.resolve.imports.new Function1() {...},0,9,0,0,0,1,0,1,0,1
 CloudFormation macro processor.,pl.wrzasq.cform.macro.processors,DelegatingResourceProcessor.process.new Function1() {...},0,9,0,0,0,1,0,1,0,1
 CloudFormation macro processor.,pl.wrzasq.cform.macro.processors,AutomaticLogGroups.processResources.new Function1() {...},0,24,0,0,0,2,0,1,0,1
 CloudFormation macro processor.,pl.wrzasq.cform.macro.processors,ApiGatewayDefinition.process.new Function1() {...},0,22,0,0,0,1,0,1,0,1
-CloudFormation macro processor.,pl.wrzasq.cform.macro.processors.types,CodeBuildSetup,0,114,1,5,0,21,1,8,0,6
+CloudFormation macro processor.,pl.wrzasq.cform.macro.processors,DelegatingResourceProcessor,0,107,0,4,0,12,0,6,0,4
+CloudFormation macro processor.,pl.wrzasq.cform.macro.processors,FnToolkitKt,0,6,0,0,0,1,0,1,0,1
 CloudFormation macro processor.,pl.wrzasq.cform.macro.processors.types,PipelineDefinition,5,136,3,9,1,24,3,9,0,6
+CloudFormation macro processor.,pl.wrzasq.cform.macro.processors.types,CodeBuildSetup,0,114,1,5,0,21,1,8,0,6
 CloudFormation macro processor.,pl.wrzasq.cform.macro.processors.types,IamStatements,0,144,0,8,0,28,0,9,0,5
 CloudFormation macro processor.,pl.wrzasq.cform.macro.processors.types,CodeBuildSetupKt,0,25,0,0,0,3,0,1,0,1
 CloudFormation macro processor.,pl.wrzasq.cform.macro.processors.types,DynamoDbAttributesDefinitions,0,102,0,0,0,15,0,4,0,4
@@ -73,9 +73,9 @@ CloudFormation macro processor.,pl.wrzasq.cform.macro.processors.types,CodeBuild
 CloudFormation macro processor.,pl.wrzasq.cform.macro.processors.types,CodeBuildSetup.handle.new Function1() {...},0,9,0,0,0,1,0,1,0,1
 CloudFormation macro processor.,pl.wrzasq.cform.macro.pipeline,PipelineManager.handleAction.leftover.new Function1() {...},0,10,0,0,0,1,0,1,0,1
 CloudFormation macro processor.,pl.wrzasq.cform.macro.pipeline,PipelineManager.handleAction.leftover.new Function1() {...},0,58,0,10,0,8,0,6,0,1
-CloudFormation macro processor.,pl.wrzasq.cform.macro.pipeline,PipelineAction.DefaultImpls,0,7,0,0,0,1,0,1,0,1
 CloudFormation macro processor.,pl.wrzasq.cform.macro.pipeline,PipelineManager.handleAction.leftover.new Function1() {...},0,9,0,0,0,1,0,1,0,1
 CloudFormation macro processor.,pl.wrzasq.cform.macro.pipeline,PipelineManager,25,546,6,28,0,60,4,22,0,9
+CloudFormation macro processor.,pl.wrzasq.cform.macro.pipeline,PipelineAction,0,4,0,0,0,1,0,1,0,1
 CloudFormation macro processor.,pl.wrzasq.cform.macro.pipeline,PipelineStage,0,80,0,0,0,9,0,4,0,4
 CloudFormation macro processor.,pl.wrzasq.cform.macro.pipeline,PipelineManager.handleStage.leftover.new Function1() {...},0,68,0,4,0,3,0,3,0,1
 CloudFormation macro processor.,pl.wrzasq.cform.macro.pipeline,PipelineManager.handleStage.leftover.new Function1() {...},0,9,0,0,0,1,0,1,0,1

@@ -6,8 +6,8 @@ WrzasqPl::AWS::Account resource,pl.wrzasq.cform.resource.aws.account.config,Lamb
 WrzasqPl::AWS::Account resource,pl.wrzasq.cform.resource.aws.account.config,LambdaResourcesFactory,157,0,0,0,19,0,12,0,12,0
 WrzasqPl::AWS::Account resource,pl.wrzasq.cform.resource.aws.account.config,LambdaResourcesFactory.lambdaHandler.2.new ResourceLambdaHandler() {...},57,0,4,0,8,0,6,0,4,0
 WrzasqPl::AWS::Account resource,pl.wrzasq.cform.resource.aws.account.config,LambdaResourcesFactory.readHandler.new Function0() {...},7,0,0,0,1,0,1,0,1,0
-WrzasqPl::AWS::Account resource,pl.wrzasq.cform.resource.aws.account.config,LambdaResourcesFactory.createHandler.new Function0() {...},10,0,0,0,1,0,1,0,1,0
 WrzasqPl::AWS::Account resource,pl.wrzasq.cform.resource.aws.account.config,LambdaResourcesFactory.updateHandler.new Function0() {...},11,0,0,0,1,0,1,0,1,0
+WrzasqPl::AWS::Account resource,pl.wrzasq.cform.resource.aws.account.config,LambdaResourcesFactory.createHandler.new Function0() {...},10,0,0,0,1,0,1,0,1,0
 WrzasqPl::AWS::Account resource,pl.wrzasq.cform.resource.aws.account.config,LambdaResourcesFactory.deleteHandler.new Function0() {...},7,0,0,0,1,0,1,0,1,0
 WrzasqPl::AWS::Account resource,pl.wrzasq.cform.resource.aws.account.action,DeleteHandler,0,245,0,4,0,49,0,9,0,7
 WrzasqPl::AWS::Account resource,pl.wrzasq.cform.resource.aws.account.action,CreateHandlerKt,0,36,0,0,0,10,0,2,0,2
