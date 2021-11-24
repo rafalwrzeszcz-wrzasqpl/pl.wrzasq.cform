@@ -11,7 +11,7 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
-import org.junit.jupiter.api.Assertions.assertInstanceOf
+//import org.junit.jupiter.api.Assertions.assertInstanceOf
 import org.junit.jupiter.api.Assertions.assertSame
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
@@ -75,13 +75,15 @@ class CloudFormationDeployTest {
         )
 
         val call = configuration[PARAMETER_OVERRIDES]
-        assertInstanceOf(Map::class.java, call)
+        //assertInstanceOf(Map::class.java, call)
+        assertTrue(call is Map<*, *>)
 
         val sub = asMapAlways(call)
         assertTrue("Fn::Sub" in sub)
 
         val params = sub["Fn::Sub"]
-        assertInstanceOf(List::class.java, params)
+        //assertInstanceOf(List::class.java, params)
+        assertTrue(params is List<*>)
         if (params is List<*>) {
             assertEquals(
                 "{" +
@@ -97,7 +99,8 @@ class CloudFormationDeployTest {
                     "}",
                 params[0]
             )
-            assertInstanceOf(Map::class.java, params[1])
+            //assertInstanceOf(Map::class.java, params[1])
+            assertTrue(params[1] is Map<*, *>)
 
             val values = asMapAlways(params[1])
             assertEquals("NotReally", values["Complex"])

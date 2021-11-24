@@ -139,6 +139,14 @@
                             </buildArgs>
                         </configuration>
                     </plugin>
+
+                    <plugin>
+                        <groupId>pl.wrzasq.parent</groupId>
+                        <artifactId>parent-nativelambda-plugin</artifactId>
+                        <configuration>
+                            <packageName>wrzasqpl-${project.artifactId}.zip</packageName>
+                        </configuration>
+                    </plugin>
                 </plugins>
             </build>
         </profile>

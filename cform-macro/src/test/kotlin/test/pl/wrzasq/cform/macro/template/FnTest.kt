@@ -8,7 +8,7 @@
 package test.pl.wrzasq.cform.macro.template
 
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertInstanceOf
+//import org.junit.jupiter.api.Assertions.assertInstanceOf
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import pl.wrzasq.cform.macro.template.Fn
@@ -121,7 +121,8 @@ class FnTest {
         assertEquals(CALL_SUB, output.keys.first())
 
         val value = output.values.first()
-        assertInstanceOf(List::class.java, value)
+        //assertInstanceOf(List::class.java, value)
+        assertTrue(value is List<*>)
         if (value is List<*>) {
             val params = asMapAlways(value.last())
             assertTrue(params.isEmpty())
@@ -147,7 +148,8 @@ class FnTest {
         assertEquals(CALL_SUB, output.keys.first())
 
         val value = output.values.first()
-        assertInstanceOf(List::class.java, value)
+        //assertInstanceOf(List::class.java, value)
+        assertTrue(value is List<*>)
         if (value is List<*>) {
             val params = asMapAlways(value.last())
             assertEquals(1, params.size)
@@ -166,7 +168,8 @@ class FnTest {
         assertEquals(CALL_SUB, output.keys.first())
 
         val value = output.values.first()
-        assertInstanceOf(List::class.java, value)
+        //assertInstanceOf(List::class.java, value)
+        assertTrue(value is List<*>)
         if (value is List<*>) {
             val params = asMapAlways(value.last())
             assertEquals(1, params.size)

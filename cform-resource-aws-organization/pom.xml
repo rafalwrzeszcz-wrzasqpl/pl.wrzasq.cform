@@ -194,6 +194,11 @@
                             </buildArgs>
                         </configuration>
                     </plugin>
+
+                    <plugin>
+                        <groupId>pl.wrzasq.parent</groupId>
+                        <artifactId>parent-nativelambda-plugin</artifactId>
+                    </plugin>
                 </plugins>
             </build>
         </profile>

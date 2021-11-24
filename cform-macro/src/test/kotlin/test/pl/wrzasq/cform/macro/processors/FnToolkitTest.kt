@@ -9,7 +9,7 @@ package test.pl.wrzasq.cform.macro.processors
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
-import org.junit.jupiter.api.Assertions.assertInstanceOf
+//import org.junit.jupiter.api.Assertions.assertInstanceOf
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import pl.wrzasq.cform.macro.processors.FnToolkit
@@ -35,7 +35,8 @@ class FnToolkitTest {
 
         val output = toolkit.expand("" to "\${Import:Test}").values.first()
 
-        assertInstanceOf(List::class.java, output)
+        //assertInstanceOf(List::class.java, output)
+        assertTrue(output is List<*>)
         if (output is List<*>) {
             val params = asMapAlways(output.last())
 
@@ -51,7 +52,8 @@ class FnToolkitTest {
 
         val output = toolkit.expand("" to listOf("\${Import:Test}", mapOf("Foo" to "Bar"))).values.first()
 
-        assertInstanceOf(List::class.java, output)
+        //assertInstanceOf(List::class.java, output)
+        assertTrue(output is List<*>)
         if (output is List<*>) {
             val params = asMapAlways(output.last())
 
