@@ -7,6 +7,8 @@
 
 package pl.wrzasq.cform.macro.model
 
+import com.fasterxml.jackson.annotation.JsonProperty
+
 /**
  * CloudFormation template macro processing request structure.
  *
@@ -14,6 +16,8 @@ package pl.wrzasq.cform.macro.model
  * @property fragment Template fragment.
  */
 data class CloudFormationMacroRequest(
+    @JsonProperty("requestId")
     val requestId: String,
+    @JsonProperty("fragment")
     val fragment: Map<String, Any>
 )

@@ -9,7 +9,13 @@
                 "Environment": {
                     "Image": "maven:3.6.2-jdk-11",
                     "Type": "LINUX_CONTAINER",
-                    "ComputeType": "BUILD_GENERAL1_SMALL"
+                    "ComputeType": "BUILD_GENERAL1_SMALL",
+                    "EnvironmentVariables": [
+                        {
+                            "Name": "ServiceUrl",
+                            "Value": "https://example.com"
+                        }
+                    ]
                 },
                 "Source": {
                     "Type": "CODEPIPELINE"

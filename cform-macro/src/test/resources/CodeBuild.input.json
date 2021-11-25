@@ -7,7 +7,10 @@
                     "Fn::ImportValue": "root:v1:codebuild:role:name"
                 },
                 "Environment": {
-                    "Image": "maven:3.6.2-jdk-11"
+                    "Image": "maven:3.6.2-jdk-11",
+                    "EnvironmentVariables": {
+                        "ServiceUrl": "https://example.com"
+                    }
                 },
                 "Cache": {
                     "Fn::Sub": "${CacheBucketName}/integrations"

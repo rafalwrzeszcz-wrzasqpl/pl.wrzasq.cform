@@ -46,6 +46,17 @@ class CodeBuildSetup : ResourceHandler {
         output.putIfAbsent("Type", "LINUX_CONTAINER")
         output.putIfAbsent("ComputeType", "BUILD_GENERAL1_SMALL")
 
+        input["EnvironmentVariables"]?.let {
+            if (it is Map<*, *>) {
+                output["EnvironmentVariables"] = asMap(it).toSortedMap().map { variable ->
+                    mapOf(
+                        "Name" to variable.key,
+                        "Value" to variable.value
+                    )
+                }
+            }
+        }
+
         return output
     }
 

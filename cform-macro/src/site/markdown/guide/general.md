@@ -57,6 +57,16 @@ properties into their full representations.
                 # this is not needed
                 # Type: "S3"
     ```
+-   Plain `EnvironmentVariables` can be specified as a mapping:
+    ```yaml
+    PipelineProject:
+        Type: "AWS::CodeBuild::Project"
+        Properties:
+            Environment:
+                EnvironmentVariables:
+                    ServiceUrl: "https://example.com"
+                    ServiceVersion: "v1"
+    ```
 
 ## DynamoDb
 
