@@ -46,17 +46,28 @@ import pl.wrzasq.cform.macro.template.mapSelected
 <span class="fc" id="L46">        output.putIfAbsent(&quot;Type&quot;, &quot;LINUX_CONTAINER&quot;)</span>
 <span class="fc" id="L47">        output.putIfAbsent(&quot;ComputeType&quot;, &quot;BUILD_GENERAL1_SMALL&quot;)</span>
 
-<span class="fc" id="L49">        return output</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">        input[&quot;EnvironmentVariables&quot;]?.let {</span>
+<span class="fc bfc" id="L50" title="All 2 branches covered.">            if (it is Map&lt;*, *&gt;) {</span>
+<span class="fc" id="L51">                output[&quot;EnvironmentVariables&quot;] = asMap(it).toSortedMap().map { variable -&gt;</span>
+<span class="fc" id="L52">                    mapOf(</span>
+<span class="fc" id="L53">                        &quot;Name&quot; to variable.key,</span>
+<span class="fc" id="L54">                        &quot;Value&quot; to variable.value</span>
+                    )
+                }
+            }
+<span class="fc" id="L58">        }</span>
+
+<span class="fc" id="L60">        return output</span>
     }
 
-<span class="pc bpc" id="L52" title="1 of 4 branches missed.">    private fun expandCache(input: Any) = if (input !is Map&lt;*, *&gt; || input.size == 1) {</span>
+<span class="pc bpc" id="L63" title="1 of 4 branches missed.">    private fun expandCache(input: Any) = if (input !is Map&lt;*, *&gt; || input.size == 1) {</span>
         // converts plain values (including calls) into full definition
-<span class="fc" id="L54">        mapOf(</span>
-<span class="fc" id="L55">            &quot;Type&quot; to &quot;S3&quot;,</span>
-<span class="fc" id="L56">            &quot;Location&quot; to input</span>
+<span class="fc" id="L65">        mapOf(</span>
+<span class="fc" id="L66">            &quot;Type&quot; to &quot;S3&quot;,</span>
+<span class="fc" id="L67">            &quot;Location&quot; to input</span>
         )
     } else {
-<span class="fc" id="L59">        input</span>
-<span class="fc" id="L60">    }</span>
+<span class="fc" id="L70">        input</span>
+<span class="fc" id="L71">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
