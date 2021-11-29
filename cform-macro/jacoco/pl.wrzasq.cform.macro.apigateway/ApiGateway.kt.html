@@ -111,7 +111,7 @@ import pl.wrzasq.cform.macro.template.popProperty
     }
 
     private fun computeDeploymentHash(definitions: List&lt;ResourceDefinition&gt;): String {
-<span class="fc" id="L114">        deploymentHash = definitions.hashCode().toString().replace(&quot;-&quot;, &quot;_&quot;)</span>
+<span class="fc" id="L114">        deploymentHash = definitions.hashCode().toString().replace(&quot;-&quot;, &quot;0&quot;)</span>
 <span class="fc" id="L115">        return deploymentHash</span>
     }
 
@@ -151,7 +151,7 @@ import pl.wrzasq.cform.macro.template.popProperty
 <span class="fc" id="L151">        var id = &quot;$scope$slug&quot;</span>
 
 <span class="pc bpc" id="L153" title="1 of 2 branches missed.">        while (id in resourceIds) {</span>
-<span class="nc" id="L154">            id += &quot;_&quot;</span>
+<span class="nc" id="L154">            id += &quot;X&quot;</span>
         }
 
 <span class="fc" id="L157">        return id</span>
