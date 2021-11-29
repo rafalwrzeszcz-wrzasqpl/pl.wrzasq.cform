@@ -159,7 +159,7 @@
                 "ResourceId": {
                     "Ref": "ApiGatewayPublicResourceAccountsAccountId"
                 },
-                "Method": "DELETE",
+                "HttpMethod": "DELETE",
                 "AuthorizerId": {
                     "Ref": "ApiGatewayPublicAuthorizerTokenAuthorizer"
                 },
@@ -206,7 +206,7 @@
                 "ResourceId": {
                     "Ref": "ApiGatewayPublicResourceAccountsAccountIdKeysApiKey"
                 },
-                "Method": "PUT",
+                "HttpMethod": "PUT",
                 "AuthorizerId": {
                     "Ref": "ApiGatewayPublicAuthorizerTokenAuthorizer"
                 },
@@ -250,7 +250,7 @@
                 }
             }
         },
-        "ApiGatewayPublicDeployment1059817317": {
+        "ApiGatewayPublicDeployment927938149": {
             "Type": "AWS::ApiGateway::Deployment",
             "DependsOn": [
                 "ApiGatewayPublicMethodDELETEAccountsAccountId",
@@ -279,7 +279,7 @@
         "DeploymentId": {
             "Description": "API Gateway deployment ID.",
             "Value": {
-                "Ref": "ApiGatewayPublicDeployment1059817317"
+                "Ref": "ApiGatewayPublicDeployment927938149"
             }
         },
         "SomeValue": {

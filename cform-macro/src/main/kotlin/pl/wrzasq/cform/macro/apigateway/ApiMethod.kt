@@ -69,7 +69,7 @@ class ApiMethod(
         properties = properties + mapOf(
             "RestApiId" to api.ref(),
             "ResourceId" to parent,
-            "Method" to method
+            "HttpMethod" to method
         )
     )
 

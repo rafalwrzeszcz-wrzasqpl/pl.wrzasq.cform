@@ -111,7 +111,7 @@ class ApiGateway(
     }
 
     private fun computeDeploymentHash(definitions: List<ResourceDefinition>): String {
-        deploymentHash = definitions.hashCode().toString().replace("-", "_")
+        deploymentHash = definitions.hashCode().toString().replace("-", "0")
         return deploymentHash
     }
 
@@ -151,7 +151,7 @@ class ApiGateway(
         var id = "$scope$slug"
 
         while (id in resourceIds) {
-            id += "_"
+            id += "X"
         }
 
         return id
