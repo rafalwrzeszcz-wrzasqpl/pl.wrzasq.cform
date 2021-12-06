@@ -111,13 +111,15 @@ import pl.wrzasq.commons.json.ObjectMapperFactory
 <span class="fc" id="L111">    }</span>
 
     private fun includeArtifact(reference: Any) {
-<span class="fc" id="L114">        inputs.add(reference.toString().split(&quot;::&quot;)[0])</span>
-<span class="fc" id="L115">    }</span>
+<span class="fc bfc" id="L114" title="All 2 branches covered.">        if (reference !is Map&lt;*, *&gt;) {</span>
+<span class="fc" id="L115">            inputs.add(reference.toString().split(&quot;::&quot;)[0])</span>
+        }
+<span class="fc" id="L117">    }</span>
 }
 
 private fun generateParamPlaceholder(index: Int, value: Any, params: MutableMap&lt;String, Any&gt;): String {
-<span class="fc" id="L119">    val param = &quot;param${index}&quot;</span>
-<span class="fc" id="L120">    params[param] = value</span>
-<span class="fc" id="L121">    return &quot;\${${param}}&quot;</span>
+<span class="fc" id="L121">    val param = &quot;param${index}&quot;</span>
+<span class="fc" id="L122">    params[param] = value</span>
+<span class="fc" id="L123">    return &quot;\${${param}}&quot;</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -47,19 +47,5 @@ import software.amazon.cloudformation.proxy.StdCallbackContext
 <span class="nc" id="L47">            .region(Region.AWS_GLOBAL)</span>
 <span class="nc" id="L48">            .build()</span>
 <span class="nc" id="L49">    }</span>
-
-    companion object {
-        // TODO: move it to pl.wrzasq.commons:commons-aws and handle via annotations/_HANDLER param
-        /**
-         * Shell entry point.
-         *
-         * @param args Runtime arguments.
-         */
-        @JvmStatic
-        fun main(args: Array&lt;String&gt;) {
-<span class="nc" id="L60">            val factory = LambdaResourcesFactory()</span>
-<span class="nc" id="L61">            factory.api.run(factory.lambdaHandler::handleRequest)</span>
-<span class="nc" id="L62">        }</span>
-    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

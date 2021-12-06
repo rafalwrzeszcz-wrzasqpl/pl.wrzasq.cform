@@ -44,19 +44,5 @@ import software.amazon.cloudformation.proxy.StdCallbackContext
 <span class="nc" id="L44">    override fun getClient(proxy: AmazonWebServicesClientProxy): ProxyClient&lt;AppSyncClient&gt; = proxy.newProxy {</span>
 <span class="nc" id="L45">        AppSyncClient.builder().build()</span>
 <span class="nc" id="L46">    }</span>
-
-    companion object {
-        // TODO: move it to pl.wrzasq.commons:commons-aws and handle via annotations/_HANDLER param
-        /**
-         * Shell entry point.
-         *
-         * @param args Runtime arguments.
-         */
-        @JvmStatic
-        fun main(args: Array&lt;String&gt;) {
-<span class="nc" id="L57">            val factory = LambdaResourcesFactory()</span>
-<span class="nc" id="L58">            factory.api.run(factory.lambdaHandler::handleRequest)</span>
-<span class="nc" id="L59">        }</span>
-    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

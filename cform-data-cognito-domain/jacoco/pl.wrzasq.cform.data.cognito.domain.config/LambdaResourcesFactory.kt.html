@@ -43,19 +43,5 @@ import software.amazon.cloudformation.proxy.StdCallbackContext
 
     override fun getClient(proxy: AmazonWebServicesClientProxy): ProxyClient&lt;CognitoIdentityProviderClient&gt; =
 <span class="nc" id="L45">        proxy.newProxy { CognitoIdentityProviderClient.builder().build() }</span>
-
-    companion object {
-        // TODO: move it to pl.wrzasq.commons:commons-aws and handle via annotations/_HANDLER param
-        /**
-         * Shell entry point.
-         *
-         * @param args Runtime arguments.
-         */
-        @JvmStatic
-        fun main(args: Array&lt;String&gt;) {
-<span class="nc" id="L56">            val factory = LambdaResourcesFactory()</span>
-<span class="nc" id="L57">            factory.api.run(factory.lambdaHandler::handleRequest)</span>
-<span class="nc" id="L58">        }</span>
-    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

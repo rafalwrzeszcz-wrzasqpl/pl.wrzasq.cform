@@ -1,9 +1,9 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
-WrzasqPl::AWS::PasswordPolicy resource/cform-commons,pl.wrzasq.cform.commons.config,BaseLambdaResourcesFactory,66,0,0,0,5,0,6,0,6,0
+WrzasqPl::AWS::PasswordPolicy resource/cform-commons,pl.wrzasq.cform.commons.config,BaseLambdaResourcesFactory,73,0,0,0,6,0,7,0,7,0
 WrzasqPl::AWS::PasswordPolicy resource/cform-commons,pl.wrzasq.cform.commons.config,BaseLambdaResourcesFactory.configuration.new Function0() {...},7,0,0,0,1,0,1,0,1,0
 WrzasqPl::AWS::PasswordPolicy resource/cform-commons,pl.wrzasq.cform.commons.config,BaseLambdaResourcesFactory.lambdaHandler.new Function0() {...},16,0,0,0,3,0,1,0,1,0
 WrzasqPl::AWS::PasswordPolicy resource/cform-commons,pl.wrzasq.cform.commons.config,BaseLambdaResourcesFactory.lambdaHandler.2.new ResourceLambdaHandler() {...},17,0,0,0,5,0,3,0,3,0
-WrzasqPl::AWS::PasswordPolicy resource/cform-commons,pl.wrzasq.cform.commons.config,BaseLambdaResourcesFactory.api.new Function0() {...},10,0,0,0,1,0,1,0,1,0
+WrzasqPl::AWS::PasswordPolicy resource/cform-commons,pl.wrzasq.cform.commons.config,BaseLambdaResourcesFactory.lambdaApi.new Function0() {...},10,0,0,0,1,0,1,0,1,0
 WrzasqPl::AWS::PasswordPolicy resource/cform-commons,pl.wrzasq.cform.commons.config,LambdaConfiguration,36,0,0,0,4,0,4,0,4,0
 WrzasqPl::AWS::PasswordPolicy resource/cform-commons,pl.wrzasq.cform.commons.config,LambdaConfiguration.resourceSchema.new Function0() {...},15,0,0,0,1,0,1,0,1,0
 WrzasqPl::AWS::PasswordPolicy resource/cform-commons,pl.wrzasq.cform.commons.config,BaseLambdaResourcesFactory.objectMapper.new Function0() {...},3,0,0,0,1,0,1,0,1,0

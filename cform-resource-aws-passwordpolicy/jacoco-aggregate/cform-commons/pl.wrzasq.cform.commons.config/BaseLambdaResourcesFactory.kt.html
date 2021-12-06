@@ -20,7 +20,7 @@ import software.amazon.cloudformation.proxy.StdCallbackContext
  * Generic provider for resource handlers.
  */
 <span class="nc" id="L22">abstract class BaseLambdaResourcesFactory&lt;ResourceType&gt; : BaseResourcesFactory&lt;ResourceType&gt; {</span>
-<span class="nc" id="L23">    override val api: NativeLambdaApi by lazy { NativeLambdaApi(objectMapper) }</span>
+<span class="nc" id="L23">    override val lambdaApi by lazy { NativeLambdaApi(objectMapper) }</span>
 
 <span class="nc" id="L25">    override val lambdaHandler by lazy {</span>
         // we can't have it as constructor arguments of ResourceLambdaHandler as these methods are called by super
@@ -35,9 +35,12 @@ import software.amazon.cloudformation.proxy.StdCallbackContext
         }
     }
 
-<span class="nc" id="L38">    private val objectMapper by lazy { ObjectMapperFactory.createObjectMapper() }</span>
+    override val lambdaCallback
+<span class="nc" id="L39">        get() = lambdaHandler::handleRequest</span>
 
-<span class="nc" id="L40">    protected val configuration by lazy { LambdaConfiguration() }</span>
+<span class="nc" id="L41">    private val objectMapper by lazy { ObjectMapperFactory.createObjectMapper() }</span>
+
+<span class="nc" id="L43">    protected val configuration by lazy { LambdaConfiguration() }</span>
 
     protected abstract fun getRequestTypeReference(): TypeReference&lt;HandlerRequest&lt;ResourceType?, StdCallbackContext&gt;&gt;
 
