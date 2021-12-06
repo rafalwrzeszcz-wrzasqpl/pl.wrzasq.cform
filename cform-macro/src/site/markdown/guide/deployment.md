@@ -48,7 +48,7 @@ Resources:
                 # put your source bucket
                 Bucket: "your-bucket"
                 Key: "cform-macro.zip"
-            Handler: "currently_not_used_in_native"
+            Handler: "pl.wrzasq.cform.macro.config.LambdaResourcesFactory"
             MemorySize: 256
             Description: "pl.wrzasq.cform CloudFormation macro handler."
             Timeout: 30

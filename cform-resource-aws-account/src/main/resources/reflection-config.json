@@ -33,6 +33,17 @@
         "allPublicFields": true
     },
     {
+        "name": "kotlin.reflect.jvm.internal.ReflectionFactoryImpl",
+        "allDeclaredConstructors": true,
+        "allPublicConstructors": true,
+        "allDeclaredMethods": true,
+        "allPublicMethods": true,
+        "allDeclaredClasses": true,
+        "allPublicClasses": true,
+        "allDeclaredFields": true,
+        "allPublicFields": true
+    },
+    {
         "name": "org.apache.commons.logging.LogFactory",
         "allDeclaredConstructors": true,
         "allPublicConstructors": true,
@@ -67,6 +78,17 @@
     },
     {
         "name": "pl.wrzasq.cform.commons.model.Tag",
+        "allDeclaredConstructors": true,
+        "allPublicConstructors": true,
+        "allDeclaredMethods": true,
+        "allPublicMethods": true,
+        "allDeclaredClasses": true,
+        "allPublicClasses": true,
+        "allDeclaredFields": true,
+        "allPublicFields": true
+    },
+    {
+        "name": "pl.wrzasq.cform.resource.aws.account.config.LambdaResourcesFactory",
         "allDeclaredConstructors": true,
         "allPublicConstructors": true,
         "allDeclaredMethods": true,

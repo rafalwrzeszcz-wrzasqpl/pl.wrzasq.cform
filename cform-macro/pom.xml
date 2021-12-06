@@ -74,25 +74,25 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
-            <version>2.12.3</version>
+            <version>2.13.0</version>
         </dependency>
 
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.12.3</version>
+            <version>2.13.0</version>
         </dependency>
 
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-core</artifactId>
-            <version>2.12.3</version>
+            <version>2.13.0</version>
         </dependency>
 
         <dependency>
             <groupId>com.fasterxml.jackson.module</groupId>
             <artifactId>jackson-module-kotlin</artifactId>
-            <version>2.12.3</version>
+            <version>2.13.0</version>
         </dependency>
 
         <dependency>
@@ -110,13 +110,13 @@
         <dependency>
             <groupId>pl.wrzasq.commons</groupId>
             <artifactId>commons-aws</artifactId>
-            <version>2.0.6</version>
+            <version>2.0.7</version>
         </dependency>
 
         <dependency>
             <groupId>pl.wrzasq.commons</groupId>
             <artifactId>commons-json</artifactId>
-            <version>2.0.6</version>
+            <version>2.0.7</version>
         </dependency>
     </dependencies>
 
@@ -131,13 +131,14 @@
                         <groupId>org.graalvm.nativeimage</groupId>
                         <artifactId>native-image-maven-plugin</artifactId>
                         <configuration>
-                            <mainClass>pl.wrzasq.cform.macro.config.LambdaResourcesFactory</mainClass>
+                            <mainClass>pl.wrzasq.commons.aws.runtime.Runner</mainClass>
                             <buildArgs>
                                 --no-fallback
                                 --no-server
                                 --enable-http
                                 --enable-https
                                 -H:ReflectionConfigurationFiles=classes/reflection-config.json
+                                -H:ResourceConfigurationFiles=classes/resource-config.json
                                 --features=org.graalvm.home.HomeFinderFeature
                                 --initialize-at-build-time=org.jboss.logmanager.ExtHandler
                                 --initialize-at-build-time=org.slf4j.LoggerFactory

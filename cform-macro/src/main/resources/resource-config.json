@@ -2,12 +2,6 @@
     "resources": {
         "includes": [
             {
-                "pattern": "schema/.*"
-            },
-            {
-                "pattern": "schema.*"
-            },
-            {
                 "pattern": ".*.kotlin_builtins"
             }
         ]

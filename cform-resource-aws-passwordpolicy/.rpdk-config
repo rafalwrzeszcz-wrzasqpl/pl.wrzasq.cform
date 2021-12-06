@@ -3,8 +3,8 @@
     "typeName": "WrzasqPl::AWS::PasswordPolicy",
     "language": "java",
     "runtime": "provided.al2",
-    "entrypoint": "main",
-    "testEntrypoint": "test",
+    "entrypoint": "pl.wrzasq.cform.resource.aws.passwordpolicy.config.LambdaResourcesFactory",
+    "testEntrypoint": "pl.wrzasq.cform.resource.aws.passwordpolicy.config.LambdaResourcesFactory",
     "settings": {
         "type_name": "WrzasqPl::AWS::PasswordPolicy",
         "artifact_type": "RESOURCE",

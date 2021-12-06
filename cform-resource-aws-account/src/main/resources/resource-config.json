@@ -6,6 +6,9 @@
             },
             {
                 "pattern": "schema.*"
+            },
+            {
+                "pattern": ".*.kotlin_builtins"
             }
         ]
     }

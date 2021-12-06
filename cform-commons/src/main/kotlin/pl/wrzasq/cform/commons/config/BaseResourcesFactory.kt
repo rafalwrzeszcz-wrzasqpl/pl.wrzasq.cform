@@ -7,19 +7,14 @@
 
 package pl.wrzasq.cform.commons.config
 
-import pl.wrzasq.commons.aws.runtime.NativeLambdaApi
+import pl.wrzasq.commons.aws.runtime.config.ResourcesFactory
 import software.amazon.cloudformation.LambdaWrapper
 import software.amazon.cloudformation.proxy.StdCallbackContext
 
 /**
  * Common base for factories required by all resource handlers.
  */
-interface BaseResourcesFactory<ResourceType> {
-    /**
-     * Native AWS Lambda runtime handler.
-     */
-    val api: NativeLambdaApi
-
+interface BaseResourcesFactory<ResourceType>: ResourcesFactory {
     /**
      * Lambda logic invocation handler.
      */

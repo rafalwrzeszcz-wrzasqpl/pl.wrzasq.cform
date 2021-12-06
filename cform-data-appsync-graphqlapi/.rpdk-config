@@ -3,8 +3,8 @@
     "typeName": "WrzasqPl::AppSync::GraphQlApiData",
     "language": "java",
     "runtime": "provided.al2",
-    "entrypoint": "main",
-    "testEntrypoint": "test",
+    "entrypoint": "pl.wrzasq.cform.data.appsync.graphqlapi.config.LambdaResourcesFactory",
+    "testEntrypoint": "pl.wrzasq.cform.data.appsync.graphqlapi.config.LambdaResourcesFactory",
     "settings": {
         "type_name": "WrzasqPl::AppSync::GraphQlApiData",
         "artifact_type": "RESOURCE",

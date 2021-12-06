@@ -47,18 +47,4 @@ class LambdaResourcesFactory : ResourcesFactory, BaseLambdaResourcesFactory<Reso
             .region(Region.AWS_GLOBAL)
             .build()
     }
-
-    companion object {
-        // TODO: move it to pl.wrzasq.commons:commons-aws and handle via annotations/_HANDLER param
-        /**
-         * Shell entry point.
-         *
-         * @param args Runtime arguments.
-         */
-        @JvmStatic
-        fun main(args: Array<String>) {
-            val factory = LambdaResourcesFactory()
-            factory.api.run(factory.lambdaHandler::handleRequest)
-        }
-    }
 }

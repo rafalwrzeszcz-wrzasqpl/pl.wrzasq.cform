@@ -3,8 +3,8 @@
     "typeName": "WrzasqPl::Cognito::DomainData",
     "language": "java",
     "runtime": "provided.al2",
-    "entrypoint": "main",
-    "testEntrypoint": "test",
+    "entrypoint": "pl.wrzasq.cform.data.cognito.domain.config.LambdaResourcesFactory",
+    "testEntrypoint": "pl.wrzasq.cform.data.cognito.domain.config.LambdaResourcesFactory",
     "settings": {
         "type_name": "WrzasqPl::Cognito::DomainData",
         "artifact_type": "RESOURCE",

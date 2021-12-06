@@ -3,8 +3,8 @@
     "typeName": "WrzasqPl::AWS::Account",
     "language": "java",
     "runtime": "provided.al2",
-    "entrypoint": "main",
-    "testEntrypoint": "test",
+    "entrypoint": "pl.wrzasq.cform.resource.aws.account.config.LambdaResourcesFactory",
+    "testEntrypoint": "pl.wrzasq.cform.resource.aws.account.config.LambdaResourcesFactory",
     "settings": {
         "type_name": "WrzasqPl::AWS::Account",
         "artifact_type": "RESOURCE",

@@ -3,8 +3,8 @@
     "typeName": "WrzasqPl::AWS::Organization",
     "language": "java",
     "runtime": "provided.al2",
-    "entrypoint": "main",
-    "testEntrypoint": "test",
+    "entrypoint": "pl.wrzasq.cform.resource.aws.organization.config.LambdaResourcesFactory",
+    "testEntrypoint": "pl.wrzasq.cform.resource.aws.organization.config.LambdaResourcesFactory",
     "settings": {
         "type_name": "WrzasqPl::AWS::Organization",
         "artifact_type": "RESOURCE",

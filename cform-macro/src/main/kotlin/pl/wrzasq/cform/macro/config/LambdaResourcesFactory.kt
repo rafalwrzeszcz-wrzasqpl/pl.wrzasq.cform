@@ -18,15 +18,14 @@ import pl.wrzasq.cform.macro.processors.types.IamStatements
 import pl.wrzasq.cform.macro.processors.types.PipelineDefinition
 import pl.wrzasq.cform.macro.template.CallsExpander
 import pl.wrzasq.commons.aws.runtime.NativeLambdaApi
+import pl.wrzasq.commons.aws.runtime.config.ResourcesFactory
 import pl.wrzasq.commons.json.ObjectMapperFactory
 
 /**
  * Resources factory for AWS Lambda environment.
  */
 class LambdaResourcesFactory : ResourcesFactory {
-    override val api by lazy { NativeLambdaApi(objectMapper) }
-
-    override val processors by lazy {
+    private val processors by lazy {
         listOf(
             // note that some orders matter - eg we need to processor our custom blocks first as most other processors
             // will only handle standard template sections
@@ -66,17 +65,7 @@ class LambdaResourcesFactory : ResourcesFactory {
 
     private val handler by lazy { Handler(objectMapper, processors) }
 
-    companion object {
-        // TODO: move it to pl.wrzasq.commons:commons-aws and handle via annotations/_HANDLER param
-        /**
-         * Shell entry point.
-         *
-         * @param args Runtime arguments.
-         */
-        @JvmStatic
-        fun main(args: Array<String>) {
-            val factory = LambdaResourcesFactory()
-            factory.api.run(factory.handler::handle)
-        }
-    }
+    override val lambdaApi by lazy { NativeLambdaApi(objectMapper) }
+
+    override val lambdaCallback = handler::handle
 }
