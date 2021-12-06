@@ -12,7 +12,10 @@ import pl.wrzasq.cform.macro.template.Fn
 import pl.wrzasq.cform.macro.template.asMap
 import pl.wrzasq.cform.macro.template.asMapAlways
 import pl.wrzasq.cform.macro.template.mapSelected
+import pl.wrzasq.cform.macro.template.mapValuesOnly
 import pl.wrzasq.cform.macro.template.popProperty
+
+private const val KEY_METHODRESPONSES = "MethodResponses"
 
 /**
  * API Gateway method definition.
@@ -49,8 +52,15 @@ class ApiMethod(
             })
             .mapSelected(
                 "Integration" to { initIntegration(asMap(it)) },
-                "MethodResponses" to ::unfoldResponses
+                KEY_METHODRESPONSES to ::unfoldResponses
             )
+
+        // at this point responses are already `unfolded`
+        if (!leftover.containsKey(KEY_METHODRESPONSES)) {
+            asMapAlways(leftover["Integration"])["IntegrationResponses"]?.let {
+                computed[KEY_METHODRESPONSES] = buildMethodResponses(it)
+            }
+        }
 
         properties = leftover + computed
     }
@@ -86,6 +96,18 @@ class ApiMethod(
 
         return leftover + computed
     }
+}
+
+private fun buildMethodResponses(input: Any) = if (input is List<*>) {
+    input.map {
+        asMapAlways(it)
+            .filterKeys { key -> key in setOf("StatusCode", "ResponseParameters") }
+            .mapSelected("ResponseParameters") { response ->
+                asMap(response).mapValuesOnly { true }
+            }
+    }
+} else {
+    input
 }
 
 private fun unfoldResponses(input: Any) = if (input is Map<*, *>) {

@@ -71,9 +71,6 @@
                                         "method.request.path.accountId": true,
                                         "method.request.path.apiKey": true
                                     },
-                                    "MethodResponses": {
-                                        "202": {}
-                                    },
                                     "Integration": {
                                         "Lambda": "${stageVariables.AccountKeySavingTarget}",
                                         "Credentials": {
@@ -83,7 +80,14 @@
                                             "application/json": "{\"tenantId\":\"$context.authorizer.tenantId\",\"accountId\":\"$input.params('accountId')\",\"apiKey\":\"$input.params('apiKey')\",\"accountInfo\":$input.json('$')}"
                                         },
                                         "IntegrationResponses": {
-                                            "202": {}
+                                            "202": {
+                                                "ResponseParameters": {
+                                                    "method.response.header.Content-Type": "'application/atom+xml'"
+                                                }
+                                            },
+                                            "404": {
+                                                "SelectionPattern": ".*Tag not found.*"
+                                            }
                                         },
                                         "PassthroughBehavior": "NEVER"
                                     }

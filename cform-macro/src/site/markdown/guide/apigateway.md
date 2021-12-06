@@ -110,8 +110,6 @@ container for integration methods definitions.
         method.request.header.Authorization: true
         method.request.path.clientTenantId: true
         method.request.path.apiKey: true
-    MethodResponses:
-        202: {}
     Integration:
         Lambda: "${stageVariables.TenantKeySavingTarget}"
         Credentials: !GetAtt "ApiGatewayRole.Arn"
@@ -124,7 +122,11 @@ container for integration methods definitions.
                     "tenantInfo": $input.json('$')
                 }
         IntegrationResponses:
-            202: {}
+            "202":
+                ResponseParameters:
+                    method.response.header.Content-Type: "'application/atom+xml'"
+            "404":
+                SelectionPattern: ".*Tag not found.*"
         PassthroughBehavior: "NEVER"
 ```
 
@@ -137,6 +139,10 @@ container for integration methods definitions.
     `PARAMETERS_ONLY, or `BODY_AND_PARAMETERS`. Underlying validators are managed on-demand by macro.
 -   Structure of `MethodResponses` and `Integration.IntegrationResponses` can be defined as maps, where keys become
     `StatusCode` of defined responses (you can still use native notation of CloudFormation template).
+-   If no `MethodResponses` is defined directly in the method it is built based on `Integration.IntegrationResponses` by
+    leaving `StatusCode` and `ResponseParameters` (if present) replaced by boolean flags instead of any values.
+
+**Note:** Mapping keys in CloudFormation templates must be strings, even if it's `202` it must be wrapped within quotes!
 
 ## References
 
@@ -205,8 +211,6 @@ RestApis:
                         RequestParameters:
                             method.request.header.Authorization: true
                             method.request.path.accountId: true
-                        MethodResponses:
-                            202: {}
                         Integration:
                             Lambda: "${stageVariables.AccountDeletionTarget}"
                             Credentials: !GetAtt "ApiGatewayRole.Arn"
@@ -217,7 +221,7 @@ RestApis:
                                         "accountId": "$input.params('accountId')"
                                     }
                             IntegrationResponses:
-                                202: {}
+                                "202": {}
                             PassthroughBehavior: "NEVER"
 
                     /keys:
@@ -231,8 +235,6 @@ RestApis:
                                     method.request.header.Authorization: true
                                     method.request.path.accountId: true
                                     method.request.path.apiKey: true
-                                MethodResponses:
-                                    202: {}
                                 Integration:
                                     Lambda: "${stageVariables.AccountKeySavingTarget}"
                                     Credentials: !GetAtt "ApiGatewayRole.Arn"
@@ -245,7 +247,7 @@ RestApis:
                                                 "accountInfo": $input.json('$')
                                             }
                                     IntegrationResponses:
-                                        202: {}
+                                        "202": {}
                                     PassthroughBehavior: "NEVER"
 
 Outputs:

@@ -226,7 +226,13 @@
                 },
                 "MethodResponses": [
                     {
-                        "StatusCode": "202"
+                        "StatusCode": "202",
+                        "ResponseParameters": {
+                            "method.response.header.Content-Type": true
+                        }
+                    },
+                    {
+                        "StatusCode": "404"
                     }
                 ],
                 "Integration": {
@@ -243,14 +249,21 @@
                     },
                     "IntegrationResponses": [
                         {
-                            "StatusCode": "202"
+                            "StatusCode": "202",
+                            "ResponseParameters": {
+                                "method.response.header.Content-Type": "'application/atom+xml'"
+                            }
+                        },
+                        {
+                            "StatusCode": "404",
+                            "SelectionPattern": ".*Tag not found.*"
                         }
                     ],
                     "PassthroughBehavior": "NEVER"
                 }
             }
         },
-        "ApiGatewayPublicDeployment927938149": {
+        "ApiGatewayPublicDeployment01872194841": {
             "Type": "AWS::ApiGateway::Deployment",
             "DependsOn": [
                 "ApiGatewayPublicMethodDELETEAccountsAccountId",
@@ -279,7 +292,7 @@
         "DeploymentId": {
             "Description": "API Gateway deployment ID.",
             "Value": {
-                "Ref": "ApiGatewayPublicDeployment927938149"
+                "Ref": "ApiGatewayPublicDeployment01872194841"
             }
         },
         "SomeValue": {
