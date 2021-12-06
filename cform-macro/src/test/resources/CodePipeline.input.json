@@ -62,7 +62,9 @@
                                 "ActionType": "CloudFormationDeploy",
                                 "Configuration": {
                                     "TemplatePath": "checkout::db.yaml",
-                                    "TemplateConfiguration": "checkout::config.json"
+                                    "TemplateConfiguration": {
+                                        "Fn::Sub": "checkout::config-${EnvironmentName}.json"
+                                    }
                                 },
                                 "Parameters": {
                                     "TableName": {

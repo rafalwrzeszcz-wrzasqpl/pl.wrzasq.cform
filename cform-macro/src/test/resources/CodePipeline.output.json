@@ -138,7 +138,9 @@
                                     "ActionMode": "CREATE_UPDATE",
                                     "Capabilities": "CAPABILITY_NAMED_IAM,CAPABILITY_AUTO_EXPAND",
                                     "TemplatePath": "checkout::db.yaml",
-                                    "TemplateConfiguration": "checkout::config.json",
+                                    "TemplateConfiguration": {
+                                        "Fn::Sub": "checkout::config-${EnvironmentName}.json"
+                                    },
                                     "ParameterOverrides": {
                                         "Fn::Sub": "{\"TableName\":\"${TableName}\",\"BuildId\":\"#{deploy-build.Id}\"}"
                                     }

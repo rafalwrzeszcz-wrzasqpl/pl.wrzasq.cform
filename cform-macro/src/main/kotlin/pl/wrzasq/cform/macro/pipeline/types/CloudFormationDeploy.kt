@@ -111,7 +111,9 @@ class CloudFormationDeploy(
     }
 
     private fun includeArtifact(reference: Any) {
-        inputs.add(reference.toString().split("::")[0])
+        if (reference !is Map<*, *>) {
+            inputs.add(reference.toString().split("::")[0])
+        }
     }
 }
 
