@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Handler.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CloudFormation macro processor.</a> &gt; <a href="index.source.html" class="el_package">pl.wrzasq.cform.cloudfront.invalidation</a> &gt; <span class="el_source">Handler.kt</span></div><h1>Handler.kt</h1><pre class="source lang-java linenums">/**
+ * This file is part of the pl.wrzasq.cform.
+ *
+ * @license http://mit-license.org/ The MIT license
+ * @copyright 2022 © by Rafał Wrzeszcz - Wrzasq.pl.
+ */
+
+package pl.wrzasq.cform.cloudfront.invalidation
+
+import com.amazonaws.services.lambda.runtime.Context
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
+import org.slf4j.LoggerFactory
+import pl.wrzasq.cform.cloudfront.invalidation.model.CodePipelineEvent
+import software.amazon.awssdk.services.cloudfront.CloudFrontClient
+import software.amazon.awssdk.services.codepipeline.CodePipelineClient
+import software.amazon.awssdk.services.codepipeline.model.FailureType
+import java.io.InputStream
+import java.io.OutputStream
+import java.util.UUID
+
+/**
+ * API key retrieval entry point.
+ *
+ * Required memory: 256MB.
+ *
+ * @param objectMapper JSON (de)serialization handler.
+ * @param cloudFront CloudFront client.
+ * @param codePipeline CodePipeline client.
+ */
+<span class="fc" id="L31">class Handler(</span>
+<span class="fc" id="L32">    private val objectMapper: ObjectMapper,</span>
+<span class="fc" id="L33">    private val cloudFront: CloudFrontClient,</span>
+<span class="fc" id="L34">    private val codePipeline: CodePipelineClient</span>
+) {
+<span class="fc" id="L36">    private val logger = LoggerFactory.getLogger(Handler::class.java)</span>
+
+    /**
+     * Handles invocation.
+     *
+     * @param inputStream Request input.
+     * @param outputStream Output stream.
+     * @param context Execution context.
+     * @throws java.io.IOException When JSON loading/dumping fails.
+     */
+    fun handle(inputStream: InputStream, outputStream: OutputStream, context: Context) {
+<span class="fc" id="L47">        val request: CodePipelineEvent = objectMapper.readValue(inputStream)</span>
+
+<span class="fc" id="L49">        try {</span>
+<span class="fc" id="L50">            cloudFront.createInvalidation {</span>
+<span class="fc" id="L51">                it</span>
+<span class="fc" id="L52">                    .distributionId(</span>
+<span class="fc" id="L53">                        request</span>
+<span class="fc" id="L54">                            .codePipelineJob</span>
+<span class="fc" id="L55">                            .codePipelineActionData</span>
+<span class="fc" id="L56">                            .codePipelineActionConfiguration</span>
+<span class="fc" id="L57">                            .configuration</span>
+<span class="fc" id="L58">                            .distributionId</span>
+                    )
+<span class="fc" id="L60">                    .invalidationBatch { batch -&gt;</span>
+<span class="fc" id="L61">                        batch</span>
+<span class="fc" id="L62">                            .callerReference(UUID.randomUUID().toString())</span>
+<span class="fc" id="L63">                            .paths { paths -&gt;</span>
+<span class="fc" id="L64">                                paths</span>
+<span class="fc" id="L65">                                    .quantity(1)</span>
+<span class="fc" id="L66">                                    .items(&quot;/*&quot;)</span>
+<span class="fc" id="L67">                            }</span>
+<span class="fc" id="L68">                    }</span>
+<span class="fc" id="L69">            }</span>
+
+<span class="fc" id="L71">            codePipeline.putJobSuccessResult { it.jobId(request.codePipelineJob.id) }</span>
+<span class="fc" id="L72">        } catch (error: RuntimeException) {</span>
+<span class="fc" id="L73">            logger.error(&quot;Failed to issue cache invalidation: {}.&quot;, error.message, error)</span>
+<span class="fc" id="L74">            codePipeline.putJobFailureResult {</span>
+<span class="fc" id="L75">                it</span>
+<span class="fc" id="L76">                    .jobId(request.codePipelineJob.id)</span>
+<span class="fc" id="L77">                    .failureDetails { failure -&gt;</span>
+<span class="fc" id="L78">                        failure</span>
+<span class="fc" id="L79">                            .message(error.message)</span>
+<span class="fc" id="L80">                            .type(FailureType.JOB_FAILED)</span>
+<span class="fc" id="L81">                    }</span>
+<span class="fc" id="L82">            }</span>
+        }
+<span class="fc" id="L84">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

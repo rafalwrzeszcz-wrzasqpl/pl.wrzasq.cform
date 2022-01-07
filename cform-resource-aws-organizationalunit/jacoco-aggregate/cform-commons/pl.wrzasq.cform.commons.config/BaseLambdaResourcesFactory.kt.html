@@ -38,7 +38,7 @@ import software.amazon.cloudformation.proxy.StdCallbackContext
     override val lambdaCallback
 <span class="nc" id="L39">        get() = lambdaHandler::handleRequest</span>
 
-<span class="nc" id="L41">    private val objectMapper by lazy { ObjectMapperFactory.createObjectMapper() }</span>
+<span class="nc" id="L41">    protected val objectMapper by lazy { ObjectMapperFactory.createObjectMapper() }</span>
 
 <span class="nc" id="L43">    protected val configuration by lazy { LambdaConfiguration() }</span>
 

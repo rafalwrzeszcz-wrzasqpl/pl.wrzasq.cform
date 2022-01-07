@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ResourceModel.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">WrzasqPl::AWS::EdgeDeploy resource</a> &gt; <a href="index.source.html" class="el_package">pl.wrzasq.cform.resource.aws.edgedeploy.model</a> &gt; <span class="el_source">ResourceModel.kt</span></div><h1>ResourceModel.kt</h1><pre class="source lang-java linenums">/**
+ * This file is part of the pl.wrzasq.cform.
+ *
+ * @license http://mit-license.org/ The MIT license
+ * @copyright 2022 © by Rafał Wrzeszcz - Wrzasq.pl.
+ */
+
+package pl.wrzasq.cform.resource.aws.edgedeploy.model
+
+import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.databind.ObjectMapper
+import org.json.JSONObject
+import pl.wrzasq.cform.commons.model.Tag
+import pl.wrzasq.cform.resource.aws.edgedeploy.zip.toEdgePackage
+import software.amazon.awssdk.awscore.exception.AwsServiceException
+import software.amazon.awssdk.services.lambda.model.CreateFunctionRequest
+import software.amazon.awssdk.services.lambda.model.DeleteFunctionRequest
+import software.amazon.awssdk.services.lambda.model.FunctionConfiguration
+import software.amazon.awssdk.services.lambda.model.GetFunctionConfigurationRequest
+import software.amazon.awssdk.services.lambda.model.GetFunctionRequest
+import software.amazon.awssdk.services.lambda.model.GetFunctionResponse
+import software.amazon.awssdk.services.lambda.model.ListVersionsByFunctionRequest
+import software.amazon.awssdk.services.lambda.model.PublishVersionRequest
+import software.amazon.awssdk.services.lambda.model.UpdateFunctionCodeRequest
+import software.amazon.awssdk.services.lambda.model.UpdateFunctionConfigurationRequest
+import software.amazon.awssdk.services.s3.S3Client
+import software.amazon.awssdk.services.s3.model.GetObjectRequest
+import software.amazon.cloudformation.exceptions.CfnGeneralServiceException
+import software.amazon.cloudformation.proxy.ProxyClient
+
+private const val DEFAULT_CONFIG_FILE = &quot;config.json&quot;
+
+/**
+ * AWS Lambda function resource description.
+ */
+<span class="fc" id="L37">class ResourceModel {</span>
+    /**
+     * Function name.
+     */
+    @JsonProperty(&quot;Name&quot;)
+<span class="fc" id="L42">    var name: String? = null</span>
+
+    /**
+     * Function ARN.
+     */
+    @JsonProperty(&quot;Arn&quot;)
+<span class="fc" id="L48">    var arn: String? = null</span>
+
+    /**
+     * Lambda function description.
+     */
+    @JsonProperty(&quot;Description&quot;)
+<span class="fc" id="L54">    var description: String? = null</span>
+
+    /**
+     * ARN of Lambda execution role.
+     */
+    @JsonProperty(&quot;RoleArn&quot;)
+<span class="fc" id="L60">    var roleArn: String? = null</span>
+
+    /**
+     * Runtime for running the Lambda (note that Lambda@Edge has reduced set of supported runtimes).
+     */
+    @JsonProperty(&quot;Runtime&quot;)
+<span class="fc" id="L66">    var runtime: String? = null</span>
+
+    /**
+     * Lambda entry point.
+     */
+    @JsonProperty(&quot;Handler&quot;)
+<span class="fc" id="L72">    var handler: String? = null</span>
+
+    /**
+     * Memory size (in MB) for the Lambda.
+     */
+    @JsonProperty(&quot;Memory&quot;)
+<span class="fc" id="L78">    var memory: Int? = null</span>
+
+    /**
+     * Lambda timeout (in seconds).
+     */
+    @JsonProperty(&quot;Timeout&quot;)
+<span class="fc" id="L84">    var timeout: Int? = null</span>
+
+    /**
+     * Package S3 bucket.
+     */
+    @JsonProperty(&quot;PackageBucket&quot;)
+<span class="fc" id="L90">    var packageBucket: String? = null</span>
+
+    /**
+     * Package S3 key.
+     */
+    @JsonProperty(&quot;PackageKey&quot;)
+<span class="fc" id="L96">    var packageKey: String? = null</span>
+
+    /**
+     * Filename for the injected configuration.
+     */
+    @JsonProperty(&quot;ConfigFile&quot;)
+<span class="pc" id="L102">    var configFile: String = DEFAULT_CONFIG_FILE</span>
+
+    /**
+     * Custom configuration to bundle with the package.
+     */
+    @JsonProperty(&quot;Config&quot;)
+<span class="pc" id="L108">    var config: Map&lt;String, Any&gt; = emptyMap()</span>
+
+    /**
+     * Resource tags.
+     */
+    @JsonProperty(&quot;Tags&quot;)
+<span class="fc" id="L114">    var tags: List&lt;Tag&gt;? = null</span>
+
+    /**
+     * Primary identifier of the resource.
+     */
+    @get:JsonIgnore
+    val primaryIdentifier: JSONObject?
+        get() {
+<span class="nc" id="L122">            val identifier = JSONObject()</span>
+
+<span class="nc bnc" id="L124" title="All 2 branches missed.">            if (name != null) {</span>
+<span class="nc" id="L125">                identifier.put(IDENTIFIER_KEY_NAME, name)</span>
+            }
+
+            // only return the identifier if it can be used, i.e. if all components are present
+<span class="nc bnc" id="L129" title="All 2 branches missed.">            return if (identifier.isEmpty) null else identifier</span>
+        }
+
+    /**
+     * All of the unique identifiers.
+     */
+    @get:JsonIgnore
+    val additionalIdentifiers: List&lt;Any&gt;?
+        get() {
+<span class="nc" id="L138">            val identifiers = mutableListOf&lt;JSONObject&gt;()</span>
+
+<span class="nc bnc" id="L140" title="All 2 branches missed.">            if (arn != null) {</span>
+<span class="nc" id="L141">                val identifier = JSONObject()</span>
+<span class="nc" id="L142">                identifier.put(IDENTIFIER_KEY_ARN, arn)</span>
+<span class="nc" id="L143">                identifiers.add(identifier)</span>
+            }
+
+            // only return the identifiers if any can be used
+<span class="nc bnc" id="L147" title="All 2 branches missed.">            return if (identifiers.isEmpty()) null else identifiers</span>
+        }
+
+    companion object {
+        /**
+         * CloudFormation resource type.
+         */
+        @JsonIgnore
+<span class="fc" id="L155">        val TYPE_NAME = &quot;WrzasqPl::AWS::EdgeDeploy&quot;</span>
+
+        /**
+         * Property path to name.
+         */
+        @JsonIgnore
+<span class="pc" id="L161">        val IDENTIFIER_KEY_NAME = &quot;/properties/Name&quot;</span>
+
+        /**
+         * Property path to ARN.
+         */
+        @JsonIgnore
+<span class="pc" id="L167">        val IDENTIFIER_KEY_ARN = &quot;/properties/Arn&quot;</span>
+    }
+}
+
+/**
+ * Request to read a resource.
+ *
+ * @return AWS service request to read resource properties.
+ */
+<span class="fc" id="L176">fun ResourceModel.toReadRequest(): GetFunctionRequest = GetFunctionRequest.builder()</span>
+<span class="fc" id="L177">    .functionName(name)</span>
+<span class="fc" id="L178">    .build()</span>
+
+/**
+ * Request to read a resource metadata.
+ *
+ * @return AWS service request to read resource configuration.
+ */
+fun ResourceModel.toReadConfigurationRequest()
+<span class="fc" id="L186">: GetFunctionConfigurationRequest = GetFunctionConfigurationRequest.builder()</span>
+<span class="fc" id="L187">        .functionName(name)</span>
+<span class="fc" id="L188">        .build()</span>
+
+/**
+ * Request to read function versions.
+ *
+ * @return AWS service request to read resource versions.
+ */
+<span class="fc" id="L195">fun ResourceModel.toReadVersionsRequest(): ListVersionsByFunctionRequest = ListVersionsByFunctionRequest.builder()</span>
+<span class="fc" id="L196">    .functionName(name)</span>
+<span class="fc" id="L197">    .build()</span>
+
+/**
+ * Request to create a resource.
+ *
+ * @return AWS service request to create a resource.
+ */
+<span class="fc" id="L204">fun ResourceModel.toCreateRequest(): CreateFunctionRequest = CreateFunctionRequest.builder()</span>
+<span class="fc" id="L205">    .functionName(name)</span>
+<span class="fc" id="L206">    .description(description)</span>
+<span class="fc" id="L207">    .runtime(runtime)</span>
+<span class="fc" id="L208">    .handler(handler)</span>
+<span class="fc" id="L209">    .memorySize(memory)</span>
+<span class="fc" id="L210">    .timeout(timeout)</span>
+<span class="fc" id="L211">    .role(roleArn)</span>
+<span class="pc bpc" id="L212" title="1 of 2 branches missed.">    .tags(tags?.associate { it.key to it.value })</span>
+<span class="fc" id="L213">    .build()</span>
+
+/**
+ * Request to publish new version of a resource.
+ *
+ * @return AWS service request to publish new version.
+ */
+<span class="fc" id="L220">fun ResourceModel.toPublishVersionRequest(): PublishVersionRequest = PublishVersionRequest.builder()</span>
+<span class="fc" id="L221">    .functionName(name)</span>
+<span class="fc" id="L222">    .build()</span>
+
+/**
+ * Request to update a resource.
+ *
+ * @return AWS service request to update a resource.
+ */
+<span class="fc" id="L229">fun ResourceModel.toUpdateRequest(): UpdateFunctionConfigurationRequest = UpdateFunctionConfigurationRequest.builder()</span>
+<span class="fc" id="L230">    .functionName(name)</span>
+<span class="fc" id="L231">    .description(description)</span>
+<span class="fc" id="L232">    .runtime(runtime)</span>
+<span class="fc" id="L233">    .handler(handler)</span>
+<span class="fc" id="L234">    .memorySize(memory)</span>
+<span class="fc" id="L235">    .timeout(timeout)</span>
+<span class="fc" id="L236">    .role(roleArn)</span>
+<span class="fc" id="L237">    .build()</span>
+
+/**
+ * Request to update a resource code.
+ *
+ * @return AWS service request to update a resource.
+ */
+fun ResourceModel.toUpdateCodeRequest(): UpdateFunctionCodeRequest =
+<span class="fc" id="L245">    UpdateFunctionCodeRequest.builder()</span>
+<span class="fc" id="L246">        .functionName(name)</span>
+<span class="fc" id="L247">        .build()</span>
+
+/**
+ * Request to delete a resource.
+ *
+ * @return AWS service request to delete a resource.
+ */
+<span class="fc" id="L254">fun ResourceModel.toDeleteRequest(): DeleteFunctionRequest = DeleteFunctionRequest.builder()</span>
+<span class="fc" id="L255">    .functionName(name)</span>
+<span class="fc" id="L256">    .build()</span>
+
+/**
+ * Builds deployable package.
+ *
+ * @param s3Proxy Proxy for S3 client.
+ * @param objectMapper JSON serializer.
+ * @return ZIP package content.
+ */
+fun ResourceModel.buildPackage(s3Proxy: ProxyClient&lt;S3Client&gt;, objectMapper: ObjectMapper): ByteArray {
+<span class="fc" id="L266">    val stream = s3Proxy.injectCredentialsAndInvokeV2InputStream(</span>
+<span class="fc" id="L267">        GetObjectRequest.builder()</span>
+<span class="fc" id="L268">            .bucket(packageBucket)</span>
+<span class="fc" id="L269">            .key(packageKey)</span>
+<span class="fc" id="L270">            .build()</span>
+<span class="fc" id="L271">    ) { awsRequest -&gt;</span>
+<span class="nc" id="L272">        try {</span>
+<span class="nc" id="L273">            s3Proxy.client().getObject(awsRequest)</span>
+<span class="nc" id="L274">        } catch (error: AwsServiceException) {</span>
+<span class="nc" id="L275">            throw CfnGeneralServiceException(ResourceModel.TYPE_NAME, error)</span>
+        }
+    }
+
+<span class="fc" id="L279">    return stream.toEdgePackage(configFile, config, objectMapper)</span>
+}
+
+/**
+ * Translates resource object from SDK into a resource model.
+ *
+ * @param describeResponse AWS service describe resource response.
+ * @param listVersionsResponse AWS service versions list response.
+ * @param model Input model for identity properties.
+ * @return Resource model.
+ */
+fun fromReadResponse(
+    describeResponse: GetFunctionResponse,
+    listVersionsResponse: Collection&lt;FunctionConfiguration&gt;,
+    model: ResourceModel
+<span class="fc" id="L294">) = ResourceModel().apply {</span>
+<span class="fc" id="L295">    name = describeResponse.configuration().functionName()</span>
+    // -1 is lover than any first version
+<span class="pc bpc" id="L297" title="2 of 6 branches missed.">    arn = (listVersionsResponse.maxByOrNull { it.version().toIntOrNull() ?: -1 } ?: describeResponse.configuration())</span>
+<span class="fc" id="L298">        .functionArn()</span>
+<span class="fc" id="L299">    description = describeResponse.configuration().description()</span>
+<span class="fc" id="L300">    roleArn = describeResponse.configuration().role()</span>
+<span class="fc" id="L301">    runtime = describeResponse.configuration().runtimeAsString()</span>
+<span class="fc" id="L302">    handler = describeResponse.configuration().handler()</span>
+<span class="fc" id="L303">    memory = describeResponse.configuration().memorySize()</span>
+<span class="fc" id="L304">    timeout = describeResponse.configuration().timeout()</span>
+<span class="fc" id="L305">    packageBucket = model.packageBucket</span>
+<span class="fc" id="L306">    packageKey = model.packageKey</span>
+<span class="fc" id="L307">    tags = describeResponse.tags().map {</span>
+<span class="fc" id="L308">        Tag().apply {</span>
+<span class="fc" id="L309">            key = it.key</span>
+<span class="fc" id="L310">            value = it.value</span>
+<span class="fc" id="L311">        }</span>
+    }
+<span class="fc" id="L313">}</span>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -28,8 +28,8 @@ CloudFormation macro processor.,pl.wrzasq.cform.macro,Handler,0,73,0,0,0,10,0,2,
 CloudFormation macro processor.,pl.wrzasq.cform.macro,Handler.handle..inlined.readValue.new TypeReference() {...},0,3,0,0,0,1,0,1,0,1
 CloudFormation macro processor.,pl.wrzasq.cform.macro.config,LambdaResourcesFactory.processors.new Function0() {...},46,0,0,0,5,0,1,0,1,0
 CloudFormation macro processor.,pl.wrzasq.cform.macro.config,LambdaResourcesFactory.handler.new Function0() {...},11,0,0,0,1,0,1,0,1,0
-CloudFormation macro processor.,pl.wrzasq.cform.macro.config,LambdaResourcesFactory.apiGatewayDefinitionProcessor.new Function0() {...},4,0,0,0,1,0,1,0,1,0
 CloudFormation macro processor.,pl.wrzasq.cform.macro.config,LambdaResourcesFactory.delegatingResourceProcessor.new Function0() {...},36,0,0,0,5,0,1,0,1,0
+CloudFormation macro processor.,pl.wrzasq.cform.macro.config,LambdaResourcesFactory.apiGatewayDefinitionProcessor.new Function0() {...},4,0,0,0,1,0,1,0,1,0
 CloudFormation macro processor.,pl.wrzasq.cform.macro.config,LambdaResourcesFactory.objectMapper.new Function0() {...},3,0,0,0,1,0,1,0,1,0
 CloudFormation macro processor.,pl.wrzasq.cform.macro.config,LambdaResourcesFactory.fnToolkitProcessor.new Function0() {...},8,0,0,0,1,0,1,0,1,0
 CloudFormation macro processor.,pl.wrzasq.cform.macro.config,LambdaResourcesFactory.dynamoDbAttributesDefinitionsProcessor.new Function0() {...},4,0,0,0,1,0,1,0,1,0
@@ -56,8 +56,8 @@ CloudFormation macro processor.,pl.wrzasq.cform.macro.processors,FnToolkit,0,131
 CloudFormation macro processor.,pl.wrzasq.cform.macro.processors,AutomaticLogGroups.process.new Function1() {...},0,9,0,0,0,1,0,1,0,1
 CloudFormation macro processor.,pl.wrzasq.cform.macro.processors,ApiGatewayDefinition.process.rest.new Function1() {...},0,42,0,2,0,3,0,2,0,1
 CloudFormation macro processor.,pl.wrzasq.cform.macro.processors,ApiGatewayDefinition,0,44,0,2,0,8,0,3,0,2
-CloudFormation macro processor.,pl.wrzasq.cform.macro.processors,AutomaticLogGroupsKt,0,34,0,0,0,4,0,1,0,1
 CloudFormation macro processor.,pl.wrzasq.cform.macro.processors,AutomaticLogGroups,0,109,1,5,0,12,1,5,0,3
+CloudFormation macro processor.,pl.wrzasq.cform.macro.processors,AutomaticLogGroupsKt,0,34,0,0,0,4,0,1,0,1
 CloudFormation macro processor.,pl.wrzasq.cform.macro.processors,FnToolkit.resolve.imports.new Function1() {...},0,9,0,0,0,1,0,1,0,1
 CloudFormation macro processor.,pl.wrzasq.cform.macro.processors,DelegatingResourceProcessor.process.new Function1() {...},0,9,0,0,0,1,0,1,0,1
 CloudFormation macro processor.,pl.wrzasq.cform.macro.processors,AutomaticLogGroups.processResources.new Function1() {...},0,24,0,0,0,2,0,1,0,1
