@@ -2,7 +2,7 @@
 # This file is part of the pl.wrzasq.cform.
 #
 # @license http://mit-license.org/ The MIT license
-# @copyright 2020 - 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+# @copyright 2020 - 2022 © by Rafał Wrzeszcz - Wrzasq.pl.
 -->
 
 # WrzasqPl-CForm
@@ -26,6 +26,10 @@ this source code.
 ### [WrzasqPl::AWS::Account](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.cform/cform-resource-aws-account/)
 
 AWS account creation handler.
+
+### [WrzasqPl::AWS::EdgeDeploy](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.cform/cform-resource-aws-edgedeploy/)
+
+Lambda@Edge deployment with configuration rewrite and proper region.
 
 ### [WrzasqPl::AWS::Organization](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.cform/cform-resource-aws-organization/)
 
@@ -54,6 +58,10 @@ Reads Cognito custom domain information.
 ### [CloudFormation macro](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.cform/cform-macro/)
 
 Template processing macro.
+
+### [CloudFront cache invalidation](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.cform/cform-cloudfront-invalidation/)
+
+**CloudFront** cache invalidation Lambda (useful in **CodePipeline** actions).
 
 # Resources
 

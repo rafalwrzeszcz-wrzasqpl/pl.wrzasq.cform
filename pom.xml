@@ -3,7 +3,7 @@
 # This file is part of the pl.wrzasq.cform.
 #
 # @license http://mit-license.org/ The MIT license
-# @copyright 2020 - 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+# @copyright 2020 - 2022 © by Rafał Wrzeszcz - Wrzasq.pl.
 -->
 <project
     xmlns="http://maven.apache.org/POM/4.0.0"
@@ -118,11 +118,13 @@
 
     <!-- components of WrzasqPl-CForm project -->
     <modules>
+        <module>cform-cloudfront-invalidation</module>
         <module>cform-commons</module>
         <module>cform-data-appsync-graphqlapi</module>
         <module>cform-data-cognito-domain</module>
         <module>cform-macro</module>
         <module>cform-resource-aws-account</module>
+        <module>cform-resource-aws-edgedeploy</module>
         <module>cform-resource-aws-organization</module>
         <module>cform-resource-aws-organizationalunit</module>
         <module>cform-resource-aws-passwordpolicy</module>

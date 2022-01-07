@@ -38,7 +38,7 @@ abstract class BaseLambdaResourcesFactory<ResourceType> : BaseResourcesFactory<R
     override val lambdaCallback
         get() = lambdaHandler::handleRequest
 
-    private val objectMapper by lazy { ObjectMapperFactory.createObjectMapper() }
+    protected val objectMapper by lazy { ObjectMapperFactory.createObjectMapper() }
 
     protected val configuration by lazy { LambdaConfiguration() }
 

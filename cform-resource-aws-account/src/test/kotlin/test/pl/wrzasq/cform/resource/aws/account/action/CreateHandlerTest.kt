@@ -2,7 +2,7 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021 - 2022 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package test.pl.wrzasq.cform.resource.aws.account.action
@@ -510,8 +510,7 @@ class CreateHandlerTest {
             .build()
 
         assertThrows<CfnNotStabilizedException> {
-            val result = CreateHandler(factory, updateHandler).handleRequest(proxy, request, callbackContext, logger)
-            println(result)
+            CreateHandler(factory, updateHandler).handleRequest(proxy, request, callbackContext, logger)
         }
 
         verify { updateHandler wasNot called }
