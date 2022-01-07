@@ -52,15 +52,14 @@ Resources:
             TracingConfig: "Active"
             Policies:
                 -
-                    PolicyName: "AllowReportingActionState"
-                    PolicyDocument:
-                        Version: "2012-10-17"
-                        Statement:
-                            -
-                                Action:
-                                    - "codepipeline:PutJobFailureResult"
-                                    - "codepipeline:PutJobSuccessResult"
-                                Effect: "Allow"
-                                Resource:
-                                    - "*"
+                    Version: "2012-10-17"
+                    Statement:
+                        -
+                            Action:
+                                - "cloudfront:CreateInvalidation"
+                                - "codepipeline:PutJobFailureResult"
+                                - "codepipeline:PutJobSuccessResult"
+                            Effect: "Allow"
+                            Resource:
+                                - "*"
 ```
