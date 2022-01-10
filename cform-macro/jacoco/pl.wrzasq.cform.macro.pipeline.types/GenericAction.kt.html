@@ -7,10 +7,6 @@
 
 package pl.wrzasq.cform.macro.pipeline.types
 
-import pl.wrzasq.cform.macro.pipeline.PipelineManager
-import pl.wrzasq.cform.macro.template.asMap
-import pl.wrzasq.cform.macro.template.mapValuesOnly
-
 /**
  * Any action type specified directly.
  *
@@ -22,24 +18,16 @@ import pl.wrzasq.cform.macro.template.mapValuesOnly
  * @param version Definition version.
  * @param condition Condition name.
  */
-<span class="fc" id="L25">open class GenericAction(</span>
+<span class="fc" id="L21">open class GenericAction(</span>
     name: String,
     properties: Map&lt;String, Any&gt;,
-<span class="fc" id="L28">    private val category: String,</span>
-<span class="fc" id="L29">    private val owner: String,</span>
-<span class="fc" id="L30">    private val provider: String,</span>
-<span class="fc" id="L31">    private val version: String,</span>
+<span class="fc" id="L24">    private val category: String,</span>
+<span class="fc" id="L25">    private val owner: String,</span>
+<span class="fc" id="L26">    private val provider: String,</span>
+<span class="fc" id="L27">    private val version: String,</span>
     condition: String?
-<span class="fc" id="L33">) : BaseAction(name, properties, condition) {</span>
-    override fun compile(manager: PipelineManager) {
-<span class="fc bfc" id="L35" title="All 2 branches covered.">        properties[&quot;Configuration&quot;]?.let {</span>
-<span class="fc" id="L36">            properties[&quot;Configuration&quot;] = asMap(it).mapValuesOnly { value -&gt;</span>
-<span class="fc" id="L37">                processReference(value, manager)</span>
-            }
-<span class="fc" id="L39">        }</span>
-<span class="fc" id="L40">    }</span>
-
-<span class="fc" id="L42">    override fun buildActionTypeId() = buildAwsActionTypeId(category, provider, owner, version)</span>
+<span class="fc" id="L29">) : BaseAction(name, properties, condition) {</span>
+<span class="fc" id="L30">    override fun buildActionTypeId() = buildAwsActionTypeId(category, provider, owner, version)</span>
 }
 
 /**
@@ -47,15 +35,15 @@ import pl.wrzasq.cform.macro.template.mapValuesOnly
  *
  * @param input Type definition properties.
  */
-<span class="fc" id="L50">fun fromMap(input: Map&lt;String, Any&gt;) = { name: String, properties: Map&lt;String, Any&gt;, condition: String? -&gt;</span>
-<span class="fc" id="L51">    GenericAction(</span>
-<span class="fc" id="L52">        name,</span>
-<span class="fc" id="L53">        properties,</span>
-<span class="fc" id="L54">        input[&quot;Category&quot;].toString(),</span>
-<span class="fc bfc" id="L55" title="All 2 branches covered.">        (input[&quot;Owner&quot;] ?: &quot;AWS&quot;).toString(),</span>
-<span class="fc" id="L56">        input[&quot;Provider&quot;].toString(),</span>
-<span class="fc bfc" id="L57" title="All 2 branches covered.">        (input[&quot;Version&quot;] ?: &quot;1&quot;).toString(),</span>
-<span class="fc" id="L58">        condition</span>
+<span class="fc" id="L38">fun fromMap(input: Map&lt;String, Any&gt;) = { name: String, properties: Map&lt;String, Any&gt;, condition: String? -&gt;</span>
+<span class="fc" id="L39">    GenericAction(</span>
+<span class="fc" id="L40">        name,</span>
+<span class="fc" id="L41">        properties,</span>
+<span class="fc" id="L42">        input[&quot;Category&quot;].toString(),</span>
+<span class="fc bfc" id="L43" title="All 2 branches covered.">        (input[&quot;Owner&quot;] ?: &quot;AWS&quot;).toString(),</span>
+<span class="fc" id="L44">        input[&quot;Provider&quot;].toString(),</span>
+<span class="fc bfc" id="L45" title="All 2 branches covered.">        (input[&quot;Version&quot;] ?: &quot;1&quot;).toString(),</span>
+<span class="fc" id="L46">        condition</span>
     )
-<span class="fc" id="L60">}</span>
+<span class="fc" id="L48">}</span>
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
