@@ -128,7 +128,10 @@
                                     "Category": "Approval",
                                     "Provider": "Manual"
                                 },
-                                "RunOrder": 1
+                                "RunOrder": 1,
+                                "Configuration": {
+                                    "BranchName": "#{Deploy:Deploy.branchName}"
+                                }
                             },
                             "Promote": {
                                 "ActionType": "S3Promote",

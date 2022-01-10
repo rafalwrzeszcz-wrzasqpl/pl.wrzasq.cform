@@ -2,7 +2,7 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021 - 2022 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package pl.wrzasq.cform.macro.pipeline.types
@@ -24,6 +24,8 @@ class S3Promote(
     private val source: String = properties.remove("Source").toString()
 
     override fun compile(manager: PipelineManager) {
+        super.compile(manager)
+
         val action = manager.resolve(source)
         check(action is S3Source) { "$name refers to $source which is not S3 source" }
 

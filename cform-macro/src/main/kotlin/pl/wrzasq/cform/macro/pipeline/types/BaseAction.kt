@@ -2,16 +2,19 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021 - 2022 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package pl.wrzasq.cform.macro.pipeline.types
 
 import pl.wrzasq.cform.macro.pipeline.PipelineAction
+import pl.wrzasq.cform.macro.pipeline.PipelineManager
 import pl.wrzasq.cform.macro.pipeline.conditional
 import pl.wrzasq.cform.macro.template.asMapAlways
 import pl.wrzasq.cform.macro.template.mapSelected
 
+// action and stage names can contain `.` so we need to match last one
+private val REFERENCE = Regex("#\\{([^:]+):([^.]+).([^}]+)}")
 private const val OPTION_INPUTARTIFACTS = "InputArtifacts"
 private const val OPTION_OUTPUTARTIFACTS = "OutputArtifacts"
 
@@ -84,6 +87,19 @@ abstract class BaseAction(
         )
 
         return conditional(definition, condition)
+    }
+
+    protected fun processReference(value: Any, manager: PipelineManager) = if (value is String) {
+        value.replace(REFERENCE) { match ->
+            val group = match.groupValues
+            val reference = "${group[1]}:${group[2]}"
+
+            dependencies.add(reference)
+
+            "#{${manager.resolveNamespace(reference)}.${group[3]}}"
+        }
+    } else {
+        value
     }
 }
 

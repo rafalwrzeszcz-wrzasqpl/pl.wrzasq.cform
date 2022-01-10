@@ -2,10 +2,14 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021 - 2022 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package pl.wrzasq.cform.macro.pipeline.types
+
+import pl.wrzasq.cform.macro.pipeline.PipelineManager
+import pl.wrzasq.cform.macro.template.asMap
+import pl.wrzasq.cform.macro.template.mapValuesOnly
 
 /**
  * Any action type specified directly.
@@ -27,6 +31,14 @@ open class GenericAction(
     private val version: String,
     condition: String?
 ) : BaseAction(name, properties, condition) {
+    override fun compile(manager: PipelineManager) {
+        properties["Configuration"]?.let {
+            properties["Configuration"] = asMap(it).mapValuesOnly { value ->
+                processReference(value, manager)
+            }
+        }
+    }
+
     override fun buildActionTypeId() = buildAwsActionTypeId(category, provider, owner, version)
 }
 
