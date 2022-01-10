@@ -10,13 +10,19 @@ package pl.wrzasq.cform.macro.pipeline.types
 import pl.wrzasq.cform.macro.pipeline.PipelineAction
 import pl.wrzasq.cform.macro.pipeline.PipelineManager
 import pl.wrzasq.cform.macro.pipeline.conditional
+import pl.wrzasq.cform.macro.template.asMap
 import pl.wrzasq.cform.macro.template.asMapAlways
 import pl.wrzasq.cform.macro.template.mapSelected
+import pl.wrzasq.cform.macro.template.mapValuesOnly
 
 // action and stage names can contain `.` so we need to match last one
 private val REFERENCE = Regex("#\\{([^:]+):([^.]+).([^}]+)}")
 private const val OPTION_INPUTARTIFACTS = "InputArtifacts"
 private const val OPTION_OUTPUTARTIFACTS = "OutputArtifacts"
+
+private const val PROPERTY_CONFIGURATION = "Configuration"
+private const val PROPERTY_NAMESPACE = "Namespace"
+private const val PROPERTY_RUNORDER = "RunOrder"
 
 /**
  * Common setup for action types.
@@ -37,12 +43,20 @@ abstract class BaseAction(
 
     // we compute these stuff but might have been defined already in the template
 
-    override var namespace = properties["Namespace"]?.toString()
-    override var runOrder: Int? = properties["RunOrder"]?.toString()?.toInt()
+    override var namespace = properties[PROPERTY_NAMESPACE]?.toString()
+    override var runOrder: Int? = properties[PROPERTY_RUNORDER]?.toString()?.toInt()
 
     init {
         properties[OPTION_INPUTARTIFACTS]?.let { readArtifacts(it, inputs) }
         properties[OPTION_OUTPUTARTIFACTS]?.let { readArtifacts(it, outputs) }
+    }
+
+    override fun compile(manager: PipelineManager) {
+        properties[PROPERTY_CONFIGURATION]?.let {
+            properties[PROPERTY_CONFIGURATION] = asMap(it).mapValuesOnly { value ->
+                processReference(value, manager)
+            }
+        }
     }
 
     /**
@@ -65,12 +79,12 @@ abstract class BaseAction(
             "ActionTypeId" to buildActionTypeId()
         )
 
-        val configuration = asMapAlways(properties["Configuration"]).toMutableMap()
+        val configuration = asMapAlways(properties[PROPERTY_CONFIGURATION]).toMutableMap()
         buildConfiguration(configuration)
 
         // we do these as conditional `.put()` calls as these stuff might be in `.properties` when defined by hand
-        namespace?.let { input["Namespace"] = it }
-        runOrder?.let { input["RunOrder"] = it }
+        namespace?.let { input[PROPERTY_NAMESPACE] = it }
+        runOrder?.let { input[PROPERTY_RUNORDER] = it }
         if (inputs.isNotEmpty()) {
             input[OPTION_INPUTARTIFACTS] = inputs.sorted()
         }
@@ -78,7 +92,7 @@ abstract class BaseAction(
             input[OPTION_OUTPUTARTIFACTS] = outputs.sorted()
         }
         if (configuration.isNotEmpty()) {
-            input["Configuration"] = configuration
+            input[PROPERTY_CONFIGURATION] = configuration
         }
 
         val definition = (properties + input).mapSelected(
