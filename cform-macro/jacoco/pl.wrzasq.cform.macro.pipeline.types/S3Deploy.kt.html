@@ -2,10 +2,12 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021 - 2022 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package pl.wrzasq.cform.macro.pipeline.types
+
+import pl.wrzasq.cform.macro.pipeline.PipelineManager
 
 /**
  * S3 deploy action.
@@ -14,19 +16,23 @@ package pl.wrzasq.cform.macro.pipeline.types
  * @param input Input properties.
  * @param condition Condition name.
  */
-<span class="fc" id="L17">open class S3Deploy(</span>
+<span class="fc" id="L19">open class S3Deploy(</span>
     name: String,
     input: Map&lt;String, Any&gt;,
     condition: String?
-<span class="fc" id="L21">) : BaseAction(name, input, condition) {</span>
-<span class="fc" id="L22">    private val bucket: Any? = properties.remove(&quot;Bucket&quot;)</span>
-<span class="pc" id="L23">    protected var objectKey: Any? = properties.remove(&quot;ObjectKey&quot;)</span>
+<span class="fc" id="L23">) : BaseAction(name, input, condition) {</span>
+<span class="fc" id="L24">    private var bucket: Any? = properties.remove(&quot;Bucket&quot;)</span>
+<span class="pc" id="L25">    protected var objectKey: Any? = properties.remove(&quot;ObjectKey&quot;)</span>
 
-<span class="fc" id="L25">    override fun buildActionTypeId() = buildAwsActionTypeId(&quot;Deploy&quot;, &quot;S3&quot;)</span>
+    override fun compile(manager: PipelineManager) {
+<span class="fc bfc" id="L28" title="All 2 branches covered.">        bucket = bucket?.let { processReference(it, manager) }</span>
+<span class="fc" id="L29">    }</span>
+
+<span class="fc" id="L31">    override fun buildActionTypeId() = buildAwsActionTypeId(&quot;Deploy&quot;, &quot;S3&quot;)</span>
 
     override fun buildConfiguration(configuration: MutableMap&lt;String, Any&gt;) {
-<span class="fc bfc" id="L28" title="All 2 branches covered.">        bucket?.let { configuration[&quot;BucketName&quot;] = it }</span>
-<span class="fc bfc" id="L29" title="All 2 branches covered.">        objectKey?.let { configuration[&quot;ObjectKey&quot;] = it }</span>
-<span class="fc" id="L30">    }</span>
+<span class="fc bfc" id="L34" title="All 2 branches covered.">        bucket?.let { configuration[&quot;BucketName&quot;] = it }</span>
+<span class="fc bfc" id="L35" title="All 2 branches covered.">        objectKey?.let { configuration[&quot;ObjectKey&quot;] = it }</span>
+<span class="fc" id="L36">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
