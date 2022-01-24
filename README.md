@@ -45,10 +45,6 @@ Sets up password policy for AWS account.
 
 ## Data providers
 
-### [WrzasqPl::AppSync::GraphQlApiData](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.cform/cform-data-appsync-graphqlapi/)
-
-Reads AppSync GraphQl endpoint information.
-
 ### [WrzasqPl::Cognito::DomainData](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.cform/cform-data-cognito-domain/)
 
 Reads Cognito custom domain information.
