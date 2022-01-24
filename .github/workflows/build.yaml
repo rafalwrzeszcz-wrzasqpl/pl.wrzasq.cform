@@ -87,7 +87,6 @@ jobs:
             # flags so we need to operate on the shell level - we need to build two-level nesting of .zip packages
             -
                 run: |
-                    zip -j cform-data-appsync-graphqlapi/target/wrzasqpl-appsync-graphqlapidata.zip cform-data-appsync-graphqlapi/.rpdk-config cform-data-appsync-graphqlapi/src/main/resources/schema.json cform-data-appsync-graphqlapi/target/cform-data-appsync-graphqlapi*.zip
                     zip -j cform-data-cognito-domain/target/wrzasqpl-cognito-domaindata.zip cform-data-cognito-domain/.rpdk-config cform-data-cognito-domain/src/main/resources/schema.json cform-data-cognito-domain/target/cform-data-cognito-domain*.zip
                     zip -j cform-resource-aws-account/target/wrzasqpl-aws-account.zip cform-resource-aws-account/.rpdk-config cform-resource-aws-account/src/main/resources/schema.json cform-resource-aws-account/target/cform-resource-aws-account*.zip
                     zip -j cform-resource-aws-edgedeploy/target/wrzasqpl-aws-edgedeploy.zip cform-resource-aws-edgedeploy/.rpdk-config cform-resource-aws-edgedeploy/src/main/resources/schema.json cform-resource-aws-edgedeploy/target/cform-resource-aws-edgedeploy*.zip
