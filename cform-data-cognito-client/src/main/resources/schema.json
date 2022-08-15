@@ -1,0 +1,48 @@
+{
+    "typeName": "WrzasqPl::Cognito::ClientData",
+    "description": "AWS Cognito user pool OAuth client data provider.",
+    "sourceUrl": "https://github.com/rafalwrzeszcz-wrzasqpl/cform.wrzasq.pl.git",
+    "definitions": {
+    },
+    "properties": {
+        "UserPoolId": {
+            "description": "Cognito user pool ID.",
+            "type": "string"
+        },
+        "ClientId": {
+            "description": "OAuth application client ID.",
+            "type": "string"
+        },
+        "ClientSecret": {
+            "description": "OAuth client secret.",
+            "type": "string"
+        }
+    },
+    "additionalProperties": false,
+    "required": [
+        "UserPoolId",
+        "ClientId"
+    ],
+    "readOnlyProperties": [
+        "/properties/ClientSecret"
+    ],
+    "primaryIdentifier": [
+        "/properties/UserPoolId",
+        "/properties/ClientId"
+    ],
+    "handlers": {
+        "create": {
+            "permissions": [
+            ]
+        },
+        "read": {
+            "permissions": [
+                "cognito-idp:DescribeUserPoolClient"
+            ]
+        },
+        "delete": {
+            "permissions": [
+            ]
+        }
+    }
+}

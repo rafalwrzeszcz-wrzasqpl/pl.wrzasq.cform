@@ -45,6 +45,10 @@ Sets up password policy for AWS account.
 
 ## Data providers
 
+### [WrzasqPl::Cognito::ClientData](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.cform/cform-data-cognito-client/)
+
+Reads Cognito user pool client information.
+
 ### [WrzasqPl::Cognito::DomainData](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.cform/cform-data-cognito-domain/)
 
 Reads Cognito custom domain information.
