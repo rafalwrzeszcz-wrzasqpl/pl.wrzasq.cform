@@ -8,7 +8,7 @@ CloudFormation macro processor.,pl.wrzasq.cform.cloudfront.invalidation.config,L
 CloudFormation macro processor.,pl.wrzasq.cform.cloudfront.invalidation.model,CodePipelineEvent,0,12,0,0,0,3,0,2,0,2
 CloudFormation macro processor.,pl.wrzasq.cform.cloudfront.invalidation.model,CodePipelineActionConfiguration,0,12,0,0,0,3,0,2,0,2
 CloudFormation macro processor.,pl.wrzasq.cform.cloudfront.invalidation.model,Request,0,12,0,0,0,3,0,2,0,2
-CloudFormation macro processor.,pl.wrzasq.cform.cloudfront.invalidation.model,CodePipelineActionData,0,12,0,0,0,3,0,2,0,2
 CloudFormation macro processor.,pl.wrzasq.cform.cloudfront.invalidation.model,CodePipelineJob,0,21,0,0,0,5,0,3,0,3
+CloudFormation macro processor.,pl.wrzasq.cform.cloudfront.invalidation.model,CodePipelineActionData,0,12,0,0,0,3,0,2,0,2
 CloudFormation macro processor.,pl.wrzasq.cform.cloudfront.invalidation,Handler,0,146,0,0,0,39,0,8,0,8
 CloudFormation macro processor.,pl.wrzasq.cform.cloudfront.invalidation,Handler.handle..inlined.readValue.new TypeReference() {...},0,3,0,0,0,1,0,1,0,1

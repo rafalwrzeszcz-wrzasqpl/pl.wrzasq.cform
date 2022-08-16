@@ -1,0 +1,13 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+WrzasqPl::AWS::DynamoDbItem resource,pl.wrzasq.cform.resource.aws.dynamodbitem.config,LambdaResourcesFactory,115,0,0,0,15,0,10,0,10,0
+WrzasqPl::AWS::DynamoDbItem resource,pl.wrzasq.cform.resource.aws.dynamodbitem.config,LambdaResourcesFactory.getRequestTypeReference.new TypeReference() {...},3,0,0,0,1,0,1,0,1,0
+WrzasqPl::AWS::DynamoDbItem resource,pl.wrzasq.cform.resource.aws.dynamodbitem.config,LambdaResourcesFactory.readHandler.new Function0() {...},7,0,0,0,1,0,1,0,1,0
+WrzasqPl::AWS::DynamoDbItem resource,pl.wrzasq.cform.resource.aws.dynamodbitem.config,LambdaResourcesFactory.deleteHandler.new Function0() {...},7,0,0,0,1,0,1,0,1,0
+WrzasqPl::AWS::DynamoDbItem resource,pl.wrzasq.cform.resource.aws.dynamodbitem.config,LambdaResourcesFactory.createHandler.new Function0() {...},11,0,0,0,1,0,1,0,1,0
+WrzasqPl::AWS::DynamoDbItem resource,pl.wrzasq.cform.resource.aws.dynamodbitem.config,LambdaResourcesFactory.getResourceTypeReference.new TypeReference() {...},3,0,0,0,1,0,1,0,1,0
+WrzasqPl::AWS::DynamoDbItem resource,pl.wrzasq.cform.resource.aws.dynamodbitem.action,CreateHandler,0,143,0,2,0,23,0,6,0,5
+WrzasqPl::AWS::DynamoDbItem resource,pl.wrzasq.cform.resource.aws.dynamodbitem.action,ReadHandler,0,128,0,2,0,22,0,5,0,4
+WrzasqPl::AWS::DynamoDbItem resource,pl.wrzasq.cform.resource.aws.dynamodbitem.action,DeleteHandler,0,138,0,2,0,25,0,6,0,5
+WrzasqPl::AWS::DynamoDbItem resource,pl.wrzasq.cform.resource.aws.dynamodbitem.model,ResourceModel.Companion,4,2,0,0,2,1,2,1,2,1
+WrzasqPl::AWS::DynamoDbItem resource,pl.wrzasq.cform.resource.aws.dynamodbitem.model,ResourceModelKt,453,262,31,16,34,31,27,8,2,5
+WrzasqPl::AWS::DynamoDbItem resource,pl.wrzasq.cform.resource.aws.dynamodbitem.model,ResourceModel,32,56,6,0,7,9,5,12,2,12
