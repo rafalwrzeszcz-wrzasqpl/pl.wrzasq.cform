@@ -27,6 +27,10 @@ this source code.
 
 AWS account creation handler.
 
+### [WrzasqPl::AWS::DynamoDbItem](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.cform/cform-resource-aws-dynamodbitem/)
+
+DynamoDB items management.
+
 ### [WrzasqPl::AWS::EdgeDeploy](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.cform/cform-resource-aws-edgedeploy/)
 
 Lambda@Edge deployment with configuration rewrite and proper region.

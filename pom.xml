@@ -124,6 +124,7 @@
         <module>cform-data-cognito-domain</module>
         <module>cform-macro</module>
         <module>cform-resource-aws-account</module>
+        <module>cform-resource-aws-dynamodbitem</module>
         <module>cform-resource-aws-edgedeploy</module>
         <module>cform-resource-aws-organization</module>
         <module>cform-resource-aws-organizationalunit</module>
