@@ -2,10 +2,40 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021 - 2022 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package pl.wrzasq.cform.macro.template
+
+/**
+ * `Ref` definition.
+ */
+const val CALL_REF = "Ref"
+
+/**
+ * `Fn::GetAtt` definition.
+ */
+const val CALL_GET_ATT = "Fn::GetAtt"
+
+/**
+ * `Fn::ImportValue` definition.
+ */
+const val CALL_IMPORT_VALUE = "Fn::ImportValue"
+
+/**
+ * `Fn::Sub` definition.
+ */
+const val CALL_SUB = "Fn::Sub"
+
+/**
+ * `Fn::If` definition.
+ */
+const val CALL_IF = "Fn::If"
+
+/**
+ * `Fn::GetParam` definition.
+ */
+const val CALL_GET_PARAM = "Fn::GetParam"
 
 /**
  * CloudFormation equivalent of `null`.
@@ -22,7 +52,7 @@ object Fn {
      * @param reference Referred object ID.
      * @return !Ref call.
      */
-    fun ref(reference: String) = mapOf("Ref" to reference)
+    fun ref(reference: String) = mapOf(CALL_REF to reference)
 
     /**
      * Returns !GetAtt reference call.
@@ -31,7 +61,7 @@ object Fn {
      * @param attribute Attribute name.
      * @return !GetAtt call.
      */
-    fun getAtt(resource: String, attribute: String) = mapOf("Fn::GetAtt" to listOf(resource, attribute))
+    fun getAtt(resource: String, attribute: String) = mapOf(CALL_GET_ATT to listOf(resource, attribute))
 
     /**
      * Returns !ImportValue reference call.
@@ -39,7 +69,7 @@ object Fn {
      * @param target Exported value reference.
      * @return !ImportValue call.
      */
-    fun importValue(target: Any) = mapOf("Fn::ImportValue" to target)
+    fun importValue(target: Any) = mapOf(CALL_IMPORT_VALUE to target)
 
     /**
      * Returns !Sub reference call.
@@ -47,7 +77,7 @@ object Fn {
      * @param params Call parameters.
      * @return !Sub call.
      */
-    fun sub(params: Any) = mapOf("Fn::Sub" to params)
+    fun sub(params: Any) = mapOf(CALL_SUB to params)
 
     /**
      * Builds !If call.
@@ -58,7 +88,7 @@ object Fn {
      * @return !If call.
      */
     fun fnIf(condition: String, whenTrue: Any, whenFalse: Any) = mapOf(
-        "Fn::If" to listOf(condition, whenTrue, whenFalse)
+        CALL_IF to listOf(condition, whenTrue, whenFalse)
     )
 
     /**
@@ -70,16 +100,16 @@ object Fn {
      */
     fun wrapSub(current: Any, producer: (String) -> String): Map<String, Any> {
         // handle some simple cases of existing calls
-        // note that these calls may have nested complex arguments so we don't want to go too deep
+        // note that these calls may have nested complex arguments, so we don't want to go too deep
         if (current is Map<*, *> && current.size == 1) {
             val key = current.keys.first().toString()
             val value = current[key]
 
-            if (key == "Ref" && value is String) {
+            if (key == CALL_REF && value is String) {
                 return sub(producer("\${$value}"))
             }
 
-            if (key == "Fn::GetAtt") {
+            if (key == CALL_GET_ATT) {
                 if (value is String) {
                     return sub(producer("\${$value}"))
                 } else if (value is List<*> && value[0] is String && value[1] is String) {
@@ -88,11 +118,11 @@ object Fn {
             }
 
             // our simplified notation - will be expanded in post-processing
-            if (key == "Fn::ImportValue" && value is String) {
+            if (key == CALL_IMPORT_VALUE && value is String) {
                 return sub(producer("\${Import:$value}"))
             }
 
-            if (key == "Fn::Sub") {
+            if (key == CALL_SUB) {
                 if (value is String) {
                     return sub(producer(value))
                 } else if (value is List<*> && value[0] is String) {

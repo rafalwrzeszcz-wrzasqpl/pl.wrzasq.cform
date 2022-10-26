@@ -27,7 +27,7 @@
     <name>WrzasqPl::AWS::DynamoDbItem resource</name>
     <url>https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.cform/cform-resource-aws-dynamodbitem/</url>
     <description>AWS CloudFormation resource handler for DynamoDB items.</description>
-    <inceptionYear>2021</inceptionYear>
+    <inceptionYear>2022</inceptionYear>
 
     <!-- plugins configuration -->
     <build>

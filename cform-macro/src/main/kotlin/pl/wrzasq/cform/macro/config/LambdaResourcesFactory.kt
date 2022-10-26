@@ -2,7 +2,7 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021 - 2022 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package pl.wrzasq.cform.macro.config
@@ -13,9 +13,12 @@ import pl.wrzasq.cform.macro.processors.AutomaticLogGroups
 import pl.wrzasq.cform.macro.processors.DelegatingResourceProcessor
 import pl.wrzasq.cform.macro.processors.FnToolkit
 import pl.wrzasq.cform.macro.processors.types.CodeBuildSetup
+import pl.wrzasq.cform.macro.processors.types.ConnectContactFlow
 import pl.wrzasq.cform.macro.processors.types.DynamoDbAttributesDefinitions
 import pl.wrzasq.cform.macro.processors.types.IamStatements
+import pl.wrzasq.cform.macro.processors.types.KinesisStreamMode
 import pl.wrzasq.cform.macro.processors.types.PipelineDefinition
+import pl.wrzasq.cform.macro.processors.types.SecretStructure
 import pl.wrzasq.cform.macro.template.CallsExpander
 import pl.wrzasq.commons.aws.runtime.NativeLambdaApi
 import pl.wrzasq.commons.aws.runtime.config.ResourcesFactory
@@ -47,6 +50,9 @@ class LambdaResourcesFactory : ResourcesFactory {
             codeBuildSetupProcessor,
             dynamoDbAttributesDefinitionsProcessor,
             iamStatementsProcessor,
+            kinesisStreamModeProcessor,
+            secretStructureProcessor,
+            connectContactFlowProcessor,
             pipelineDefinitionProcessor
         )
     }
@@ -58,6 +64,12 @@ class LambdaResourcesFactory : ResourcesFactory {
     private val dynamoDbAttributesDefinitionsProcessor by lazy { DynamoDbAttributesDefinitions() }
 
     private val iamStatementsProcessor by lazy { IamStatements() }
+
+    private val kinesisStreamModeProcessor by lazy { KinesisStreamMode() }
+
+    private val secretStructureProcessor by lazy { SecretStructure() }
+
+    private val connectContactFlowProcessor by lazy { ConnectContactFlow() }
 
     private val pipelineDefinitionProcessor by lazy { PipelineDefinition() }
 

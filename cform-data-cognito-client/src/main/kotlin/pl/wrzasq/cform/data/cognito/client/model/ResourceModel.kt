@@ -65,7 +65,7 @@ class ResourceModel {
          * CloudFormation resource type.
          */
         @JsonIgnore
-        val TYPE_NAME = "WrzasqPl::Cognito::DomainData"
+        val TYPE_NAME = "WrzasqPl::Cognito::ClientData"
 
         /**
          * Property path to UserPoolId.

@@ -2,7 +2,7 @@
 # This file is part of the pl.wrzasq.cform.
 #
 # @license http://mit-license.org/ The MIT license
-# @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+# @copyright 2021 - 2022 © by Rafał Wrzeszcz - Wrzasq.pl.
 -->
 
 # Serverless repository
@@ -19,7 +19,7 @@ WrzasqPlCformMacro:
     Properties:
         Location:
             ApplicationId: "arn:aws:serverlessrepo:eu-central-1:117504620086:applications/wrzasqpl-cform-macro"
-            SemanticVersion: "1.1.2"
+            SemanticVersion: "1.1.12" # check for the latest tag
         # `Parameters` section is optional, default name is `WrzasqPlCformMacro` - you can define custom name here
         Parameters:
             MacroName: "NameItCformMacro"

@@ -27,7 +27,7 @@
     <name>WrzasqPl::Cognito::Client data provider</name>
     <url>https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.cform/cform-data-cognito-client/</url>
     <description>AWS CloudFormation data provider for Cognito client.</description>
-    <inceptionYear>2021</inceptionYear>
+    <inceptionYear>2022</inceptionYear>
 
     <!-- plugins configuration -->
     <build>

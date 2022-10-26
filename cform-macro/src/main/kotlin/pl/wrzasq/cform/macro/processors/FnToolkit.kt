@@ -2,11 +2,12 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021 - 2022 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package pl.wrzasq.cform.macro.processors
 
+import pl.wrzasq.cform.macro.template.CALL_SUB
 import pl.wrzasq.cform.macro.template.ExpansionHandler
 import pl.wrzasq.cform.macro.template.Fn
 import pl.wrzasq.cform.macro.template.asMapAlways
@@ -17,7 +18,7 @@ private val PATTERN_SUB_IMPORT = Regex("\\\$\\{Import:(.*?)}")
  * Custom functions.
  */
 class FnToolkit : ExpansionHandler {
-    override fun canHandle(function: String) = function == "Fn::Sub"
+    override fun canHandle(function: String) = function == CALL_SUB
 
     override fun expand(input: Pair<String, Any>) = Fn.sub(resolve(input.second))
 

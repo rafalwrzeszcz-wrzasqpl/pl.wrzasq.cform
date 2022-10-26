@@ -2,7 +2,7 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021 - 2022 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package test.pl.wrzasq.cform.macro.template
@@ -11,6 +11,11 @@ import org.junit.jupiter.api.Assertions.assertEquals
 //import org.junit.jupiter.api.Assertions.assertInstanceOf
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import pl.wrzasq.cform.macro.template.CALL_GET_ATT
+import pl.wrzasq.cform.macro.template.CALL_IF
+import pl.wrzasq.cform.macro.template.CALL_IMPORT_VALUE
+import pl.wrzasq.cform.macro.template.CALL_REF
+import pl.wrzasq.cform.macro.template.CALL_SUB
 import pl.wrzasq.cform.macro.template.Fn
 import pl.wrzasq.cform.macro.template.asMapAlways
 
@@ -18,10 +23,6 @@ private const val RESOURCE_ID = "Entry"
 private const val ATTRIBUTE_NAME = "Some"
 private const val VAR_NAME = "Test"
 private const val TEMPLATE_STRING = "\${$VAR_NAME}"
-
-const val CALL_REF = "Ref"
-const val CALL_SUB = "Fn::Sub"
-const val CALL_IF = "Fn::If"
 
 class FnTest {
     private fun producer(input: String) = input
@@ -38,7 +39,7 @@ class FnTest {
     fun getAtt() {
         val output = Fn.getAtt(RESOURCE_ID, ATTRIBUTE_NAME)
         assertEquals(1, output.size)
-        assertEquals("Fn::GetAtt", output.keys.first())
+        assertEquals(CALL_GET_ATT, output.keys.first())
         assertEquals(listOf(RESOURCE_ID, ATTRIBUTE_NAME), output.values.first())
     }
 
@@ -47,7 +48,7 @@ class FnTest {
         val input = mapOf(CALL_SUB to RESOURCE_ID)
         val output = Fn.importValue(input)
         assertEquals(1, output.size)
-        assertEquals("Fn::ImportValue", output.keys.first())
+        assertEquals(CALL_IMPORT_VALUE, output.keys.first())
         assertEquals(input, output.values.first())
     }
 
@@ -80,7 +81,7 @@ class FnTest {
 
     @Test
     fun wrapSubGetAttSingle() {
-        val output = Fn.wrapSub(mapOf("Fn::GetAtt" to "Test.Param"), ::producer)
+        val output = Fn.wrapSub(mapOf(CALL_GET_ATT to "Test.Param"), ::producer)
         assertEquals(CALL_SUB, output.keys.first())
 
         val value = output.values.first()

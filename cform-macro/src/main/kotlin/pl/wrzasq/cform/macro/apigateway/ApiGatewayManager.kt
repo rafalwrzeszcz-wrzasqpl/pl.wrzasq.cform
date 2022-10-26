@@ -2,12 +2,15 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021 - 2022 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package pl.wrzasq.cform.macro.apigateway
 
 import pl.wrzasq.cform.macro.model.ResourceDefinition
+import pl.wrzasq.cform.macro.template.CALL_GET_ATT
+import pl.wrzasq.cform.macro.template.CALL_REF
+import pl.wrzasq.cform.macro.template.CALL_SUB
 import pl.wrzasq.cform.macro.template.ExpansionHandler
 import pl.wrzasq.cform.macro.template.Fn
 
@@ -75,7 +78,7 @@ class ApiGatewayManager : ExpansionHandler {
         return apis.values.flatMap(ApiGateway::generateResources) + listOf(role, account)
     }
 
-    override fun canHandle(function: String) = function == "Ref" || function == "Fn::Sub" || function == "Fn::GetAtt"
+    override fun canHandle(function: String) = function == CALL_REF || function == CALL_SUB || function == CALL_GET_ATT
 
     override fun expand(input: Pair<String, Any>): Map<String, Any> {
         val params = input.second

@@ -1,0 +1,21 @@
+{
+    "Resources": {
+        "StreamWithShards": {
+            "Type": "AWS::Kinesis::Stream",
+            "Properties": {
+                "ShardCount": 1
+            }
+        },
+        "StreamWithMode": {
+            "Type": "AWS::Kinesis::Stream",
+            "Properties": {
+                "StreamModeDetails": {
+                    "StreamMode": "PROVISIONED"
+                }
+            }
+        },
+        "StreamWithDefaults": {
+            "Type": "AWS::Kinesis::Stream"
+        }
+    }
+}

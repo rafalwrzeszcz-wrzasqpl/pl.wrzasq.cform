@@ -2,7 +2,7 @@
 # This file is part of the pl.wrzasq.cform.
 #
 # @license http://mit-license.org/ The MIT license
-# @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+# @copyright 2021 - 2022 © by Rafał Wrzeszcz - Wrzasq.pl.
 -->
 
 Apart from big things like API and pipeline definitions macro also handles many minor things that simplifies common
@@ -132,6 +132,49 @@ properties into their full representations.
 -   Property `PolicyDocument` in `AWS::IAM::ManagedPolicy` and `AWS::IAM::Policy` and `AssumeRolePolicyDocument` in
     `AWS::IAM::Role` are expanded same way (as a single policy statement).
 
+## Connect
+
+-   In `AWS::Connect::ContactFlow` resource `Content` can be defined as regular template structure and it will be
+    serialized to JSON (intrinsic function calls will be maintained).
+-   Flow schema version will be set to `2019-10-30` by default (no need for manual definition).
+    ```yaml
+    ConnectFlow:
+        Type: "AWS::Connect::ContactFlow"
+        Properties:
+            InstanceArn: !GetAtt "ConnectInstance.Arn"
+            Name: "Default Flow"
+            Type: "CONTACT_FLOW"
+            Content:
+                StartAction: "start"
+                Actions:
+                    -
+                        Identifier: "start"
+                        Type: "UpdateContactTargetQueue"
+                        Parameters:
+                            QueueId: !Ref "OrderQueueId"
+                        Transitions:
+                            NextAction: "order_number"
+                            Errors:
+                                -
+                                    ErrorType: "NoMatchingError"
+                                    NextAction: "end"
+    ```
+
+## SecretsManager
+
+-   In `AWS::SecretsManager::Secret` initial value can be specified using `SecretContent` property, that will be
+    serialized as `SecretString` JSON (intrinsic function calls will be maintained).
+    ```yaml
+    MySecret:
+        Type: "AWS::SecretsManager::Secret"
+        Properties:
+            SecretContent:
+                OAuthUrl: !Ref "TokenEndpoint"
+                # these will be entered in console
+                ClientId: ""
+                ClientSecret: ""
+    ```
+
 # Automatic log group
 
 For `AWS::Lambda::Function`, `AWS::Serverless::Function` and `AWS::CodeBuild::Project` resources you can specify new
@@ -186,3 +229,8 @@ implicitly.
                 Image: "maven:3.6.2-jdk-11"
     ```
 -   Environment build type is by default set to `LINUX_CONTAINER` and compute type to `BUILD_GENERAL1_SMALL`.
+
+## Kinesis
+
+-   If you don't specify `ShardsCount` for **Kinesis** data stream and you don't explicitly set `StreamModeDetails`
+    property, mode will be set to `ON_DEMAND`.

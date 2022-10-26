@@ -1,0 +1,62 @@
+{
+    "Resources": {
+        "ConnectFlow": {
+            "Type": "AWS::Connect::ContactFlow",
+            "Properties": {
+                "InstanceArn": {
+                    "Fn::GetAtt": "ConnectInstance.Arn"
+                },
+                "Name": "Default Flow",
+                "Type": "CONTACT_FLOW",
+                "Content": {
+                    "StartAction": "start",
+                    "Actions": [
+                        {
+                            "Identifier": "start",
+                            "Type": "UpdateContactTargetQueue",
+                            "Parameters": {
+                                "QueueId": {
+                                    "Ref": "OrderQueueId"
+                                }
+                            },
+                            "Transitions": {
+                                "NextAction": "order_number",
+                                "Errors": [
+                                    {
+                                        "ErrorType": "NoMatchingError",
+                                        "NextAction": "end"
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            }
+        },
+        "ConnectFlowWithVersion": {
+            "Type": "AWS::Connect::ContactFlow",
+            "Properties": {
+                "InstanceArn": {
+                    "Fn::GetAtt": "ConnectInstance.Arn"
+                },
+                "Name": "Default Flow",
+                "Type": "CONTACT_FLOW",
+                "Content": {
+                    "Version": "2022-01-30",
+                    "StartAction": "start"
+                }
+            }
+        },
+        "ConnectFlowWithText": {
+            "Type": "AWS::Connect::ContactFlow",
+            "Properties": {
+                "InstanceArn": {
+                    "Fn::GetAtt": "ConnectInstance.Arn"
+                },
+                "Name": "Default Flow",
+                "Type": "CONTACT_FLOW",
+                "Content": "{\"StartAction\":\"start\"}"
+            }
+        }
+    }
+}

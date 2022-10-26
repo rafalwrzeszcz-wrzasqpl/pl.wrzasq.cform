@@ -8,13 +8,9 @@
 package pl.wrzasq.cform.macro.pipeline.types
 
 import pl.wrzasq.cform.macro.pipeline.PipelineManager
-import pl.wrzasq.cform.macro.template.Fn
-import pl.wrzasq.cform.macro.template.asMap
+import pl.wrzasq.cform.macro.template.CALL_GET_PARAM
+import pl.wrzasq.cform.macro.template.CompiledFragment
 import pl.wrzasq.cform.macro.template.asMapAlways
-import pl.wrzasq.cform.macro.template.mapValuesOnly
-import pl.wrzasq.commons.json.ObjectMapperFactory
-
-private val OBJECT_MAPPER = ObjectMapperFactory.createObjectMapper()
 
 /**
  * CloudFormation stack deploy action.
@@ -41,7 +37,7 @@ class CloudFormationDeploy(
         // parameters may use `Fn::GetParam` calls that are CloudFormation-specific
         parameters.values.filterIsInstance<Map<*, *>>().map {
             val call = it.values.first()
-            if (it.size == 1 && it.keys.first() == "Fn::GetParam" && call is List<*>) {
+            if (it.size == 1 && it.keys.first() == CALL_GET_PARAM && call is List<*>) {
                 inputs.add(call[0].toString())
             }
         }
@@ -55,39 +51,7 @@ class CloudFormationDeploy(
 
     override fun buildConfiguration(configuration: MutableMap<String, Any>) {
         if (compiled.isNotEmpty()) {
-            var plainText = true
-            var index = 0
-            val params = mutableMapOf<String, Any>()
-            val final = compiled.mapValuesOnly {
-                if (it is Map<*, *> && it.size == 1) {
-                    plainText = false
-                    val (key, value) = asMap(it).entries.first()
-
-                    when {
-                        key == "Ref" || key == "Fn::GetAtt" && value is String -> "\${${value}}"
-                        key == "Fn::GetAtt" && value is List<*> -> "\${${value[0]}.${value[1]}}"
-                        // this is the simples one - just elevate encapsulation
-                        key == "Fn::Sub" && value is String -> value
-                        key == "Fn::Sub" && value is List<*> -> {
-                            params.putAll(asMapAlways(value[1]))
-                            value[0] ?: ""
-                        }
-                        // this is our notation - it will be handled afterwards
-                        key == "Fn::ImportValue" && value is String -> "\${Import:${value}}"
-                        key == "Fn::GetParam" -> it
-                        else -> generateParamPlaceholder(++index, it, params)
-                    }
-                } else {
-                    it
-                }
-            }
-            val json = OBJECT_MAPPER.writeValueAsString(final)
-
-            configuration["ParameterOverrides"] = when {
-                plainText -> json
-                params.isEmpty() -> Fn.sub(json)
-                else -> Fn.sub(listOf(json, params))
-            }
+            configuration["ParameterOverrides"] = CompiledFragment(compiled).raw
         }
 
         configuration["ActionMode"] = "CREATE_UPDATE"
@@ -99,10 +63,4 @@ class CloudFormationDeploy(
             inputs.add(reference.toString().split("::")[0])
         }
     }
-}
-
-private fun generateParamPlaceholder(index: Int, value: Any, params: MutableMap<String, Any>): String {
-    val param = "param${index}"
-    params[param] = value
-    return "\${${param}}"
 }
