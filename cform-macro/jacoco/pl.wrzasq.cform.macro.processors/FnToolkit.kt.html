@@ -2,48 +2,49 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021 - 2022 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package pl.wrzasq.cform.macro.processors
 
+import pl.wrzasq.cform.macro.template.CALL_SUB
 import pl.wrzasq.cform.macro.template.ExpansionHandler
 import pl.wrzasq.cform.macro.template.Fn
 import pl.wrzasq.cform.macro.template.asMapAlways
 
-<span class="fc" id="L14">private val PATTERN_SUB_IMPORT = Regex(&quot;\\\$\\{Import:(.*?)}&quot;)</span>
+<span class="fc" id="L15">private val PATTERN_SUB_IMPORT = Regex(&quot;\\\$\\{Import:(.*?)}&quot;)</span>
 
 /**
  * Custom functions.
  */
-<span class="fc" id="L19">class FnToolkit : ExpansionHandler {</span>
-<span class="fc" id="L20">    override fun canHandle(function: String) = function == &quot;Fn::Sub&quot;</span>
+<span class="fc" id="L20">class FnToolkit : ExpansionHandler {</span>
+<span class="fc" id="L21">    override fun canHandle(function: String) = function == CALL_SUB</span>
 
-<span class="fc" id="L22">    override fun expand(input: Pair&lt;String, Any&gt;) = Fn.sub(resolve(input.second))</span>
+<span class="fc" id="L23">    override fun expand(input: Pair&lt;String, Any&gt;) = Fn.sub(resolve(input.second))</span>
 
     private fun resolve(input: Any): Any {
-<span class="fc bfc" id="L25" title="All 2 branches covered.">        val (inputTemplate, inputParams) = if (input is List&lt;*&gt;) {</span>
-<span class="fc" id="L26">            input.first().toString() to asMapAlways(input.last())</span>
+<span class="fc bfc" id="L26" title="All 2 branches covered.">        val (inputTemplate, inputParams) = if (input is List&lt;*&gt;) {</span>
+<span class="fc" id="L27">            input.first().toString() to asMapAlways(input.last())</span>
         } else {
-<span class="fc" id="L28">            input.toString() to emptyMap()</span>
+<span class="fc" id="L29">            input.toString() to emptyMap()</span>
         }
 
         // look for all occurrences of import calls
-<span class="fc" id="L32">        val imports = PATTERN_SUB_IMPORT.findAll(inputTemplate).map { it.groupValues[1] }.toList()</span>
+<span class="fc" id="L33">        val imports = PATTERN_SUB_IMPORT.findAll(inputTemplate).map { it.groupValues[1] }.toList()</span>
 
         // check if there is any need to modify existing structure - if not, simply leave it untouched
-<span class="fc bfc" id="L35" title="All 2 branches covered.">        return if (imports.isEmpty()) {</span>
-<span class="fc" id="L36">            input</span>
+<span class="fc bfc" id="L36" title="All 2 branches covered.">        return if (imports.isEmpty()) {</span>
+<span class="fc" id="L37">            input</span>
         } else {
-<span class="fc" id="L38">            val params = inputParams.toMutableMap()</span>
-<span class="fc" id="L39">            val template = imports.foldIndexed(inputTemplate) { index, buffer, import -&gt;</span>
-<span class="fc" id="L40">                val key = &quot;import$index&quot;</span>
-<span class="fc" id="L41">                params[key] = Fn.importValue(import)</span>
+<span class="fc" id="L39">            val params = inputParams.toMutableMap()</span>
+<span class="fc" id="L40">            val template = imports.foldIndexed(inputTemplate) { index, buffer, import -&gt;</span>
+<span class="fc" id="L41">                val key = &quot;import$index&quot;</span>
+<span class="fc" id="L42">                params[key] = Fn.importValue(import)</span>
 
-<span class="fc" id="L43">                buffer.replace(&quot;\${Import:${import}}&quot;, &quot;\${$key}&quot;)</span>
+<span class="fc" id="L44">                buffer.replace(&quot;\${Import:${import}}&quot;, &quot;\${$key}&quot;)</span>
             }
 
-<span class="fc" id="L46">            listOf(template, params)</span>
+<span class="fc" id="L47">            listOf(template, params)</span>
         }
     }
 }

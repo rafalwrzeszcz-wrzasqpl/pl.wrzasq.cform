@@ -8,13 +8,9 @@
 package pl.wrzasq.cform.macro.pipeline.types
 
 import pl.wrzasq.cform.macro.pipeline.PipelineManager
-import pl.wrzasq.cform.macro.template.Fn
-import pl.wrzasq.cform.macro.template.asMap
+import pl.wrzasq.cform.macro.template.CALL_GET_PARAM
+import pl.wrzasq.cform.macro.template.CompiledFragment
 import pl.wrzasq.cform.macro.template.asMapAlways
-import pl.wrzasq.cform.macro.template.mapValuesOnly
-import pl.wrzasq.commons.json.ObjectMapperFactory
-
-<span class="fc" id="L17">private val OBJECT_MAPPER = ObjectMapperFactory.createObjectMapper()</span>
 
 /**
  * CloudFormation stack deploy action.
@@ -23,87 +19,49 @@ import pl.wrzasq.commons.json.ObjectMapperFactory
  * @param input Input properties.
  * @param condition Condition name.
  */
-<span class="fc" id="L26">class CloudFormationDeploy(</span>
+<span class="fc" id="L22">class CloudFormationDeploy(</span>
     name: String,
     input: Map&lt;String, Any&gt;,
     condition: String?
-<span class="fc" id="L30">) : BaseAction(name, input, condition) {</span>
-<span class="fc" id="L31">    private val parameters = asMapAlways(properties.remove(&quot;Parameters&quot;))</span>
-<span class="fc" id="L32">    private val compiled = mutableMapOf&lt;String, Any&gt;()</span>
+<span class="fc" id="L26">) : BaseAction(name, input, condition) {</span>
+<span class="fc" id="L27">    private val parameters = asMapAlways(properties.remove(&quot;Parameters&quot;))</span>
+<span class="fc" id="L28">    private val compiled = mutableMapOf&lt;String, Any&gt;()</span>
 
-<span class="fc" id="L34">    init {</span>
-<span class="fc" id="L35">        val configuration = asMapAlways(properties[&quot;Configuration&quot;])</span>
+<span class="fc" id="L30">    init {</span>
+<span class="fc" id="L31">        val configuration = asMapAlways(properties[&quot;Configuration&quot;])</span>
 
         // try to figure out input artifacts
-<span class="fc bfc" id="L38" title="All 2 branches covered.">        configuration[&quot;TemplatePath&quot;]?.let(::includeArtifact)</span>
-<span class="fc bfc" id="L39" title="All 2 branches covered.">        configuration[&quot;TemplateConfiguration&quot;]?.let(::includeArtifact)</span>
+<span class="fc bfc" id="L34" title="All 2 branches covered.">        configuration[&quot;TemplatePath&quot;]?.let(::includeArtifact)</span>
+<span class="fc bfc" id="L35" title="All 2 branches covered.">        configuration[&quot;TemplateConfiguration&quot;]?.let(::includeArtifact)</span>
 
         // parameters may use `Fn::GetParam` calls that are CloudFormation-specific
-<span class="fc" id="L42">        parameters.values.filterIsInstance&lt;Map&lt;*, *&gt;&gt;().map {</span>
-<span class="fc" id="L43">            val call = it.values.first()</span>
-<span class="pc bpc" id="L44" title="2 of 6 branches missed.">            if (it.size == 1 &amp;&amp; it.keys.first() == &quot;Fn::GetParam&quot; &amp;&amp; call is List&lt;*&gt;) {</span>
-<span class="fc" id="L45">                inputs.add(call[0].toString())</span>
+<span class="fc" id="L38">        parameters.values.filterIsInstance&lt;Map&lt;*, *&gt;&gt;().map {</span>
+<span class="fc" id="L39">            val call = it.values.first()</span>
+<span class="pc bpc" id="L40" title="2 of 6 branches missed.">            if (it.size == 1 &amp;&amp; it.keys.first() == CALL_GET_PARAM &amp;&amp; call is List&lt;*&gt;) {</span>
+<span class="fc" id="L41">                inputs.add(call[0].toString())</span>
             }
-<span class="fc" id="L47">        }</span>
-<span class="fc" id="L48">    }</span>
+<span class="fc" id="L43">        }</span>
+<span class="fc" id="L44">    }</span>
 
     override fun compile(manager: PipelineManager) {
-<span class="fc" id="L51">        parameters.mapValuesTo(compiled) { processReference(it.value, manager) }</span>
-<span class="fc" id="L52">    }</span>
+<span class="fc" id="L47">        parameters.mapValuesTo(compiled) { processReference(it.value, manager) }</span>
+<span class="fc" id="L48">    }</span>
 
-<span class="fc" id="L54">    override fun buildActionTypeId() = buildAwsActionTypeId(&quot;Deploy&quot;, &quot;CloudFormation&quot;)</span>
+<span class="fc" id="L50">    override fun buildActionTypeId() = buildAwsActionTypeId(&quot;Deploy&quot;, &quot;CloudFormation&quot;)</span>
 
     override fun buildConfiguration(configuration: MutableMap&lt;String, Any&gt;) {
-<span class="fc bfc" id="L57" title="All 4 branches covered.">        if (compiled.isNotEmpty()) {</span>
-<span class="fc" id="L58">            var plainText = true</span>
-<span class="fc" id="L59">            var index = 0</span>
-<span class="fc" id="L60">            val params = mutableMapOf&lt;String, Any&gt;()</span>
-<span class="fc" id="L61">            val final = compiled.mapValuesOnly {</span>
-<span class="pc bpc" id="L62" title="1 of 4 branches missed.">                if (it is Map&lt;*, *&gt; &amp;&amp; it.size == 1) {</span>
-<span class="fc" id="L63">                    plainText = false</span>
-<span class="fc" id="L64">                    val (key, value) = asMap(it).entries.first()</span>
-
-<span class="fc" id="L66">                    when {</span>
-<span class="fc bfc" id="L67" title="All 6 branches covered.">                        key == &quot;Ref&quot; || key == &quot;Fn::GetAtt&quot; &amp;&amp; value is String -&gt; &quot;\${${value}}&quot;</span>
-<span class="pc bpc" id="L68" title="1 of 4 branches missed.">                        key == &quot;Fn::GetAtt&quot; &amp;&amp; value is List&lt;*&gt; -&gt; &quot;\${${value[0]}.${value[1]}}&quot;</span>
-                        // this is the simples one - just elevate encapsulation
-<span class="fc bfc" id="L70" title="All 4 branches covered.">                        key == &quot;Fn::Sub&quot; &amp;&amp; value is String -&gt; value</span>
-<span class="pc bpc" id="L71" title="1 of 4 branches missed.">                        key == &quot;Fn::Sub&quot; &amp;&amp; value is List&lt;*&gt; -&gt; {</span>
-<span class="fc" id="L72">                            params.putAll(asMapAlways(value[1]))</span>
-<span class="pc bpc" id="L73" title="1 of 2 branches missed.">                            value[0] ?: &quot;&quot;</span>
-                        }
-                        // this is our notation - it will be handled afterwards
-<span class="pc bpc" id="L76" title="1 of 4 branches missed.">                        key == &quot;Fn::ImportValue&quot; &amp;&amp; value is String -&gt; &quot;\${Import:${value}}&quot;</span>
-<span class="fc bfc" id="L77" title="All 2 branches covered.">                        key == &quot;Fn::GetParam&quot; -&gt; it</span>
-<span class="fc" id="L78">                        else -&gt; generateParamPlaceholder(++index, it, params)</span>
-                    }
-                } else {
-<span class="fc" id="L81">                    it</span>
-                }
-            }
-<span class="fc" id="L84">            val json = OBJECT_MAPPER.writeValueAsString(final)</span>
-
-<span class="fc" id="L86">            configuration[&quot;ParameterOverrides&quot;] = when {</span>
-<span class="fc bfc" id="L87" title="All 2 branches covered.">                plainText -&gt; json</span>
-<span class="fc bfc" id="L88" title="All 2 branches covered.">                params.isEmpty() -&gt; Fn.sub(json)</span>
-<span class="fc" id="L89">                else -&gt; Fn.sub(listOf(json, params))</span>
-            }
+<span class="fc bfc" id="L53" title="All 4 branches covered.">        if (compiled.isNotEmpty()) {</span>
+<span class="fc" id="L54">            configuration[&quot;ParameterOverrides&quot;] = CompiledFragment(compiled).raw</span>
         }
 
-<span class="fc" id="L93">        configuration[&quot;ActionMode&quot;] = &quot;CREATE_UPDATE&quot;</span>
-<span class="fc" id="L94">        configuration[&quot;Capabilities&quot;] = &quot;CAPABILITY_NAMED_IAM,CAPABILITY_AUTO_EXPAND&quot;</span>
-<span class="fc" id="L95">    }</span>
+<span class="fc" id="L57">        configuration[&quot;ActionMode&quot;] = &quot;CREATE_UPDATE&quot;</span>
+<span class="fc" id="L58">        configuration[&quot;Capabilities&quot;] = &quot;CAPABILITY_NAMED_IAM,CAPABILITY_AUTO_EXPAND&quot;</span>
+<span class="fc" id="L59">    }</span>
 
     private fun includeArtifact(reference: Any) {
-<span class="fc bfc" id="L98" title="All 2 branches covered.">        if (reference !is Map&lt;*, *&gt;) {</span>
-<span class="fc" id="L99">            inputs.add(reference.toString().split(&quot;::&quot;)[0])</span>
+<span class="fc bfc" id="L62" title="All 2 branches covered.">        if (reference !is Map&lt;*, *&gt;) {</span>
+<span class="fc" id="L63">            inputs.add(reference.toString().split(&quot;::&quot;)[0])</span>
         }
-<span class="fc" id="L101">    }</span>
-}
-
-private fun generateParamPlaceholder(index: Int, value: Any, params: MutableMap&lt;String, Any&gt;): String {
-<span class="fc" id="L105">    val param = &quot;param${index}&quot;</span>
-<span class="fc" id="L106">    params[param] = value</span>
-<span class="fc" id="L107">    return &quot;\${${param}}&quot;</span>
+<span class="fc" id="L65">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

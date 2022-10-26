@@ -16,5 +16,5 @@ WrzasqPl::AWS::EdgeDeploy resource,pl.wrzasq.cform.resource.aws.edgedeploy.confi
 WrzasqPl::AWS::EdgeDeploy resource,pl.wrzasq.cform.resource.aws.edgedeploy.config,LambdaResourcesFactory.getResourceTypeReference.new TypeReference() {...},3,0,0,0,1,0,1,0,1,0
 WrzasqPl::AWS::EdgeDeploy resource,pl.wrzasq.cform.resource.aws.edgedeploy.config,LambdaResourcesFactory.updateHandler.new Function0() {...},14,0,0,0,1,0,1,0,1,0
 WrzasqPl::AWS::EdgeDeploy resource,pl.wrzasq.cform.resource.aws.edgedeploy.config,LambdaResourcesFactory.getRequestTypeReference.new TypeReference() {...},3,0,0,0,1,0,1,0,1,0
-WrzasqPl::AWS::EdgeDeploy resource,pl.wrzasq.cform.resource.aws.edgedeploy.config,LambdaResourcesFactory.createHandler.new Function0() {...},14,0,0,0,1,0,1,0,1,0
 WrzasqPl::AWS::EdgeDeploy resource,pl.wrzasq.cform.resource.aws.edgedeploy.config,LambdaResourcesFactory,166,0,0,0,22,0,14,0,14,0
+WrzasqPl::AWS::EdgeDeploy resource,pl.wrzasq.cform.resource.aws.edgedeploy.config,LambdaResourcesFactory.createHandler.new Function0() {...},14,0,0,0,1,0,1,0,1,0

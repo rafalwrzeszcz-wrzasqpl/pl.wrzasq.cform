@@ -2,15 +2,45 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021 - 2022 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package pl.wrzasq.cform.macro.template
 
 /**
+ * `Ref` definition.
+ */
+const val CALL_REF = &quot;Ref&quot;
+
+/**
+ * `Fn::GetAtt` definition.
+ */
+const val CALL_GET_ATT = &quot;Fn::GetAtt&quot;
+
+/**
+ * `Fn::ImportValue` definition.
+ */
+const val CALL_IMPORT_VALUE = &quot;Fn::ImportValue&quot;
+
+/**
+ * `Fn::Sub` definition.
+ */
+const val CALL_SUB = &quot;Fn::Sub&quot;
+
+/**
+ * `Fn::If` definition.
+ */
+const val CALL_IF = &quot;Fn::If&quot;
+
+/**
+ * `Fn::GetParam` definition.
+ */
+const val CALL_GET_PARAM = &quot;Fn::GetParam&quot;
+
+/**
  * CloudFormation equivalent of `null`.
  */
-<span class="fc" id="L13">val NO_VALUE = Fn.ref(&quot;AWS::NoValue&quot;)</span>
+<span class="fc" id="L43">val NO_VALUE = Fn.ref(&quot;AWS::NoValue&quot;)</span>
 
 /**
  * Utilities for intrinsic CloudFormation operations.
@@ -22,7 +52,7 @@ object Fn {
      * @param reference Referred object ID.
      * @return !Ref call.
      */
-<span class="fc" id="L25">    fun ref(reference: String) = mapOf(&quot;Ref&quot; to reference)</span>
+<span class="fc" id="L55">    fun ref(reference: String) = mapOf(CALL_REF to reference)</span>
 
     /**
      * Returns !GetAtt reference call.
@@ -31,7 +61,7 @@ object Fn {
      * @param attribute Attribute name.
      * @return !GetAtt call.
      */
-<span class="fc" id="L34">    fun getAtt(resource: String, attribute: String) = mapOf(&quot;Fn::GetAtt&quot; to listOf(resource, attribute))</span>
+<span class="fc" id="L64">    fun getAtt(resource: String, attribute: String) = mapOf(CALL_GET_ATT to listOf(resource, attribute))</span>
 
     /**
      * Returns !ImportValue reference call.
@@ -39,7 +69,7 @@ object Fn {
      * @param target Exported value reference.
      * @return !ImportValue call.
      */
-<span class="fc" id="L42">    fun importValue(target: Any) = mapOf(&quot;Fn::ImportValue&quot; to target)</span>
+<span class="fc" id="L72">    fun importValue(target: Any) = mapOf(CALL_IMPORT_VALUE to target)</span>
 
     /**
      * Returns !Sub reference call.
@@ -47,7 +77,7 @@ object Fn {
      * @param params Call parameters.
      * @return !Sub call.
      */
-<span class="fc" id="L50">    fun sub(params: Any) = mapOf(&quot;Fn::Sub&quot; to params)</span>
+<span class="fc" id="L80">    fun sub(params: Any) = mapOf(CALL_SUB to params)</span>
 
     /**
      * Builds !If call.
@@ -57,9 +87,9 @@ object Fn {
      * @param whenFalse Value in case of negative case.
      * @return !If call.
      */
-<span class="fc" id="L60">    fun fnIf(condition: String, whenTrue: Any, whenFalse: Any) = mapOf(</span>
-<span class="fc" id="L61">        &quot;Fn::If&quot; to listOf(condition, whenTrue, whenFalse)</span>
-<span class="fc" id="L62">    )</span>
+<span class="fc" id="L90">    fun fnIf(condition: String, whenTrue: Any, whenFalse: Any) = mapOf(</span>
+<span class="fc" id="L91">        CALL_IF to listOf(condition, whenTrue, whenFalse)</span>
+<span class="fc" id="L92">    )</span>
 
     /**
      * Wraps existing expression to !Sub call.
@@ -70,42 +100,42 @@ object Fn {
      */
     fun wrapSub(current: Any, producer: (String) -&gt; String): Map&lt;String, Any&gt; {
         // handle some simple cases of existing calls
-        // note that these calls may have nested complex arguments so we don't want to go too deep
-<span class="fc bfc" id="L74" title="All 4 branches covered.">        if (current is Map&lt;*, *&gt; &amp;&amp; current.size == 1) {</span>
-<span class="fc" id="L75">            val key = current.keys.first().toString()</span>
-<span class="fc" id="L76">            val value = current[key]</span>
+        // note that these calls may have nested complex arguments, so we don't want to go too deep
+<span class="fc bfc" id="L104" title="All 4 branches covered.">        if (current is Map&lt;*, *&gt; &amp;&amp; current.size == 1) {</span>
+<span class="fc" id="L105">            val key = current.keys.first().toString()</span>
+<span class="fc" id="L106">            val value = current[key]</span>
 
-<span class="pc bpc" id="L78" title="1 of 4 branches missed.">            if (key == &quot;Ref&quot; &amp;&amp; value is String) {</span>
-<span class="fc" id="L79">                return sub(producer(&quot;\${$value}&quot;))</span>
+<span class="pc bpc" id="L108" title="1 of 4 branches missed.">            if (key == CALL_REF &amp;&amp; value is String) {</span>
+<span class="fc" id="L109">                return sub(producer(&quot;\${$value}&quot;))</span>
             }
 
-<span class="fc bfc" id="L82" title="All 2 branches covered.">            if (key == &quot;Fn::GetAtt&quot;) {</span>
-<span class="fc bfc" id="L83" title="All 2 branches covered.">                if (value is String) {</span>
-<span class="fc" id="L84">                    return sub(producer(&quot;\${$value}&quot;))</span>
-<span class="pc bpc" id="L85" title="3 of 6 branches missed.">                } else if (value is List&lt;*&gt; &amp;&amp; value[0] is String &amp;&amp; value[1] is String) {</span>
-<span class="fc" id="L86">                    return sub(producer(&quot;\${${value[0]}.${value[1]}}&quot;))</span>
+<span class="fc bfc" id="L112" title="All 2 branches covered.">            if (key == CALL_GET_ATT) {</span>
+<span class="fc bfc" id="L113" title="All 2 branches covered.">                if (value is String) {</span>
+<span class="fc" id="L114">                    return sub(producer(&quot;\${$value}&quot;))</span>
+<span class="pc bpc" id="L115" title="3 of 6 branches missed.">                } else if (value is List&lt;*&gt; &amp;&amp; value[0] is String &amp;&amp; value[1] is String) {</span>
+<span class="fc" id="L116">                    return sub(producer(&quot;\${${value[0]}.${value[1]}}&quot;))</span>
                 }
             }
 
             // our simplified notation - will be expanded in post-processing
-<span class="pc bpc" id="L91" title="1 of 4 branches missed.">            if (key == &quot;Fn::ImportValue&quot; &amp;&amp; value is String) {</span>
-<span class="fc" id="L92">                return sub(producer(&quot;\${Import:$value}&quot;))</span>
+<span class="pc bpc" id="L121" title="1 of 4 branches missed.">            if (key == CALL_IMPORT_VALUE &amp;&amp; value is String) {</span>
+<span class="fc" id="L122">                return sub(producer(&quot;\${Import:$value}&quot;))</span>
             }
 
-<span class="pc bpc" id="L95" title="1 of 2 branches missed.">            if (key == &quot;Fn::Sub&quot;) {</span>
-<span class="fc bfc" id="L96" title="All 2 branches covered.">                if (value is String) {</span>
-<span class="fc" id="L97">                    return sub(producer(value))</span>
-<span class="pc bpc" id="L98" title="2 of 4 branches missed.">                } else if (value is List&lt;*&gt; &amp;&amp; value[0] is String) {</span>
-<span class="fc" id="L99">                    return sub(listOf(producer(value[0].toString()), value[1]))</span>
+<span class="pc bpc" id="L125" title="1 of 2 branches missed.">            if (key == CALL_SUB) {</span>
+<span class="fc bfc" id="L126" title="All 2 branches covered.">                if (value is String) {</span>
+<span class="fc" id="L127">                    return sub(producer(value))</span>
+<span class="pc bpc" id="L128" title="2 of 4 branches missed.">                } else if (value is List&lt;*&gt; &amp;&amp; value[0] is String) {</span>
+<span class="fc" id="L129">                    return sub(listOf(producer(value[0].toString()), value[1]))</span>
                 }
             }
-<span class="fc bfc" id="L102" title="All 2 branches covered.">        } else if (current is String) {</span>
+<span class="fc bfc" id="L132" title="All 2 branches covered.">        } else if (current is String) {</span>
             // escape `${` sequences as plain string becomes part of !Sub call
-<span class="fc" id="L104">            return sub(producer(current.toString().replace(&quot;\${&quot;, &quot;\${!&quot;)))</span>
+<span class="fc" id="L134">            return sub(producer(current.toString().replace(&quot;\${&quot;, &quot;\${!&quot;)))</span>
         }
 
         // fallback to nested call
-<span class="fc" id="L108">        return sub(listOf(producer(&quot;\${wrapped}&quot;), mapOf(&quot;wrapped&quot; to current)))</span>
+<span class="fc" id="L138">        return sub(listOf(producer(&quot;\${wrapped}&quot;), mapOf(&quot;wrapped&quot; to current)))</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
