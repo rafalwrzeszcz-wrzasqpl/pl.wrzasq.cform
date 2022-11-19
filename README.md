@@ -23,10 +23,6 @@ this source code.
 
 ## Resource handlers
 
-### [WrzasqPl::AWS::Account](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.cform/cform-resource-aws-account/)
-
-AWS account creation handler.
-
 ### [WrzasqPl::AWS::DynamoDbItem](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.cform/cform-resource-aws-dynamodbitem/)
 
 DynamoDB items management.
@@ -38,10 +34,6 @@ Lambda@Edge deployment with configuration rewrite and proper region.
 ### [WrzasqPl::AWS::Organization](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.cform/cform-resource-aws-organization/)
 
 Manage AWS Organizations setup.
-
-### [WrzasqPl::AWS::OrganizationalUnit](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.cform/cform-resource-aws-organizationalunit/)
-
-Manage AWS Organizational Unit setup.
 
 ### [WrzasqPl::AWS::PasswordPolicy](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.cform/cform-resource-aws-passwordpolicy/)
 
