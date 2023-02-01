@@ -3,8 +3,8 @@ WrzasqPl::AWS::DynamoDbItem resource,pl.wrzasq.cform.resource.aws.dynamodbitem.c
 WrzasqPl::AWS::DynamoDbItem resource,pl.wrzasq.cform.resource.aws.dynamodbitem.config,LambdaResourcesFactory.getRequestTypeReference.new TypeReference() {...},3,0,0,0,1,0,1,0,1,0
 WrzasqPl::AWS::DynamoDbItem resource,pl.wrzasq.cform.resource.aws.dynamodbitem.config,LambdaResourcesFactory.readHandler.new Function0() {...},7,0,0,0,1,0,1,0,1,0
 WrzasqPl::AWS::DynamoDbItem resource,pl.wrzasq.cform.resource.aws.dynamodbitem.config,LambdaResourcesFactory.deleteHandler.new Function0() {...},7,0,0,0,1,0,1,0,1,0
-WrzasqPl::AWS::DynamoDbItem resource,pl.wrzasq.cform.resource.aws.dynamodbitem.config,LambdaResourcesFactory.createHandler.new Function0() {...},11,0,0,0,1,0,1,0,1,0
 WrzasqPl::AWS::DynamoDbItem resource,pl.wrzasq.cform.resource.aws.dynamodbitem.config,LambdaResourcesFactory.getResourceTypeReference.new TypeReference() {...},3,0,0,0,1,0,1,0,1,0
+WrzasqPl::AWS::DynamoDbItem resource,pl.wrzasq.cform.resource.aws.dynamodbitem.config,LambdaResourcesFactory.createHandler.new Function0() {...},11,0,0,0,1,0,1,0,1,0
 WrzasqPl::AWS::DynamoDbItem resource,pl.wrzasq.cform.resource.aws.dynamodbitem.action,CreateHandler,0,143,0,2,0,23,0,6,0,5
 WrzasqPl::AWS::DynamoDbItem resource,pl.wrzasq.cform.resource.aws.dynamodbitem.action,ReadHandler,0,128,0,2,0,22,0,5,0,4
 WrzasqPl::AWS::DynamoDbItem resource,pl.wrzasq.cform.resource.aws.dynamodbitem.action,DeleteHandler,0,138,0,2,0,25,0,6,0,5

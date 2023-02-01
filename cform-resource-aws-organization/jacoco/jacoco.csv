@@ -2,8 +2,8 @@ GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_
 WrzasqPl::AWS::Organization resource,pl.wrzasq.cform.resource.aws.organization.config,LambdaResourcesFactory.createHandler.new Function0() {...},11,0,0,0,1,0,1,0,1,0
 WrzasqPl::AWS::Organization resource,pl.wrzasq.cform.resource.aws.organization.config,LambdaResourcesFactory.readHandler.new Function0() {...},7,0,0,0,1,0,1,0,1,0
 WrzasqPl::AWS::Organization resource,pl.wrzasq.cform.resource.aws.organization.config,LambdaResourcesFactory,111,0,0,0,16,0,10,0,10,0
-WrzasqPl::AWS::Organization resource,pl.wrzasq.cform.resource.aws.organization.config,LambdaResourcesFactory.deleteHandler.new Function0() {...},7,0,0,0,1,0,1,0,1,0
 WrzasqPl::AWS::Organization resource,pl.wrzasq.cform.resource.aws.organization.config,LambdaResourcesFactory.getResourceTypeReference.new TypeReference() {...},3,0,0,0,1,0,1,0,1,0
+WrzasqPl::AWS::Organization resource,pl.wrzasq.cform.resource.aws.organization.config,LambdaResourcesFactory.deleteHandler.new Function0() {...},7,0,0,0,1,0,1,0,1,0
 WrzasqPl::AWS::Organization resource,pl.wrzasq.cform.resource.aws.organization.config,LambdaResourcesFactory.getRequestTypeReference.new TypeReference() {...},3,0,0,0,1,0,1,0,1,0
 WrzasqPl::AWS::Organization resource,pl.wrzasq.cform.resource.aws.organization.action,ReadHandler,0,183,0,2,0,25,0,6,0,5
 WrzasqPl::AWS::Organization resource,pl.wrzasq.cform.resource.aws.organization.action,CreateHandler,0,255,0,4,0,44,0,10,0,8

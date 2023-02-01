@@ -1,6 +1,6 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
-CloudFormation macro processor.,pl.wrzasq.cform.cloudfront.invalidation.config,LambdaResourcesFactory.objectMapper.new Function0() {...},3,0,0,0,1,0,1,0,1,0
 CloudFormation macro processor.,pl.wrzasq.cform.cloudfront.invalidation.config,LambdaResourcesFactory.lambdaApi.new Function0() {...},10,0,0,0,1,0,1,0,1,0
+CloudFormation macro processor.,pl.wrzasq.cform.cloudfront.invalidation.config,LambdaResourcesFactory.objectMapper.new Function0() {...},3,0,0,0,1,0,1,0,1,0
 CloudFormation macro processor.,pl.wrzasq.cform.cloudfront.invalidation.config,LambdaResourcesFactory,91,0,0,0,7,0,8,0,8,0
 CloudFormation macro processor.,pl.wrzasq.cform.cloudfront.invalidation.config,LambdaResourcesFactory.handler.new Function0() {...},23,0,0,0,1,0,1,0,1,0
 CloudFormation macro processor.,pl.wrzasq.cform.cloudfront.invalidation.config,LambdaResourcesFactory.cloudFront.new Function0() {...},7,0,0,0,3,0,1,0,1,0

@@ -28,10 +28,10 @@ CloudFormation macro processor.,pl.wrzasq.cform.macro,Handler,0,73,0,0,0,10,0,2,
 CloudFormation macro processor.,pl.wrzasq.cform.macro,Handler.handle..inlined.readValue.new TypeReference() {...},0,3,0,0,0,1,0,1,0,1
 CloudFormation macro processor.,pl.wrzasq.cform.macro.config,LambdaResourcesFactory.delegatingResourceProcessor.new Function0() {...},57,0,0,0,8,0,1,0,1,0
 CloudFormation macro processor.,pl.wrzasq.cform.macro.config,LambdaResourcesFactory.objectMapper.new Function0() {...},3,0,0,0,1,0,1,0,1,0
-CloudFormation macro processor.,pl.wrzasq.cform.macro.config,LambdaResourcesFactory,237,0,0,0,17,0,18,0,18,0
 CloudFormation macro processor.,pl.wrzasq.cform.macro.config,LambdaResourcesFactory.dynamoDbAttributesDefinitionsProcessor.new Function0() {...},4,0,0,0,1,0,1,0,1,0
-CloudFormation macro processor.,pl.wrzasq.cform.macro.config,LambdaResourcesFactory.codeBuildSetupProcessor.new Function0() {...},4,0,0,0,1,0,1,0,1,0
+CloudFormation macro processor.,pl.wrzasq.cform.macro.config,LambdaResourcesFactory,237,0,0,0,17,0,18,0,18,0
 CloudFormation macro processor.,pl.wrzasq.cform.macro.config,LambdaResourcesFactory.secretStructureProcessor.new Function0() {...},4,0,0,0,1,0,1,0,1,0
+CloudFormation macro processor.,pl.wrzasq.cform.macro.config,LambdaResourcesFactory.codeBuildSetupProcessor.new Function0() {...},4,0,0,0,1,0,1,0,1,0
 CloudFormation macro processor.,pl.wrzasq.cform.macro.config,LambdaResourcesFactory.pipelineDefinitionProcessor.new Function0() {...},4,0,0,0,1,0,1,0,1,0
 CloudFormation macro processor.,pl.wrzasq.cform.macro.config,LambdaResourcesFactory.lambdaApi.new Function0() {...},10,0,0,0,1,0,1,0,1,0
 CloudFormation macro processor.,pl.wrzasq.cform.macro.config,LambdaResourcesFactory.processors.new Function0() {...},46,0,0,0,5,0,1,0,1,0
