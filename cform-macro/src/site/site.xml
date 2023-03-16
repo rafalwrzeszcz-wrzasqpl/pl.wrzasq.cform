@@ -16,6 +16,7 @@
 
         <menu name="Guide">
             <item name="Deployment" href="guide/deployment.html"/>
+            <item name="Matrix resources" href="guide/matrix.html"/>
             <item name="API Gateway" href="guide/apigateway.html"/>
             <item name="CodePipeline" href="guide/codepipeline.html"/>
             <item name="General improvements" href="guide/general.html"/>

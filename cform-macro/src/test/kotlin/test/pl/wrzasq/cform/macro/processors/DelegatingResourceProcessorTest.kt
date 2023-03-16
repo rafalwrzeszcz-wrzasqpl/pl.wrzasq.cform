@@ -2,7 +2,7 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021, 2023 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package test.pl.wrzasq.cform.macro.processors
@@ -29,7 +29,8 @@ class DelegatingResourceProcessorTest {
                 SECTION_RESOURCES to mapOf(
                     "Id" to input
                 )
-            )
+            ),
+            emptyMap()
         )
 
         assertSame(input, asMapAlways(output[SECTION_RESOURCES])["Id"])

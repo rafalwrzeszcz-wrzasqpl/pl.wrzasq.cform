@@ -1,0 +1,106 @@
+{
+    "Resources": {
+        "MessageQueue": {
+            "Type": "AWS::SQS::Queue",
+            "Properties": {
+                "QueueName": "Non-Matrix"
+            }
+        },
+        "ConnectOrigin0": {
+            "Type": "AWS::Connect::ApprovedOrigin",
+            "Properties": {
+                "InstanceId": {
+                    "Ref": "ConnectInstanceId"
+                },
+                "Origin": "https://wrzasq.pl"
+            }
+        },
+        "ConnectOrigin1": {
+            "Type": "AWS::Connect::ApprovedOrigin",
+            "Properties": {
+                "InstanceId": {
+                    "Ref": "ConnectInstanceId"
+                },
+                "Origin": "https://ivms.online"
+            }
+        },
+        "TopicFor_0_Customers": {
+            "Type": "AWS::SNS::Topic",
+            "Properties": {
+                "TopicName": "Topic-dev-customers-core",
+                "TracingConfig": "Active",
+                "ContentBasedDeduplication": true
+            }
+        },
+        "TopicFor_0_Sites": {
+            "Type": "AWS::SNS::Topic",
+            "Properties": {
+                "TopicName": "Topic-dev-sites-core",
+                "TracingConfig": "Active",
+                "ContentBasedDeduplication": true
+            }
+        },
+        "TopicFor_1_Customers": {
+            "Type": "AWS::SNS::Topic",
+            "Properties": {
+                "TopicName": "Topic-prod-customers-core",
+                "TracingConfig": "Active",
+                "ContentBasedDeduplication": true
+            }
+        },
+        "TopicFor_1_Sites": {
+            "Type": "AWS::SNS::Topic",
+            "Properties": {
+                "TopicName": "Topic-prod-sites-core",
+                "TracingConfig": "Active",
+                "ContentBasedDeduplication": true
+            }
+        }
+    },
+    "Outputs": {
+        "DevSnsTopicForSitesArn": {
+            "Value": {
+                "Ref": "TopicFor_0_Sites"
+            }
+        },
+        "DevSnsTopicForCustomersName": {
+            "Value": {
+                "Fn::GetAtt": [
+                    "TopicFor_0_Customers",
+                    "TopicName"
+                ]
+            }
+        },
+        "ProdSnsTopicForSitesArn": {
+            "Value": {
+                "Fn::Sub": "${TopicFor_1_Sites}"
+            }
+        },
+        "OriginsCount": {
+            "Value": {
+                "Fn::Length": [
+                    0,
+                    1
+                ]
+            }
+        },
+        "SomeLength": {
+            "Value": {
+                "Fn::Length": [
+                    "a",
+                    "b"
+                ]
+            }
+        },
+        "MessageQueueUrl": {
+            "Value": {
+                "Ref": "MessageQueue"
+            }
+        },
+        "MessageQueueArn": {
+            "Value": {
+                "Fn::GetAtt": "MessageQueue.Arn"
+            }
+        }
+    }
+}

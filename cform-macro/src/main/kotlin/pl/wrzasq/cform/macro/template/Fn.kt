@@ -2,7 +2,7 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021 - 2022 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021 - 2023 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package pl.wrzasq.cform.macro.template
@@ -16,6 +16,11 @@ const val CALL_REF = "Ref"
  * `Fn::GetAtt` definition.
  */
 const val CALL_GET_ATT = "Fn::GetAtt"
+
+/**
+ * `Fn::Length` definition (AWS::LanguageExtensions transform).
+ */
+const val CALL_LENGTH = "Fn::Length"
 
 /**
  * `Fn::ImportValue` definition.

@@ -2,7 +2,7 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021, 2023 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package pl.wrzasq.cform.macro.processors
@@ -30,9 +30,12 @@ class DelegatingResourceProcessor(vararg handlers: ResourceHandler) {
      * Handles input template.
      *
      * @param input Current template state.
+     * @param params Template parameter values.
      * @return Processed template.
      */
-    fun process(input: Map<String, Any>) = input.mapSelected(SECTION_RESOURCES) { processResources(asMap(it)) }
+    fun process(input: Map<String, Any>, params: Map<String, Any>) = input.mapSelected(SECTION_RESOURCES) {
+        processResources(asMap(it))
+    }
 
     // all the changes should be in-place scoped to single resource
     private fun processResources(input: Map<String, Any>) = input.mapValues {

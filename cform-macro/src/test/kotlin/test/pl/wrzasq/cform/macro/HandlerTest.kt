@@ -2,7 +2,7 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021, 2023 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package test.pl.wrzasq.cform.macro
@@ -54,16 +54,18 @@ class HandlerTest {
         val input = mapOf("Foo" to "Bar")
         val intermediate = mapOf("Test" to "Yes")
         val output = mapOf("Wrzasq.pl" to "CForm")
+        val params = mapOf("Project" to "IVMS")
 
         every {
             objectMapper.readValue(inputStream, any<TypeReference<CloudFormationMacroRequest>>())
         } returns CloudFormationMacroRequest(
             requestId = id,
-            fragment = input
+            fragment = input,
+            templateParameterValues = params,
         )
 
-        every { templateProcessor1(input) } returns intermediate
-        every { templateProcessor2(intermediate) } returns output
+        every { templateProcessor1(input, params) } returns intermediate
+        every { templateProcessor2(intermediate, params) } returns output
 
         val captor = slot<CloudFormationMacroResponse>()
         every { objectMapper.writeValue(outputStream, capture(captor)) } just runs
@@ -71,8 +73,8 @@ class HandlerTest {
         val handler = Handler(objectMapper, listOf(templateProcessor1, templateProcessor2))
         handler.handle(inputStream, outputStream, context)
 
-        verify { templateProcessor1(input) }
-        verify { templateProcessor2(intermediate) }
+        verify { templateProcessor1(input, params) }
+        verify { templateProcessor2(intermediate, params) }
 
         val response = captor.captured
         assertEquals(id, response.requestId)

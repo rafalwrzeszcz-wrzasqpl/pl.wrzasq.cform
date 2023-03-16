@@ -2,7 +2,7 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021, 2023 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package pl.wrzasq.cform.macro
@@ -15,7 +15,7 @@ import pl.wrzasq.cform.macro.model.CloudFormationMacroResponse
 import java.io.InputStream
 import java.io.OutputStream
 
-typealias TemplateProcessor = (Map<String, Any>) -> Map<String, Any>
+typealias TemplateProcessor = (Map<String, Any>, Map<String, Any>) -> Map<String, Any>
 
 /**
  * API key retrieval entry point.
@@ -44,7 +44,9 @@ class Handler(
             outputStream,
             CloudFormationMacroResponse(
                 requestId = request.requestId,
-                fragment =  templateProcessors.fold(request.fragment) { state, fn -> fn(state) }
+                fragment =  templateProcessors.fold(request.fragment) { state, fn ->
+                    fn(state, request.templateParameterValues)
+                }
             )
         )
     }

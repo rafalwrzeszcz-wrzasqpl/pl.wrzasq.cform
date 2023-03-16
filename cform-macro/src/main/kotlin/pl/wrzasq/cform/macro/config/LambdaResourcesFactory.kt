@@ -2,7 +2,7 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021 - 2022 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021 - 2023 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package pl.wrzasq.cform.macro.config
@@ -12,6 +12,7 @@ import pl.wrzasq.cform.macro.processors.ApiGatewayDefinition
 import pl.wrzasq.cform.macro.processors.AutomaticLogGroups
 import pl.wrzasq.cform.macro.processors.DelegatingResourceProcessor
 import pl.wrzasq.cform.macro.processors.FnToolkit
+import pl.wrzasq.cform.macro.processors.MatricesExpander
 import pl.wrzasq.cform.macro.processors.types.CodeBuildSetup
 import pl.wrzasq.cform.macro.processors.types.ConnectContactFlow
 import pl.wrzasq.cform.macro.processors.types.DynamoDbAttributesDefinitions
@@ -30,9 +31,10 @@ import pl.wrzasq.commons.json.ObjectMapperFactory
 class LambdaResourcesFactory : ResourcesFactory {
     private val processors by lazy {
         listOf(
-            // note that some orders matter - eg we need to processor our custom blocks first as most other processors
+            // note that some orders matter - e.g. we need to process our custom blocks first as most other processors
             // will only handle standard template sections
             apiGatewayDefinitionProcessor::process,
+            matricesExpander::expand,
             // from now on we should only have standard template sections
             automaticLogGroupsProcessor::process,
             delegatingResourceProcessor::process,
@@ -42,6 +44,8 @@ class LambdaResourcesFactory : ResourcesFactory {
     }
 
     private val apiGatewayDefinitionProcessor by lazy { ApiGatewayDefinition() }
+
+    private val matricesExpander by lazy { MatricesExpander() }
 
     private val automaticLogGroupsProcessor by lazy { AutomaticLogGroups() }
 

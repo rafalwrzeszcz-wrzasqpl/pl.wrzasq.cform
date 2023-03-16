@@ -2,7 +2,7 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021, 2023 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package test.pl.wrzasq.cform.macro
@@ -12,7 +12,9 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import pl.wrzasq.cform.macro.TemplateProcessor
 import pl.wrzasq.commons.json.ObjectMapperFactory
 
-abstract class TemplateTest {
+abstract class TemplateTest(
+    private val templateParameterValues: Map<String, String> = emptyMap()
+) {
     private val objectMapper = ObjectMapperFactory.createObjectMapper()
 
     protected abstract val processor: TemplateProcessor
@@ -25,6 +27,6 @@ abstract class TemplateTest {
             this.javaClass.getResourceAsStream("/${scenario}.output.json")
         )
 
-        assertEquals(output, processor(input))
+        assertEquals(output, processor(input, templateParameterValues))
     }
 }

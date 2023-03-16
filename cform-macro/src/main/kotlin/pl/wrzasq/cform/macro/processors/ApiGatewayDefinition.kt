@@ -2,7 +2,7 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021, 2023 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package pl.wrzasq.cform.macro.processors
@@ -24,9 +24,10 @@ class ApiGatewayDefinition {
      * Handles input template.
      *
      * @param input Current template state.
+     * @param params Template parameter values.
      * @return Processed template.
      */
-    fun process(input: Map<String, Any>): Map<String, Any> {
+    fun process(input: Map<String, Any>, params: Map<String, Any>): Map<String, Any> {
         val manager = ApiGatewayManager()
         val rest = input.popProperty("RestApis", {
             for ((id, api) in asMap(it)) {
@@ -40,11 +41,12 @@ class ApiGatewayDefinition {
         } else {
             val callsExpander = CallsExpander(manager)
 
-            // take rest of the template and append all of the generated API resources
+            // take rest of the template and append all the generated API resources
             callsExpander.processTemplate(
                 rest.mapSelected(SECTION_RESOURCES) {
                     asMap(it) + manager.generateResources().map(ResourceDefinition::build)
-                }
+                },
+                params
             )
         }
     }

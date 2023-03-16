@@ -1,0 +1,88 @@
+{
+    "Resources": {
+        "MessageQueue": {
+            "Type": "AWS::SQS::Queue",
+            "Properties": {
+                "QueueName": "Non-Matrix"
+            }
+        },
+        "ConnectOrigin": {
+            "Type": "AWS::Connect::ApprovedOrigin",
+            "Matrix": {
+                "Entries": {
+                    "Domain": "MultipleValuesParam"
+                }
+            },
+            "Properties": {
+                "InstanceId": {
+                    "Ref": "ConnectInstanceId"
+                },
+                "Origin": "${Each:Domain}"
+            }
+        },
+        "SnsTopic": {
+            "Type": "AWS::SNS::Topic",
+            "Matrix": {
+                "LogicalIdPattern": "TopicFor_${Env}_${Service}",
+                "Entries": {
+                    "Env": [
+                        "dev",
+                        "prod"
+                    ],
+                    "Service": {
+                        "Customers": "customers-core",
+                        "Sites": "sites-core"
+                    }
+                }
+            },
+            "Properties": {
+                "TopicName": "Topic-${Each:Env}-${Each:Service}",
+                "TracingConfig": "Active",
+                "ContentBasedDeduplication": true
+            }
+        }
+    },
+    "Outputs": {
+        "DevSnsTopicForSitesArn": {
+            "Value": {
+                "Ref": "Matrix:SnsTopic[Env=0,Service=Sites]"
+            }
+        },
+        "DevSnsTopicForCustomersName": {
+            "Value": {
+                "Fn::GetAtt": [
+                    "Matrix:SnsTopic[Env=0,Service=Customers]",
+                    "TopicName"
+                ]
+            }
+        },
+        "ProdSnsTopicForSitesArn": {
+            "Value": {
+                "Fn::Sub": "${Matrix:SnsTopic[Env=1,Service=Sites]}"
+            }
+        },
+        "OriginsCount": {
+            "Value": {
+                "Fn::Length": "Matrix:ConnectOrigin"
+            }
+        },
+        "SomeLength": {
+            "Value": {
+                "Fn::Length": [
+                    "a",
+                    "b"
+                ]
+            }
+        },
+        "MessageQueueUrl": {
+            "Value": {
+                "Ref": "MessageQueue"
+            }
+        },
+        "MessageQueueArn": {
+            "Value": {
+                "Fn::GetAtt": "MessageQueue.Arn"
+            }
+        }
+    }
+}
