@@ -2,7 +2,7 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021 - 2022 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021 - 2023 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package pl.wrzasq.cform.macro.config
@@ -12,6 +12,7 @@ import pl.wrzasq.cform.macro.processors.ApiGatewayDefinition
 import pl.wrzasq.cform.macro.processors.AutomaticLogGroups
 import pl.wrzasq.cform.macro.processors.DelegatingResourceProcessor
 import pl.wrzasq.cform.macro.processors.FnToolkit
+import pl.wrzasq.cform.macro.processors.MatricesExpander
 import pl.wrzasq.cform.macro.processors.types.CodeBuildSetup
 import pl.wrzasq.cform.macro.processors.types.ConnectContactFlow
 import pl.wrzasq.cform.macro.processors.types.DynamoDbAttributesDefinitions
@@ -27,58 +28,61 @@ import pl.wrzasq.commons.json.ObjectMapperFactory
 /**
  * Resources factory for AWS Lambda environment.
  */
-<span class="nc" id="L30">class LambdaResourcesFactory : ResourcesFactory {</span>
-<span class="nc" id="L31">    private val processors by lazy {</span>
-<span class="nc" id="L32">        listOf(</span>
-            // note that some orders matter - eg we need to processor our custom blocks first as most other processors
+<span class="nc" id="L31">class LambdaResourcesFactory : ResourcesFactory {</span>
+<span class="nc" id="L32">    private val processors by lazy {</span>
+<span class="nc" id="L33">        listOf(</span>
+            // note that some orders matter - e.g. we need to process our custom blocks first as most other processors
             // will only handle standard template sections
-<span class="nc" id="L35">            apiGatewayDefinitionProcessor::process,</span>
+<span class="nc" id="L36">            apiGatewayDefinitionProcessor::process,</span>
+<span class="nc" id="L37">            matricesExpander::expand,</span>
             // from now on we should only have standard template sections
-<span class="nc" id="L37">            automaticLogGroupsProcessor::process,</span>
-<span class="nc" id="L38">            delegatingResourceProcessor::process,</span>
+<span class="nc" id="L39">            automaticLogGroupsProcessor::process,</span>
+<span class="nc" id="L40">            delegatingResourceProcessor::process,</span>
             // this needs to be last one ase we rely on our custom notations in other processors
-<span class="nc" id="L40">            fnToolkitProcessor::processTemplate</span>
+<span class="nc" id="L42">            fnToolkitProcessor::processTemplate</span>
         )
     }
 
-<span class="nc" id="L44">    private val apiGatewayDefinitionProcessor by lazy { ApiGatewayDefinition() }</span>
+<span class="nc" id="L46">    private val apiGatewayDefinitionProcessor by lazy { ApiGatewayDefinition() }</span>
 
-<span class="nc" id="L46">    private val automaticLogGroupsProcessor by lazy { AutomaticLogGroups() }</span>
+<span class="nc" id="L48">    private val matricesExpander by lazy { MatricesExpander() }</span>
 
-<span class="nc" id="L48">    private val delegatingResourceProcessor by lazy {</span>
-<span class="nc" id="L49">        DelegatingResourceProcessor(</span>
-<span class="nc" id="L50">            codeBuildSetupProcessor,</span>
-<span class="nc" id="L51">            dynamoDbAttributesDefinitionsProcessor,</span>
-<span class="nc" id="L52">            iamStatementsProcessor,</span>
-<span class="nc" id="L53">            kinesisStreamModeProcessor,</span>
-<span class="nc" id="L54">            secretStructureProcessor,</span>
-<span class="nc" id="L55">            connectContactFlowProcessor,</span>
-<span class="nc" id="L56">            pipelineDefinitionProcessor</span>
+<span class="nc" id="L50">    private val automaticLogGroupsProcessor by lazy { AutomaticLogGroups() }</span>
+
+<span class="nc" id="L52">    private val delegatingResourceProcessor by lazy {</span>
+<span class="nc" id="L53">        DelegatingResourceProcessor(</span>
+<span class="nc" id="L54">            codeBuildSetupProcessor,</span>
+<span class="nc" id="L55">            dynamoDbAttributesDefinitionsProcessor,</span>
+<span class="nc" id="L56">            iamStatementsProcessor,</span>
+<span class="nc" id="L57">            kinesisStreamModeProcessor,</span>
+<span class="nc" id="L58">            secretStructureProcessor,</span>
+<span class="nc" id="L59">            connectContactFlowProcessor,</span>
+<span class="nc" id="L60">            pipelineDefinitionProcessor</span>
         )
     }
 
-<span class="nc" id="L60">    private val fnToolkitProcessor by lazy { CallsExpander(FnToolkit()) }</span>
+<span class="nc" id="L64">    private val fnToolkitProcessor by lazy { CallsExpander(FnToolkit()) }</span>
 
-<span class="nc" id="L62">    private val codeBuildSetupProcessor by lazy { CodeBuildSetup() }</span>
+<span class="nc" id="L66">    private val codeBuildSetupProcessor by lazy { CodeBuildSetup() }</span>
 
-<span class="nc" id="L64">    private val dynamoDbAttributesDefinitionsProcessor by lazy { DynamoDbAttributesDefinitions() }</span>
+<span class="nc" id="L68">    private val dynamoDbAttributesDefinitionsProcessor by lazy { DynamoDbAttributesDefinitions() }</span>
 
-<span class="nc" id="L66">    private val iamStatementsProcessor by lazy { IamStatements() }</span>
+<span class="nc" id="L70">    private val iamStatementsProcessor by lazy { IamStatements() }</span>
 
-<span class="nc" id="L68">    private val kinesisStreamModeProcessor by lazy { KinesisStreamMode() }</span>
+<span class="nc" id="L72">    private val kinesisStreamModeProcessor by lazy { KinesisStreamMode() }</span>
 
-<span class="nc" id="L70">    private val secretStructureProcessor by lazy { SecretStructure() }</span>
+<span class="nc" id="L74">    private val secretStructureProcessor by lazy { SecretStructure() }</span>
 
-<span class="nc" id="L72">    private val connectContactFlowProcessor by lazy { ConnectContactFlow() }</span>
+<span class="nc" id="L76">    private val connectContactFlowProcessor by lazy { ConnectContactFlow() }</span>
 
-<span class="nc" id="L74">    private val pipelineDefinitionProcessor by lazy { PipelineDefinition() }</span>
+<span class="nc" id="L78">    private val pipelineDefinitionProcessor by lazy { PipelineDefinition() }</span>
 
-<span class="nc" id="L76">    private val objectMapper by lazy { ObjectMapperFactory.createObjectMapper() }</span>
+<span class="nc" id="L80">    private val objectMapper by lazy { ObjectMapperFactory.createObjectMapper() }</span>
 
-<span class="nc" id="L78">    private val handler by lazy { Handler(objectMapper, processors) }</span>
+<span class="nc" id="L82">    private val handler by lazy { Handler(objectMapper, processors) }</span>
 
-<span class="nc" id="L80">    override val lambdaApi by lazy { NativeLambdaApi(objectMapper) }</span>
+<span class="nc" id="L84">    override val lambdaApi by lazy { NativeLambdaApi(objectMapper) }</span>
 
-<span class="nc" id="L82">    override val lambdaCallback = handler::handle</span>
+<span class="nc" id="L86">    override val lambdaCallback = handler::handle</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

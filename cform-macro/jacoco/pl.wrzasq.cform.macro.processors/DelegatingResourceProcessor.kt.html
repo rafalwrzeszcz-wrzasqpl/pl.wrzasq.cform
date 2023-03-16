@@ -2,7 +2,7 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021, 2023 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package pl.wrzasq.cform.macro.processors
@@ -30,19 +30,22 @@ import pl.wrzasq.cform.macro.template.rebuildResource
      * Handles input template.
      *
      * @param input Current template state.
+     * @param params Template parameter values.
      * @return Processed template.
      */
-<span class="fc" id="L35">    fun process(input: Map&lt;String, Any&gt;) = input.mapSelected(SECTION_RESOURCES) { processResources(asMap(it)) }</span>
+<span class="fc" id="L36">    fun process(input: Map&lt;String, Any&gt;, params: Map&lt;String, Any&gt;) = input.mapSelected(SECTION_RESOURCES) {</span>
+<span class="fc" id="L37">        processResources(asMap(it))</span>
+<span class="fc" id="L38">    }</span>
 
     // all the changes should be in-place scoped to single resource
-<span class="fc" id="L38">    private fun processResources(input: Map&lt;String, Any&gt;) = input.mapValues {</span>
-<span class="fc" id="L39">        val entry = asDefinition(it.key, it.value)</span>
+<span class="fc" id="L41">    private fun processResources(input: Map&lt;String, Any&gt;) = input.mapValues {</span>
+<span class="fc" id="L42">        val entry = asDefinition(it.key, it.value)</span>
 
-<span class="fc bfc" id="L41" title="All 4 branches covered.">        typeHandles[entry.type]?.let { handler -&gt; rebuildResource(it.value, handler.handle(entry)) } ?: it.value</span>
-<span class="fc" id="L42">    }</span>
+<span class="fc bfc" id="L44" title="All 4 branches covered.">        typeHandles[entry.type]?.let { handler -&gt; rebuildResource(it.value, handler.handle(entry)) } ?: it.value</span>
+<span class="fc" id="L45">    }</span>
 
     private fun register(handler: ResourceHandler) {
-<span class="fc" id="L45">        handler.handledResourceTypes().forEach { typeHandles[it] = handler }</span>
-<span class="fc" id="L46">    }</span>
+<span class="fc" id="L48">        handler.handledResourceTypes().forEach { typeHandles[it] = handler }</span>
+<span class="fc" id="L49">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

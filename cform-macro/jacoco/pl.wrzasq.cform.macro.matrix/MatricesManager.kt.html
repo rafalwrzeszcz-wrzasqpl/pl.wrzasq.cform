@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MatricesManager.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CloudFormation macro processor.</a> &gt; <a href="index.source.html" class="el_package">pl.wrzasq.cform.macro.matrix</a> &gt; <span class="el_source">MatricesManager.kt</span></div><h1>MatricesManager.kt</h1><pre class="source lang-java linenums">/**
+ * This file is part of the pl.wrzasq.cform.
+ *
+ * @license http://mit-license.org/ The MIT license
+ * @copyright 2023 © by Rafał Wrzeszcz - Wrzasq.pl.
+ */
+
+package pl.wrzasq.cform.macro.matrix
+
+import pl.wrzasq.cform.macro.template.CALL_GET_ATT
+import pl.wrzasq.cform.macro.template.CALL_LENGTH
+import pl.wrzasq.cform.macro.template.CALL_REF
+import pl.wrzasq.cform.macro.template.CALL_SUB
+import pl.wrzasq.cform.macro.template.ExpansionHandler
+import pl.wrzasq.cform.macro.template.asMap
+import pl.wrzasq.cform.macro.template.asMapAlways
+
+private const val REF_PATTERN = &quot;Matrix:([^.}\\[]+)(?:\\[([^\\]]+)\\](\\.[^}]+)?)?&quot;
+<span class="fc" id="L19">private val REF_MATCH_FULL = Regex(&quot;^${REF_PATTERN}\$&quot;)</span>
+<span class="fc" id="L20">private val REF_MATCH_PATTERN = Regex(&quot;\\\$\\{${REF_PATTERN}}&quot;)</span>
+
+/**
+ * Registry to all matrices.
+ */
+<span class="fc" id="L25">class MatricesManager : ExpansionHandler {</span>
+<span class="fc" id="L26">    private val matrices: MutableMap&lt;String, Matrix&gt; = mutableMapOf()</span>
+
+    /**
+     * Builds new resources matrix.
+     *
+     * @param id Matrix resource identifier.
+     * @param template Template resource definition.
+     * @param matrix Matrix setup.
+     * @param params Template parameter values.
+     */
+    fun buildMatrix(id: String, template: Map&lt;String, Any&gt;, matrix: Map&lt;String, Any&gt;, params: Map&lt;String, Any&gt;) {
+<span class="fc" id="L37">        val map = asMapAlways(matrix[&quot;Entries&quot;])</span>
+        // sort to make predictable order of generated entries
+<span class="fc" id="L39">        val key = map.keys.sorted()</span>
+<span class="fc bfc" id="L40" title="All 4 branches covered.">        val idPattern = matrix[&quot;LogicalIdPattern&quot;]?.toString()</span>
+<span class="fc" id="L41">            ?: key.joinToString(prefix = id, separator = &quot;&quot;) { &quot;\${${it}}&quot; }</span>
+
+        /**
+         * Matrix:
+         *      Domain:
+         *          - &quot;wrzasq.pl&quot;
+         *          - &quot;ivms.online&quot;
+         *      Role:
+         *          Static: &quot;static&quot;
+         *          Web: &quot;www&quot;
+         *
+         * Will result in:
+         *
+         * Key = [&quot;Domain&quot;, &quot;Role&quot;]
+         * Entries keyed by: [&quot;1&quot;, &quot;Static&quot;], [&quot;1&quot;, &quot;Web&quot;], [&quot;2&quot;, &quot;Static&quot;], [&quot;2&quot;, &quot;Web&quot;]
+         * Entries being:
+         *  -   [{&quot;Domain&quot;: &quot;wrzasq.pl&quot;}, {&quot;Role&quot;: &quot;static&quot;}]
+         *  -   [{&quot;Domain&quot;: &quot;ivms.online&quot;}, {&quot;Role&quot;: &quot;static&quot;}]
+         *  -   [{&quot;Domain&quot;: &quot;wrzasq.pl&quot;}, {&quot;Role&quot;: &quot;web&quot;}]
+         *  -   [{&quot;Domain&quot;: &quot;ivms.online&quot;}, {&quot;Role&quot;: &quot;web&quot;}]
+         *
+         * Key doesn't need to contain field names, as it's ordered.
+         *
+         * Each matrix entry is list of matrix params keys and maps to value mapping.
+         */
+
+<span class="fc" id="L67">        val entries = key</span>
+            // we map from sorted key for consistent order
+<span class="fc" id="L69">            .map { it to map[it] }</span>
+            // initial seed of empty key mapped to empty matrix set
+<span class="fc" id="L71">            .fold(listOf(emptyList&lt;String&gt;() to emptyMap&lt;String, String&gt;())) { entries, (param, values) -&gt;</span>
+<span class="fc" id="L72">                val options = when (values) {</span>
+<span class="fc bfc" id="L73" title="All 2 branches covered.">                    is Map&lt;*, *&gt; -&gt; asMap(values)</span>
+<span class="fc bfc" id="L74" title="All 2 branches covered.">                    is List&lt;*&gt; -&gt; listToMap(values)</span>
+<span class="fc" id="L75">                    else -&gt; listToMap(params[values].toString().split(&quot;,&quot;))</span>
+                }
+
+<span class="fc" id="L78">                options.flatMap { (option, value) -&gt;</span>
+                    // option key goes to entry path
+                    // option value goes to substitution params
+<span class="fc" id="L81">                    entries.map { it.first + option to it.second + (param to value.toString()) }</span>
+                }
+            }
+
+<span class="fc" id="L85">        matrices[id] = Matrix(id, idPattern, template, key, entries.toMap())</span>
+<span class="fc" id="L86">    }</span>
+
+    /**
+     * Checks if there is any matrix expansion in current scope.
+     *
+     * @return State, whether there is any matrix definition.
+     */
+<span class="fc" id="L93">    fun isEmpty() = matrices.isEmpty()</span>
+
+    /**
+     * Generates list of all resources defined in current scope.
+     *
+     * @return List of resource models.
+     */
+<span class="fc" id="L100">    fun generateResources() = matrices.toSortedMap().flatMap { it.value.generateResources() }</span>
+
+<span class="fc bfc" id="L102" title="All 2 branches covered.">    override fun canHandle(function: String) = function == CALL_REF</span>
+<span class="fc bfc" id="L103" title="All 2 branches covered.">        || function == CALL_SUB</span>
+<span class="fc bfc" id="L104" title="All 2 branches covered.">        || function == CALL_GET_ATT</span>
+<span class="fc bfc" id="L105" title="All 2 branches covered.">        || function == CALL_LENGTH</span>
+
+    override fun expand(input: Pair&lt;String, Any&gt;): Map&lt;String, Any&gt; {
+<span class="fc" id="L108">        val params = input.second</span>
+
+        // call to anything else than Fn::Length needs to contain Matrix:$ID[$Selector]
+<span class="fc bfc" id="L111" title="All 2 branches covered.">        val value = if (input.first == CALL_LENGTH) {</span>
+            // for length, we return number of matrix elements - this is only case when we simply refer to Matrix:$ID
+<span class="fc bfc" id="L113" title="All 4 branches covered.">            REF_MATCH_FULL.find(input.second.toString())?.let { match -&gt;</span>
+<span class="fc" id="L114">                val matrixId = match.groupValues[1]</span>
+<span class="pc bpc" id="L115" title="1 of 2 branches missed.">                val matrix = checkNotNull(matrices[matrixId]) { &quot;Checking length of unknown matrix `$matrixId`&quot; }</span>
+<span class="fc bfc" id="L116" title="All 2 branches covered.">                List(matrix.length) { it }</span>
+<span class="fc" id="L117">            } ?: input.second</span>
+<span class="fc bfc" id="L118" title="All 4 branches covered.">        } else if (params is List&lt;*&gt; &amp;&amp; params[0] is String) {</span>
+<span class="fc" id="L119">            listOf(</span>
+<span class="fc" id="L120">                expand(params[0].toString()),</span>
+<span class="fc" id="L121">                params[1]</span>
+            )
+<span class="fc bfc" id="L123" title="All 2 branches covered.">        } else if (params is String) {</span>
+<span class="fc" id="L124">            expand(params)</span>
+        } else {
+<span class="fc" id="L126">            params</span>
+        }
+
+<span class="fc" id="L129">        return mapOf(input.first to value)</span>
+    }
+
+<span class="fc" id="L132">    private fun expand(input: String) = when {</span>
+<span class="fc bfc" id="L133" title="All 2 branches covered.">        REF_MATCH_FULL.matches(input) -&gt; REF_MATCH_FULL.replace(input) { resolve(it.groupValues) }</span>
+<span class="fc bfc" id="L134" title="All 2 branches covered.">        REF_MATCH_PATTERN.containsMatchIn(input) -&gt; REF_MATCH_PATTERN.replace(input) {</span>
+<span class="fc" id="L135">            &quot;\${${resolve(it.groupValues)}}&quot;</span>
+        }
+<span class="fc" id="L137">        else -&gt; input</span>
+<span class="fc" id="L138">    }</span>
+
+<span class="pc bpc" id="L140" title="3 of 6 branches missed.">    private fun resolve(match: List&lt;String?&gt;) = &quot;${resolve(match[1] ?: &quot;&quot;, match[2] ?: &quot;&quot;)}${match[3] ?: &quot;&quot;}&quot;</span>
+
+    private fun resolve(matrixId: String, selector: String): String {
+<span class="fc bfc" id="L143" title="All 2 branches covered.">        val matrix = checkNotNull(matrices[matrixId]) { &quot;Reference to unknown matrix `$matrixId`&quot; }</span>
+<span class="fc" id="L144">        val parts = selector.split(&quot;,&quot;)</span>
+<span class="fc" id="L145">            .map { it.split(&quot;=&quot;) }</span>
+<span class="fc" id="L146">            .associate { it[0] to it[1] }</span>
+
+<span class="fc" id="L148">        return matrix.resolve(parts)</span>
+    }
+}
+
+<span class="fc" id="L152">private fun listToMap(options: List&lt;*&gt;) = options</span>
+<span class="fc" id="L153">    .mapIndexed { index, value -&gt; index.toString() to value.toString() }</span>
+<span class="fc" id="L154">    .toMap()</span>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

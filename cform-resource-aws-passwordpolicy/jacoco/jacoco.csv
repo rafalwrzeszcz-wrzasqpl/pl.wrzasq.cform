@@ -6,8 +6,8 @@ WrzasqPl::AWS::PasswordPolicy resource,pl.wrzasq.cform.resource.aws.passwordpoli
 WrzasqPl::AWS::PasswordPolicy resource,pl.wrzasq.cform.resource.aws.passwordpolicy.action,ReadHandler,0,120,0,2,0,21,0,5,0,4
 WrzasqPl::AWS::PasswordPolicy resource,pl.wrzasq.cform.resource.aws.passwordpolicy.action,DeleteHandler,0,144,0,2,0,27,0,6,0,5
 WrzasqPl::AWS::PasswordPolicy resource,pl.wrzasq.cform.resource.aws.passwordpolicy.config,LambdaResourcesFactory.deleteHandler.new Function0() {...},7,0,0,0,1,0,1,0,1,0
-WrzasqPl::AWS::PasswordPolicy resource,pl.wrzasq.cform.resource.aws.passwordpolicy.config,LambdaResourcesFactory.createHandler.new Function0() {...},11,0,0,0,1,0,1,0,1,0
 WrzasqPl::AWS::PasswordPolicy resource,pl.wrzasq.cform.resource.aws.passwordpolicy.config,LambdaResourcesFactory.getRequestTypeReference.new TypeReference() {...},3,0,0,0,1,0,1,0,1,0
+WrzasqPl::AWS::PasswordPolicy resource,pl.wrzasq.cform.resource.aws.passwordpolicy.config,LambdaResourcesFactory.createHandler.new Function0() {...},11,0,0,0,1,0,1,0,1,0
 WrzasqPl::AWS::PasswordPolicy resource,pl.wrzasq.cform.resource.aws.passwordpolicy.config,LambdaResourcesFactory.readHandler.new Function0() {...},7,0,0,0,1,0,1,0,1,0
 WrzasqPl::AWS::PasswordPolicy resource,pl.wrzasq.cform.resource.aws.passwordpolicy.config,LambdaResourcesFactory,118,0,0,0,17,0,10,0,10,0
 WrzasqPl::AWS::PasswordPolicy resource,pl.wrzasq.cform.resource.aws.passwordpolicy.config,LambdaResourcesFactory.getResourceTypeReference.new TypeReference() {...},3,0,0,0,1,0,1,0,1,0

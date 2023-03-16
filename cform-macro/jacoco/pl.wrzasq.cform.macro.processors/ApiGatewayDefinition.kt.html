@@ -2,7 +2,7 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021, 2023 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package pl.wrzasq.cform.macro.processors
@@ -24,27 +24,29 @@ import pl.wrzasq.cform.macro.template.popProperty
      * Handles input template.
      *
      * @param input Current template state.
+     * @param params Template parameter values.
      * @return Processed template.
      */
-    fun process(input: Map&lt;String, Any&gt;): Map&lt;String, Any&gt; {
-<span class="fc" id="L30">        val manager = ApiGatewayManager()</span>
-<span class="fc" id="L31">        val rest = input.popProperty(&quot;RestApis&quot;, {</span>
-<span class="fc bfc" id="L32" title="All 2 branches covered.">            for ((id, api) in asMap(it)) {</span>
-<span class="fc" id="L33">                manager.buildApi(id, asMap(api))</span>
+    fun process(input: Map&lt;String, Any&gt;, params: Map&lt;String, Any&gt;): Map&lt;String, Any&gt; {
+<span class="fc" id="L31">        val manager = ApiGatewayManager()</span>
+<span class="fc" id="L32">        val rest = input.popProperty(&quot;RestApis&quot;, {</span>
+<span class="fc bfc" id="L33" title="All 2 branches covered.">            for ((id, api) in asMap(it)) {</span>
+<span class="fc" id="L34">                manager.buildApi(id, asMap(api))</span>
             }
-<span class="fc" id="L35">        })</span>
+<span class="fc" id="L36">        })</span>
 
         // avoid unnecessary work and resources
-<span class="fc bfc" id="L38" title="All 2 branches covered.">        return if (manager.isEmpty()) {</span>
-<span class="fc" id="L39">            input</span>
+<span class="fc bfc" id="L39" title="All 2 branches covered.">        return if (manager.isEmpty()) {</span>
+<span class="fc" id="L40">            input</span>
         } else {
-<span class="fc" id="L41">            val callsExpander = CallsExpander(manager)</span>
+<span class="fc" id="L42">            val callsExpander = CallsExpander(manager)</span>
 
-            // take rest of the template and append all of the generated API resources
-<span class="fc" id="L44">            callsExpander.processTemplate(</span>
-<span class="fc" id="L45">                rest.mapSelected(SECTION_RESOURCES) {</span>
-<span class="fc" id="L46">                    asMap(it) + manager.generateResources().map(ResourceDefinition::build)</span>
-                }
+            // take rest of the template and append all the generated API resources
+<span class="fc" id="L45">            callsExpander.processTemplate(</span>
+<span class="fc" id="L46">                rest.mapSelected(SECTION_RESOURCES) {</span>
+<span class="fc" id="L47">                    asMap(it) + manager.generateResources().map(ResourceDefinition::build)</span>
+                },
+<span class="fc" id="L49">                params</span>
             )
         }
     }

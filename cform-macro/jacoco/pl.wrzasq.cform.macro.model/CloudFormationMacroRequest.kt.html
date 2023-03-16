@@ -2,7 +2,7 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021, 2023 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package pl.wrzasq.cform.macro.model
@@ -14,11 +14,14 @@ import com.fasterxml.jackson.annotation.JsonProperty
  *
  * @property requestId Request ID.
  * @property fragment Template fragment.
+ * @property templateParameterValues Parameter values in current execution.
  */
-<span class="fc" id="L18">data class CloudFormationMacroRequest(</span>
-<span class="fc" id="L19">    @JsonProperty(&quot;requestId&quot;)</span>
-<span class="fc" id="L20">    val requestId: String,</span>
-<span class="fc" id="L21">    @JsonProperty(&quot;fragment&quot;)</span>
-<span class="fc" id="L22">    val fragment: Map&lt;String, Any&gt;</span>
+<span class="fc" id="L19">data class CloudFormationMacroRequest(</span>
+<span class="fc" id="L20">    @JsonProperty(&quot;requestId&quot;)</span>
+<span class="fc" id="L21">    val requestId: String,</span>
+<span class="fc" id="L22">    @JsonProperty(&quot;fragment&quot;)</span>
+<span class="fc" id="L23">    val fragment: Map&lt;String, Any&gt;,</span>
+<span class="fc" id="L24">    @JsonProperty(&quot;templateParameterValues&quot;)</span>
+<span class="fc" id="L25">    val templateParameterValues: Map&lt;String, Any&gt;</span>
 )
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

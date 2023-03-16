@@ -2,7 +2,7 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021, 2023 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package pl.wrzasq.cform.macro
@@ -15,7 +15,7 @@ import pl.wrzasq.cform.macro.model.CloudFormationMacroResponse
 import java.io.InputStream
 import java.io.OutputStream
 
-typealias TemplateProcessor = (Map&lt;String, Any&gt;) -&gt; Map&lt;String, Any&gt;
+typealias TemplateProcessor = (Map&lt;String, Any&gt;, Map&lt;String, Any&gt;) -&gt; Map&lt;String, Any&gt;
 
 /**
  * API key retrieval entry point.
@@ -44,9 +44,11 @@ typealias TemplateProcessor = (Map&lt;String, Any&gt;) -&gt; Map&lt;String, Any&
 <span class="fc" id="L44">            outputStream,</span>
 <span class="fc" id="L45">            CloudFormationMacroResponse(</span>
 <span class="fc" id="L46">                requestId = request.requestId,</span>
-<span class="fc" id="L47">                fragment =  templateProcessors.fold(request.fragment) { state, fn -&gt; fn(state) }</span>
+<span class="fc" id="L47">                fragment =  templateProcessors.fold(request.fragment) { state, fn -&gt;</span>
+<span class="fc" id="L48">                    fn(state, request.templateParameterValues)</span>
+                }
             )
         )
-<span class="fc" id="L50">    }</span>
+<span class="fc" id="L52">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

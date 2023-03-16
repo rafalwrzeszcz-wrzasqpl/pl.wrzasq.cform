@@ -2,7 +2,7 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021, 2023 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package pl.wrzasq.cform.macro.processors
@@ -31,33 +31,36 @@ import pl.wrzasq.cform.macro.template.popProperty
      * Handles input template.
      *
      * @param input Current template state.
+     * @param params Template parameter values.
      * @return Processed template.
      */
-<span class="fc" id="L36">    fun process(input: Map&lt;String, Any&gt;) = input.mapSelected(SECTION_RESOURCES) { processResources(asMap(it)) }</span>
+<span class="fc" id="L37">    fun process(input: Map&lt;String, Any&gt;, params: Map&lt;String, Any&gt;) = input.mapSelected(SECTION_RESOURCES) {</span>
+<span class="fc" id="L38">        processResources(asMap(it))</span>
+<span class="fc" id="L39">    }</span>
 
     private fun processResources(input: Map&lt;String, Any&gt;): Map&lt;String, Any&gt; {
         // we keep old resources anyway, will just add more to it
-<span class="fc" id="L40">        val resources = mutableMapOf&lt;String, Any&gt;()</span>
+<span class="fc" id="L43">        val resources = mutableMapOf&lt;String, Any&gt;()</span>
 
-<span class="fc bfc" id="L42" title="All 2 branches covered.">        for ((id, resource) in input) {</span>
-<span class="fc" id="L43">            val entry = asDefinition(id, resource)</span>
-<span class="fc" id="L44">            val handler = logGroupsHandlers[entry.type]</span>
+<span class="fc bfc" id="L45" title="All 2 branches covered.">        for ((id, resource) in input) {</span>
+<span class="fc" id="L46">            val entry = asDefinition(id, resource)</span>
+<span class="fc" id="L47">            val handler = logGroupsHandlers[entry.type]</span>
 
             // check if resource type is handled
-<span class="pc bpc" id="L47" title="1 of 4 branches missed.">            if (handler != null &amp;&amp; entry.properties.containsKey(handler.propertyName)) {</span>
+<span class="pc bpc" id="L50" title="1 of 4 branches missed.">            if (handler != null &amp;&amp; entry.properties.containsKey(handler.propertyName)) {</span>
                 // create copy of old resource but drop the non-standard property
-<span class="fc" id="L49">                resources[id] = entry.popProperty(handler.propertyName, {</span>
-<span class="fc" id="L50">                    resources += handler.buildLogGroup(id, it).build()</span>
-<span class="fc" id="L51">                })</span>
-<span class="fc" id="L52">                    .build()</span>
-<span class="fc" id="L53">                    .second</span>
+<span class="fc" id="L52">                resources[id] = entry.popProperty(handler.propertyName, {</span>
+<span class="fc" id="L53">                    resources += handler.buildLogGroup(id, it).build()</span>
+<span class="fc" id="L54">                })</span>
+<span class="fc" id="L55">                    .build()</span>
+<span class="fc" id="L56">                    .second</span>
             } else {
                 // just keep original resource
-<span class="fc" id="L56">                resources[id] = resource</span>
+<span class="fc" id="L59">                resources[id] = resource</span>
             }
         }
 
-<span class="fc" id="L60">        return resources</span>
+<span class="fc" id="L63">        return resources</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
