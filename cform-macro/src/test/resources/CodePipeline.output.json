@@ -65,6 +65,7 @@
                                             "Version": "1"
                                         },
                                         "Configuration": {
+                                            "PollForSourceChanges": false,
                                             "S3Bucket": {
                                                 "Ref": "SourceBucket"
                                             },

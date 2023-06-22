@@ -31,5 +31,6 @@ class S3Source(
     override fun buildConfiguration(configuration: MutableMap<String, Any>) {
         configuration["S3Bucket"] = bucket
         configuration["S3ObjectKey"] = objectKey
+        configuration["PollForSourceChanges"] = false
     }
 }
