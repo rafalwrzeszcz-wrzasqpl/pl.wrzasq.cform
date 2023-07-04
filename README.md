@@ -2,7 +2,7 @@
 # This file is part of the pl.wrzasq.cform.
 #
 # @license http://mit-license.org/ The MIT license
-# @copyright 2020 - 2022 © by Rafał Wrzeszcz - Wrzasq.pl.
+# @copyright 2020 - 2032 © by Rafał Wrzeszcz - Wrzasq.pl.
 -->
 
 # WrzasqPl-CForm
@@ -30,10 +30,6 @@ DynamoDB items management.
 ### [WrzasqPl::AWS::EdgeDeploy](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.cform/cform-resource-aws-edgedeploy/)
 
 Lambda@Edge deployment with configuration rewrite and proper region.
-
-### [WrzasqPl::AWS::Organization](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.cform/cform-resource-aws-organization/)
-
-Manage AWS Organizations setup.
 
 ### [WrzasqPl::AWS::PasswordPolicy](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.cform/cform-resource-aws-passwordpolicy/)
 

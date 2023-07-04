@@ -3,7 +3,7 @@
 # This file is part of the pl.wrzasq.cform.
 #
 # @license http://mit-license.org/ The MIT license
-# @copyright 2020 - 2022 © by Rafał Wrzeszcz - Wrzasq.pl.
+# @copyright 2020 - 2023 © by Rafał Wrzeszcz - Wrzasq.pl.
 -->
 <project
     xmlns="http://maven.apache.org/POM/4.0.0"
@@ -125,7 +125,6 @@
         <module>cform-macro</module>
         <module>cform-resource-aws-dynamodbitem</module>
         <module>cform-resource-aws-edgedeploy</module>
-        <module>cform-resource-aws-organization</module>
         <module>cform-resource-aws-passwordpolicy</module>
     </modules>
 </project>
