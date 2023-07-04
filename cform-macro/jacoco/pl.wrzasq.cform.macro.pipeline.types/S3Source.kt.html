@@ -31,6 +31,7 @@ package pl.wrzasq.cform.macro.pipeline.types
     override fun buildConfiguration(configuration: MutableMap&lt;String, Any&gt;) {
 <span class="fc" id="L32">        configuration[&quot;S3Bucket&quot;] = bucket</span>
 <span class="fc" id="L33">        configuration[&quot;S3ObjectKey&quot;] = objectKey</span>
-<span class="fc" id="L34">    }</span>
+<span class="fc" id="L34">        configuration[&quot;PollForSourceChanges&quot;] = false</span>
+<span class="fc" id="L35">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
