@@ -121,7 +121,6 @@
         <module>cform-cloudfront-invalidation</module>
         <module>cform-commons</module>
         <module>cform-data-cognito-client</module>
-        <module>cform-data-cognito-domain</module>
         <module>cform-macro</module>
         <module>cform-resource-aws-dynamodbitem</module>
         <module>cform-resource-aws-edgedeploy</module>

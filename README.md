@@ -41,10 +41,6 @@ Sets up password policy for AWS account.
 
 Reads Cognito user pool client information.
 
-### [WrzasqPl::Cognito::DomainData](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.cform/cform-data-cognito-domain/)
-
-Reads Cognito custom domain information.
-
 ## Additional resources
 
 ### [CloudFormation macro](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.cform/cform-macro/)
