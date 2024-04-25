@@ -2,7 +2,7 @@
 # This file is part of the pl.wrzasq.cform.
 #
 # @license http://mit-license.org/ The MIT license
-# @copyright 2021 - 2023 © by Rafał Wrzeszcz - Wrzasq.pl.
+# @copyright 2021 - 2024 © by Rafał Wrzeszcz - Wrzasq.pl.
 ##
 
 on:
@@ -89,7 +89,6 @@ jobs:
                 run: |
                     zip -j cform-data-cognito-client/target/wrzasqpl-cognito-clientdata.zip cform-data-cognito-client/.rpdk-config cform-data-cognito-client/src/main/resources/schema.json cform-data-cognito-client/target/cform-data-cognito-client*.zip
                     zip -j cform-resource-aws-dynamodbitem/target/wrzasqpl-aws-dynamodbitem.zip cform-resource-aws-dynamodbitem/.rpdk-config cform-resource-aws-dynamodbitem/src/main/resources/schema.json cform-resource-aws-dynamodbitem/target/cform-resource-aws-dynamodbitem*.zip
-                    zip -j cform-resource-aws-edgedeploy/target/wrzasqpl-aws-edgedeploy.zip cform-resource-aws-edgedeploy/.rpdk-config cform-resource-aws-edgedeploy/src/main/resources/schema.json cform-resource-aws-edgedeploy/target/cform-resource-aws-edgedeploy*.zip
                     zip -j cform-resource-aws-passwordpolicy/target/wrzasqpl-aws-passwordpolicy.zip cform-resource-aws-passwordpolicy/.rpdk-config cform-resource-aws-passwordpolicy/src/main/resources/schema.json cform-resource-aws-passwordpolicy/target/cform-resource-aws-passwordpolicy*.zip
             # deploy site as GitHub Pages - we previously had it integrated with Maven build in `site-deploy` phase
             # but net.trajano.wagon:wagon-git has a lot of problems with handling newer SSH connection protocols
