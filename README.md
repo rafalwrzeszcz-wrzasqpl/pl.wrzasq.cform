@@ -23,10 +23,6 @@ this source code.
 
 ## Resource handlers
 
-### [WrzasqPl::AWS::DynamoDbItem](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.cform/cform-resource-aws-dynamodbitem/)
-
-DynamoDB items management.
-
 ### [WrzasqPl::AWS::PasswordPolicy](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.cform/cform-resource-aws-passwordpolicy/)
 
 Sets up password policy for AWS account.

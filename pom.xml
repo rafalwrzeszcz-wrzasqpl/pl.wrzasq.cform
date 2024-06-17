@@ -122,7 +122,6 @@
         <module>cform-commons</module>
         <module>cform-data-cognito-client</module>
         <module>cform-macro</module>
-        <module>cform-resource-aws-dynamodbitem</module>
         <module>cform-resource-aws-passwordpolicy</module>
     </modules>
 </project>
