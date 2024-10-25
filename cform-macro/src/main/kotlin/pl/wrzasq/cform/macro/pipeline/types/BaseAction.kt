@@ -2,7 +2,7 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021 - 2022 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021 - 2022, 2024 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package pl.wrzasq.cform.macro.pipeline.types
@@ -21,6 +21,7 @@ private const val OPTION_INPUTARTIFACTS = "InputArtifacts"
 private const val OPTION_OUTPUTARTIFACTS = "OutputArtifacts"
 
 private const val PROPERTY_CONFIGURATION = "Configuration"
+private const val PROPERTY_COMMANDS = "Commands"
 private const val PROPERTY_NAMESPACE = "Namespace"
 private const val PROPERTY_RUNORDER = "RunOrder"
 
@@ -55,6 +56,15 @@ abstract class BaseAction(
         properties[PROPERTY_CONFIGURATION]?.let {
             properties[PROPERTY_CONFIGURATION] = asMap(it).mapValuesOnly { value ->
                 processReference(value, manager)
+            }
+        }
+        properties[PROPERTY_COMMANDS]?.let {
+            properties[PROPERTY_COMMANDS] = if (it is List<*>) {
+                it.filterNotNull().map { value ->
+                    processReference(value, manager)
+                }
+            } else {
+                it
             }
         }
     }

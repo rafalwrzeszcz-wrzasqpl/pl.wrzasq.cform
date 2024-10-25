@@ -118,7 +118,6 @@
 
     <!-- components of WrzasqPl-CForm project -->
     <modules>
-        <module>cform-cloudfront-invalidation</module>
         <module>cform-commons</module>
         <module>cform-data-cognito-client</module>
         <module>cform-macro</module>

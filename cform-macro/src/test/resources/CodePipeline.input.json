@@ -116,6 +116,15 @@
                                     ]
                                 },
                                 "Namespace": "assets"
+                            },
+                            "CacheInvalidation": {
+                                "ActionTypeId": {
+                                    "Category": "Compute",
+                                    "Provider": "Commands"
+                                },
+                                "Commands": [
+                                    "aws cloudfront create-invalidation --distribution-id \"#{Deploy:Assets.DistributionId}\""
+                                ]
                             }
                         }
                     },

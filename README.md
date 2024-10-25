@@ -39,10 +39,6 @@ Reads Cognito user pool client information.
 
 Template processing macro.
 
-### [CloudFront cache invalidation](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.cform/cform-cloudfront-invalidation/)
-
-**CloudFront** cache invalidation Lambda (useful in **CodePipeline** actions).
-
 # Resources
 
 -   [GitHub page with API documentation](https://rafalwrzeszcz-wrzasqpl.github.io/pl.wrzasq.cform)

@@ -128,6 +128,19 @@
                                 "Namespace": "deploy-build"
                             },
                             {
+                                "Name": "CacheInvalidation",
+                                "ActionTypeId": {
+                                    "Owner": "AWS",
+                                    "Category": "Compute",
+                                    "Provider": "Commands",
+                                    "Version": "1"
+                                },
+                                "Commands": [
+                                    "aws cloudfront create-invalidation --distribution-id \"#{assets.DistributionId}\""
+                                ],
+                                "RunOrder": 2
+                            },
+                            {
                                 "Name": "Db",
                                 "ActionTypeId": {
                                     "Owner": "AWS",
