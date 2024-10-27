@@ -3,7 +3,7 @@
 # This file is part of the pl.wrzasq.cform.
 #
 # @license http://mit-license.org/ The MIT license
-# @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+# @copyright 2021, 2024 © by Rafał Wrzeszcz - Wrzasq.pl.
 -->
 <settings
     xmlns="http://maven.apache.org/SETTINGS/1.0.0"
@@ -17,13 +17,4 @@
             <password>${env.OSSRH_PASSWORD}</password>
         </server>
     </servers>
-
-    <profiles>
-        <profile>
-            <id>deploy</id>
-            <properties>
-                <gpg.passphrase>${env.GPG_PASSPHRASE}</gpg.passphrase>
-            </properties>
-        </profile>
-    </profiles>
 </settings>

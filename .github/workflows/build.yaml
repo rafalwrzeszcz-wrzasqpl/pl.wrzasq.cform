@@ -18,26 +18,27 @@ on:
 jobs:
     build:
         if: "!contains(github.event.head_commit.message, '[skip ci]') || (github.event_name == 'schedule')"
-        runs-on: "ubuntu-22.04"
+        runs-on: "ubuntu-24.04"
         steps:
             -
                 uses: "actions/checkout@v4.2.2"
             -
-                uses: "ayltai/setup-graalvm@v1"
+                uses: "graalvm/setup-graalvm@v1.2.4.1"
                 with:
-                    java-version: "11"
-                    graalvm-version: "21.1.0"
+                    java-version: "17.0.9"
+                    distribution: "graalvm"
+                    github-token: "${{ secrets.GITHUB_TOKEN }}"
             -
                 uses: "actions/cache@v4.1.2"
                 with:
                     path: "~/.m2/repository/"
-                    key: "${{ runner.os }}-m2-11"
+                    key: "${{ runner.os }}-m2-17"
             -
                 run: "mvn -B -e verify site"
 
     release:
         if: "(github.event_name == 'push') && (github.event.ref == 'refs/heads/master')"
-        runs-on: "ubuntu-22.04"
+        runs-on: "ubuntu-24.04"
         needs: "build"
         steps:
             # workspace preparation
@@ -46,11 +47,11 @@ jobs:
             -
                 uses: "ayltai/setup-graalvm@v1"
                 with:
-                    java-version: "11"
-                    graalvm-version: "21.1.0"
+                    java-version: "17"
+                    graalvm-version: "23.0.2"
                     native-image: true
             -
-                uses: "crazy-max/ghaction-import-gpg@v3.1.0"
+                uses: "crazy-max/ghaction-import-gpg@v6.2.0"
                 with:
                     gpg-private-key: "${{ secrets.GPG_PRIVATE_KEY }}"
                     passphrase: "${{ secrets.GPG_PASSPHRASE }}"
@@ -58,7 +59,7 @@ jobs:
                 uses: "actions/cache@v4.1.2"
                 with:
                     path: "~/.m2/repository/"
-                    key: "${{ runner.os }}-m2-11"
+                    key: "${{ runner.os }}-m2-17"
             # Git setup
             -
                 run: |
@@ -82,7 +83,7 @@ jobs:
                     GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
                     OSSRH_USERNAME: "${{ secrets.OSSRH_USERNAME }}"
                     OSSRH_PASSWORD: "${{ secrets.OSSRH_PASSWORD }}"
-                    GPG_PASSPHRASE: "${{ secrets.GPG_PASSPHRASE }}"
+                    MAVEN_GPG_PASSPHRASE: "${{ secrets.GPG_PASSPHRASE }}"
             # we tried using papeloto/action-zip but it's important to build particular structure and keep executable
             # flags so we need to operate on the shell level - we need to build two-level nesting of .zip packages
             -
@@ -98,7 +99,7 @@ jobs:
                         cp -r $site target/site/$(echo $site | cut -d / -f 1);
                     done
             -
-                uses: "peaceiris/actions-gh-pages@v3.7.3"
+                uses: "peaceiris/actions-gh-pages@v4.0.0"
                 with:
                     github_token: "${{ secrets.GITHUB_TOKEN }}"
                     publish_dir: "./target/site/"
@@ -110,7 +111,7 @@ jobs:
                     git add -u
                     git commit -m "[skip ci] New version bump."
             -
-                uses: "ad-m/github-push-action@v0.6.0"
+                uses: "ad-m/github-push-action@v0.8.0"
                 with:
                     github_token: "${{ secrets.GITHUB_TOKEN }}"
                     branch: "${{ github.ref }}"
@@ -118,7 +119,7 @@ jobs:
                 id: "tag"
                 run: "echo ref=$(git describe --abbrev=0) >> $GITHUB_OUTPUT"
             -
-                uses: "ncipollo/release-action@v1.8.6"
+                uses: "ncipollo/release-action@v1.14.0"
                 with:
                     tag: "${{ steps.tag.outputs.ref }}"
                     body: "${{ github.event.head_commit.message }}"
