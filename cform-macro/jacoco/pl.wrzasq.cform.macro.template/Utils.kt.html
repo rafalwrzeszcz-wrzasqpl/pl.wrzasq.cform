@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Utils.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CloudFormation macro processor.</a> &gt; <a href="index.source.html" class="el_package">pl.wrzasq.cform.macro.template</a> &gt; <span class="el_source">Utils.kt</span></div><h1>Utils.kt</h1><pre class="source lang-java linenums">/**
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Utils.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CloudFormation macro processor.</a> &gt; <a href="index.source.html" class="el_package">pl.wrzasq.cform.macro.template</a> &gt; <span class="el_source">Utils.kt</span></div><h1>Utils.kt</h1><pre class="source lang-java linenums">/**
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021, 2024 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package pl.wrzasq.cform.macro.template
@@ -73,7 +73,7 @@ fun asMap(input: Any): Map&lt;String, Any&gt; {
  * @param input Input object.
  * @return Typed map.
  */
-<span class="fc bfc" id="L76" title="All 4 branches covered.">fun asMapAlways(input: Any?) = input?.let(::asMap) ?: emptyMap()</span>
+<span class="pc bpc" id="L76" title="1 of 4 branches missed.">fun asMapAlways(input: Any?) = input?.let(::asMap) ?: emptyMap()</span>
 
 /**
  * Handles optional property by removing it from generic properties pool.
@@ -86,7 +86,7 @@ fun asMap(input: Any): Map&lt;String, Any&gt; {
 <span class="fc" id="L86">fun Map&lt;String, Any&gt;.popProperty(key: String, then: (Any) -&gt; Unit, defaultValue: Any? = null): Map&lt;String, Any&gt; {</span>
 <span class="fc bfc" id="L87" title="All 2 branches covered.">    if (containsKey(key)) {</span>
 <span class="pc bpc" id="L88" title="1 of 2 branches missed.">        this[key]?.let(then)</span>
-<span class="fc bfc" id="L89" title="All 4 branches covered.">        return filterKeys { it != key }</span>
+<span class="fc bfc" id="L89" title="All 2 branches covered.">        return filterKeys { it != key }</span>
 <span class="fc bfc" id="L90" title="All 2 branches covered.">    } else if (defaultValue != null) {</span>
 <span class="fc" id="L91">        then(defaultValue)</span>
     }
@@ -100,7 +100,7 @@ fun asMap(input: Any): Map&lt;String, Any&gt; {
  * @return Mapped structure.
  */
 <span class="fc" id="L102">fun Map&lt;String, Any&gt;.mapSelected(vararg handlers: Pair&lt;String, (Any) -&gt; Any&gt;) = mapValues {</span>
-<span class="fc bfc" id="L103" title="All 4 branches covered.">    mapOf(*handlers)[it.key]?.invoke(it.value) ?: it.value</span>
+<span class="pc bpc" id="L103" title="1 of 4 branches missed.">    mapOf(*handlers)[it.key]?.invoke(it.value) ?: it.value</span>
 <span class="fc" id="L104">}</span>
 
 /**
@@ -129,7 +129,7 @@ fun asMap(input: Any): Map&lt;String, Any&gt; {
  */
 fun rebuildResource(
     input: Any,
-    properties: Map&lt;String, Any&gt;
+    properties: Map&lt;String, Any&gt;,
 <span class="fc" id="L133">) = asMap(input) + mapOf(PROPERTY_KEY_PROPERTIES to properties)</span>
 
 /**
@@ -167,10 +167,10 @@ fun asDefinition(id: String, input: Any): ResourceDefinition {
         // dummy fallback, should never be needed
 <span class="pc bpc" id="L168" title="1 of 4 branches missed.">        type = data[PROPERTY_KEY_TYPE]?.toString() ?: &quot;&quot;,</span>
 <span class="fc bfc" id="L169" title="All 2 branches covered.">        condition = data[PROPERTY_KEY_CONDITION]?.toString(),</span>
-<span class="fc bfc" id="L170" title="All 4 branches covered.">        dependsOn = data[PROPERTY_KEY_DEPENDSON]?.let {</span>
+<span class="pc bpc" id="L170" title="1 of 4 branches missed.">        dependsOn = data[PROPERTY_KEY_DEPENDSON]?.let {</span>
 <span class="fc bfc" id="L171" title="All 2 branches covered.">            if (it is List&lt;*&gt;) it.filterNotNull().map(Any::toString) else emptyList()</span>
 <span class="fc" id="L172">        } ?: emptyList(),</span>
-<span class="fc bfc" id="L173" title="All 4 branches covered.">        properties = data[PROPERTY_KEY_PROPERTIES]?.let(::asMap) ?: emptyMap()</span>
+<span class="pc bpc" id="L173" title="1 of 4 branches missed.">        properties = data[PROPERTY_KEY_PROPERTIES]?.let(::asMap) ?: emptyMap(),</span>
     )
 }
 
@@ -190,6 +190,6 @@ fun asDefinition(id: String, input: Any): ResourceDefinition {
  * @return Map without consumed key.
  */
 <span class="fc" id="L192">fun ResourceDefinition.popProperty(key: String, then: (Any) -&gt; Unit, defaultValue: Any? = null) = copy(</span>
-<span class="fc" id="L193">    properties = properties.popProperty(key, then, defaultValue)</span>
+<span class="fc" id="L193">    properties = properties.popProperty(key, then, defaultValue),</span>
 <span class="fc" id="L194">)</span>
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

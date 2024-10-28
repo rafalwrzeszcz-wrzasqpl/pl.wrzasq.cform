@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CodeBuildSetup.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CloudFormation macro processor.</a> &gt; <a href="index.source.html" class="el_package">pl.wrzasq.cform.macro.processors.types</a> &gt; <span class="el_source">CodeBuildSetup.kt</span></div><h1>CodeBuildSetup.kt</h1><pre class="source lang-java linenums">/**
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CodeBuildSetup.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CloudFormation macro processor.</a> &gt; <a href="index.source.html" class="el_package">pl.wrzasq.cform.macro.processors.types</a> &gt; <span class="el_source">CodeBuildSetup.kt</span></div><h1>CodeBuildSetup.kt</h1><pre class="source lang-java linenums">/**
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021, 2024 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package pl.wrzasq.cform.macro.processors.types
@@ -11,7 +11,7 @@ import pl.wrzasq.cform.macro.model.ResourceDefinition
 import pl.wrzasq.cform.macro.template.asMap
 import pl.wrzasq.cform.macro.template.mapSelected
 
-<span class="fc" id="L14">private val fallback = mapOf(</span>
+<span class="fc" id="L14">private val FALLBACK = mapOf(</span>
 <span class="fc" id="L15">    &quot;Artifacts&quot; to mapOf(&quot;Type&quot; to &quot;CODEPIPELINE&quot;),</span>
 <span class="fc" id="L16">    &quot;Source&quot; to mapOf(&quot;Type&quot; to &quot;CODEPIPELINE&quot;),</span>
 )
@@ -22,10 +22,10 @@ import pl.wrzasq.cform.macro.template.mapSelected
 <span class="fc" id="L22">class CodeBuildSetup : ResourceHandler {</span>
 <span class="fc" id="L23">    override fun handledResourceTypes() = listOf(&quot;AWS::CodeBuild::Project&quot;)</span>
 
-<span class="fc" id="L25">    override fun handle(entry: ResourceDefinition) = fallback + entry.properties.mapSelected(</span>
+<span class="fc" id="L25">    override fun handle(entry: ResourceDefinition) = FALLBACK + entry.properties.mapSelected(</span>
 <span class="fc" id="L26">        &quot;Artifacts&quot; to { value -&gt; handleArtifacts(asMap(value)) },</span>
 <span class="fc" id="L27">        &quot;Cache&quot; to ::expandCache,</span>
-<span class="fc" id="L28">        &quot;Environment&quot; to { value -&gt; handleEnvironment(asMap(value)) }</span>
+<span class="fc" id="L28">        &quot;Environment&quot; to { value -&gt; handleEnvironment(asMap(value)) },</span>
 <span class="fc" id="L29">    )</span>
 
     private fun handleArtifacts(input: Map&lt;String, Any&gt;): Any {
@@ -51,8 +51,8 @@ import pl.wrzasq.cform.macro.template.mapSelected
 <span class="fc" id="L51">                output[&quot;EnvironmentVariables&quot;] = asMap(it).toSortedMap().map { variable -&gt;</span>
 <span class="fc" id="L52">                    mapOf(</span>
 <span class="fc" id="L53">                        &quot;Name&quot; to variable.key,</span>
-<span class="fc" id="L54">                        &quot;Value&quot; to variable.value</span>
-                    )
+<span class="fc" id="L54">                        &quot;Value&quot; to variable.value,</span>
+<span class="fc" id="L55">                    )</span>
                 }
             }
 <span class="fc" id="L58">        }</span>
@@ -64,10 +64,10 @@ import pl.wrzasq.cform.macro.template.mapSelected
         // converts plain values (including calls) into full definition
 <span class="fc" id="L65">        mapOf(</span>
 <span class="fc" id="L66">            &quot;Type&quot; to &quot;S3&quot;,</span>
-<span class="fc" id="L67">            &quot;Location&quot; to input</span>
+<span class="fc" id="L67">            &quot;Location&quot; to input,</span>
         )
     } else {
 <span class="fc" id="L70">        input</span>
 <span class="fc" id="L71">    }</span>
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

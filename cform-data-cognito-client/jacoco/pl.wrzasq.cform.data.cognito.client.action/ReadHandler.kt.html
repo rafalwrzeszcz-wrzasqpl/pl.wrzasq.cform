@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ReadHandler.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">WrzasqPl::Cognito::Client data provider</a> &gt; <a href="index.source.html" class="el_package">pl.wrzasq.cform.data.cognito.client.action</a> &gt; <span class="el_source">ReadHandler.kt</span></div><h1>ReadHandler.kt</h1><pre class="source lang-java linenums">/**
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ReadHandler.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">WrzasqPl::Cognito::Client data provider</a> &gt; <a href="index.source.html" class="el_package">pl.wrzasq.cform.data.cognito.client.action</a> &gt; <span class="el_source">ReadHandler.kt</span></div><h1>ReadHandler.kt</h1><pre class="source lang-java linenums">/**
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2022 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2022, 2024 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package pl.wrzasq.cform.data.cognito.client.action
@@ -28,13 +28,13 @@ import software.amazon.cloudformation.proxy.StdCallbackContext
  * @param factory Dependent resource factory.
  */
 <span class="fc" id="L30">class ReadHandler(</span>
-<span class="fc" id="L31">    private val factory: ResourcesFactory</span>
+<span class="fc" id="L31">    private val factory: ResourcesFactory,</span>
 ) : ActionHandler&lt;ResourceModel&gt; {
     override fun handleRequest(
         proxy: AmazonWebServicesClientProxy,
         request: ResourceHandlerRequest&lt;ResourceModel?&gt;,
         callbackContext: StdCallbackContext,
-        logger: Logger
+        logger: Logger,
     ): ProgressEvent&lt;ResourceModel?, StdCallbackContext&gt; {
 <span class="fc" id="L39">        val proxyClient = factory.getClient(proxy)</span>
 
@@ -42,7 +42,7 @@ import software.amazon.cloudformation.proxy.StdCallbackContext
 <span class="fc" id="L42">            &quot;WrzasqPl-Cognito-ClientData::Read&quot;,</span>
 <span class="fc" id="L43">            proxyClient,</span>
 <span class="fc bfc" id="L44" title="All 2 branches covered.">            requireNotNull(request.desiredResourceState),</span>
-<span class="fc" id="L45">            callbackContext</span>
+<span class="fc" id="L45">            callbackContext,</span>
         )
             // step 1 - construct a body of a request
 <span class="fc" id="L48">            .translateToServiceRequest(ResourceModel::toReadRequest)</span>
@@ -51,7 +51,7 @@ import software.amazon.cloudformation.proxy.StdCallbackContext
 <span class="fc" id="L51">                try {</span>
 <span class="fc" id="L52">                    client.injectCredentialsAndInvokeV2(</span>
 <span class="fc" id="L53">                        awsRequest,</span>
-<span class="fc" id="L54">                        client.client()::describeUserPoolClient</span>
+<span class="fc" id="L54">                        client.client()::describeUserPoolClient,</span>
 <span class="fc" id="L55">                    ).also {</span>
 <span class="fc" id="L56">                        logger.log(&quot;${ResourceModel.TYPE_NAME} has successfully been read.&quot;)</span>
 <span class="fc" id="L57">                    }</span>
@@ -59,7 +59,7 @@ import software.amazon.cloudformation.proxy.StdCallbackContext
 <span class="fc" id="L59">                    throw CfnNotFoundException(ResourceModel.TYPE_NAME, awsRequest.clientId(), error)</span>
 <span class="fc" id="L60">                } catch (error: AwsServiceException) {</span>
 <span class="fc" id="L61">                    throw CfnGeneralServiceException(ResourceModel.TYPE_NAME, error)</span>
-                }
+<span class="fc" id="L62">                }</span>
             }
             // step 3 - gather all properties of the resource
 <span class="fc" id="L65">            .done { awsResponse -&gt;</span>
@@ -67,4 +67,4 @@ import software.amazon.cloudformation.proxy.StdCallbackContext
             }
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

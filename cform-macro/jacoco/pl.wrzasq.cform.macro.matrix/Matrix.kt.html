@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Matrix.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CloudFormation macro processor.</a> &gt; <a href="index.source.html" class="el_package">pl.wrzasq.cform.macro.matrix</a> &gt; <span class="el_source">Matrix.kt</span></div><h1>Matrix.kt</h1><pre class="source lang-java linenums">/**
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Matrix.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CloudFormation macro processor.</a> &gt; <a href="index.source.html" class="el_package">pl.wrzasq.cform.macro.matrix</a> &gt; <span class="el_source">Matrix.kt</span></div><h1>Matrix.kt</h1><pre class="source lang-java linenums">/**
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2023 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2023 - 2024 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package pl.wrzasq.cform.macro.matrix
@@ -24,7 +24,7 @@ import pl.wrzasq.cform.macro.template.mapValuesOnly
 <span class="fc" id="L24">    private val idPattern: String,</span>
 <span class="fc" id="L25">    private val template: Map&lt;String, Any&gt;,</span>
 <span class="fc" id="L26">    private val key: List&lt;String&gt;,</span>
-<span class="fc" id="L27">    private val entries: Map&lt;List&lt;String&gt;, Map&lt;String, String&gt;&gt;</span>
+<span class="fc" id="L27">    private val entries: Map&lt;List&lt;String&gt;, Map&lt;String, String&gt;&gt;,</span>
 ) {
     /**
      * Returns number of defined matrices.
@@ -50,7 +50,7 @@ import pl.wrzasq.cform.macro.template.mapValuesOnly
      * @return Expected logical ID.
      */
 <span class="fc" id="L52">    fun resolve(selector: Map&lt;String, String&gt;) = generateLogicalId(</span>
-<span class="pc bpc" id="L53" title="1 of 2 branches missed.">        key.map { checkNotNull(selector[it]) { &quot;Missing $it part of $id matrix selector.&quot; } }</span>
+<span class="pc bpc" id="L53" title="1 of 2 branches missed.">        key.map { checkNotNull(selector[it]) { &quot;Missing $it part of $id matrix selector.&quot; } },</span>
 <span class="fc" id="L54">    )</span>
 
 <span class="fc" id="L56">    private fun generateLogicalId(params: List&lt;String&gt;) = key.foldIndexed(idPattern) { index, value, param -&gt;</span>
@@ -66,4 +66,4 @@ import pl.wrzasq.cform.macro.template.mapValuesOnly
 <span class="fc" id="L66">        else -&gt; input</span>
 <span class="fc" id="L67">    }</span>
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

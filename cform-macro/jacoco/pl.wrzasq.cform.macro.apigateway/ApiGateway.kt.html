@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ApiGateway.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CloudFormation macro processor.</a> &gt; <a href="index.source.html" class="el_package">pl.wrzasq.cform.macro.apigateway</a> &gt; <span class="el_source">ApiGateway.kt</span></div><h1>ApiGateway.kt</h1><pre class="source lang-java linenums">/**
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ApiGateway.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CloudFormation macro processor.</a> &gt; <a href="index.source.html" class="el_package">pl.wrzasq.cform.macro.apigateway</a> &gt; <span class="el_source">ApiGateway.kt</span></div><h1>ApiGateway.kt</h1><pre class="source lang-java linenums">/**
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021, 2024 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package pl.wrzasq.cform.macro.apigateway
@@ -22,7 +22,7 @@ import pl.wrzasq.cform.macro.template.popProperty
  */
 <span class="fc" id="L23">class ApiGateway(</span>
 <span class="pc" id="L24">    val id: String,</span>
-    input: Map&lt;String, Any&gt;
+    input: Map&lt;String, Any&gt;,
 ) : ApiTemplateResource {
     private val properties: Map&lt;String, Any&gt;
 
@@ -70,7 +70,7 @@ import pl.wrzasq.cform.macro.template.popProperty
 <span class="fc" id="L70">            &quot;PARAMETERS_ONLY&quot; -&gt; ApiRequestValidator(this, &quot;ParametersOnly&quot;, false, true)</span>
 <span class="fc" id="L71">            &quot;BODY_AND_PARAMETERS&quot; -&gt; ApiRequestValidator(this, &quot;BodyAndParameters&quot;, true, true)</span>
 <span class="fc" id="L72">            else -&gt; throw IllegalArgumentException(&quot;Unsupported validator type `$it`&quot;)</span>
-        }
+<span class="fc" id="L73">        }</span>
 <span class="fc" id="L74">    }</span>
 
     /**
@@ -86,8 +86,8 @@ import pl.wrzasq.cform.macro.template.popProperty
 <span class="fc" id="L86">            ResourceDefinition(</span>
 <span class="fc" id="L87">                id = resourceId,</span>
 <span class="fc" id="L88">                type = &quot;AWS::ApiGateway::RestApi&quot;,</span>
-<span class="fc" id="L89">                properties = properties</span>
-            )
+<span class="fc" id="L89">                properties = properties,</span>
+            ),
         )
 
         // sorted resources to ensure consistent order for hash computation
@@ -103,8 +103,8 @@ import pl.wrzasq.cform.macro.template.popProperty
 <span class="fc" id="L103">                id = &quot;${resourceId}Deployment${computeDeploymentHash(definitions)}&quot;,</span>
 <span class="fc" id="L104">                type = &quot;AWS::ApiGateway::Deployment&quot;,</span>
 <span class="fc" id="L105">                dependsOn = methods.values.map(ApiMethod::resourceId).sorted(),</span>
-<span class="fc" id="L106">                properties = mapOf(&quot;RestApiId&quot; to ref())</span>
-            )
+<span class="fc" id="L106">                properties = mapOf(&quot;RestApiId&quot; to ref()),</span>
+            ),
         )
 
 <span class="fc" id="L110">        return definitions</span>
@@ -119,12 +119,12 @@ import pl.wrzasq.cform.macro.template.popProperty
         parent: Any,
         input: Map&lt;String, Any&gt;,
 <span class="fc" id="L121">        scopePath: String = &quot;&quot;,</span>
-<span class="fc" id="L122">        scopeId: String = &quot;&quot;</span>
+<span class="fc" id="L122">        scopeId: String = &quot;&quot;,</span>
     ) {
 <span class="fc bfc" id="L124" title="All 2 branches covered.">        for ((key, value) in input) {</span>
-<span class="fc" id="L125">            when (key[0]) {</span>
+<span class="fc bfc" id="L125" title="All 3 branches covered.">            when (key[0]) {</span>
                 // sub-resource
-<span class="fc bfc" id="L127" title="All 2 branches covered.">                '/' -&gt; {</span>
+                '/' -&gt; {
 <span class="fc" id="L128">                    val part = key.substring(1)</span>
 <span class="fc" id="L129">                    val path = &quot;$scopePath$key&quot;</span>
 <span class="fc" id="L130">                    val id = generateResourceId(scopeId, part)</span>
@@ -137,7 +137,7 @@ import pl.wrzasq.cform.macro.template.popProperty
 <span class="fc" id="L137">                    initTree(resource.ref(), asMap(value), path, id)</span>
                 }
                 // method
-<span class="fc bfc" id="L140" title="All 2 branches covered.">                '@' -&gt; {</span>
+                '@' -&gt; {
 <span class="fc" id="L141">                    val method = key.substring(1)</span>
 <span class="fc" id="L142">                    methods[&quot;$method$scopePath&quot;] = ApiMethod(this, &quot;$method$scopeId&quot;, parent, method, asMap(value))</span>
                 }
@@ -194,4 +194,4 @@ import pl.wrzasq.cform.macro.template.popProperty
 // since in API gateway only full path parts are allowed as fragments this is only pattern possibility
 // %/ won't work for top-level placeholder resources, but after first replacement only trailing `%` will be left
 <span class="fc" id="L196">private fun unescapeReference(reference: String) = reference.replace(&quot;/%&quot;, &quot;/{&quot;).replace(&quot;%&quot;, &quot;}&quot;)</span>
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

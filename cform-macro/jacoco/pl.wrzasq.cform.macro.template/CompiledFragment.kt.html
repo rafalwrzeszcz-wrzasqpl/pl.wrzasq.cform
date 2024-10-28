@@ -1,25 +1,23 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CompiledFragment.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CloudFormation macro processor.</a> &gt; <a href="index.source.html" class="el_package">pl.wrzasq.cform.macro.template</a> &gt; <span class="el_source">CompiledFragment.kt</span></div><h1>CompiledFragment.kt</h1><pre class="source lang-java linenums">/**
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CompiledFragment.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CloudFormation macro processor.</a> &gt; <a href="index.source.html" class="el_package">pl.wrzasq.cform.macro.template</a> &gt; <span class="el_source">CompiledFragment.kt</span></div><h1>CompiledFragment.kt</h1><pre class="source lang-java linenums">/**
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2022 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2022, 2024 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package pl.wrzasq.cform.macro.template
 
-import pl.wrzasq.commons.json.ObjectMapperFactory
-
-<span class="fc" id="L12">private val OBJECT_MAPPER = ObjectMapperFactory.createObjectMapper()</span>
+import pl.wrzasq.cform.macro.config.LambdaResourcesFactory
 
 /**
  * Template processing which replaces nested calls to intrinsic functions to produce plain JSON representation.
  *
  * @param input Initial template state.
  */
-<span class="fc" id="L19">class CompiledFragment(input: Map&lt;String, Any&gt;) {</span>
-<span class="fc" id="L20">    private var plainText = true</span>
+<span class="fc" id="L17">class CompiledFragment(input: Map&lt;String, Any&gt;) {</span>
+<span class="fc" id="L18">    private var plainText = true</span>
     private var index = 0
-<span class="fc" id="L22">    private val params = mutableMapOf&lt;String, Any&gt;()</span>
+<span class="fc" id="L20">    private val params = mutableMapOf&lt;String, Any&gt;()</span>
     private val json: String
 
     /**
@@ -28,54 +26,54 @@ import pl.wrzasq.commons.json.ObjectMapperFactory
      * @return JSON representation.
      */
     val raw: Any
-<span class="fc" id="L31">        get() = when {</span>
-<span class="fc bfc" id="L32" title="All 2 branches covered.">            plainText -&gt; json</span>
-<span class="fc bfc" id="L33" title="All 2 branches covered.">            params.isEmpty() -&gt; Fn.sub(json)</span>
-<span class="fc" id="L34">            else -&gt; Fn.sub(listOf(json, params))</span>
-<span class="fc" id="L35">        }</span>
+<span class="fc" id="L29">        get() = when {</span>
+<span class="fc bfc" id="L30" title="All 2 branches covered.">            plainText -&gt; json</span>
+<span class="fc bfc" id="L31" title="All 2 branches covered.">            params.isEmpty() -&gt; Fn.sub(json)</span>
+<span class="fc" id="L32">            else -&gt; Fn.sub(listOf(json, params))</span>
+<span class="fc" id="L33">        }</span>
 
-<span class="fc" id="L37">    init {</span>
-<span class="fc" id="L38">        val final = traverseMap(input)</span>
-<span class="fc" id="L39">        json = OBJECT_MAPPER.writeValueAsString(final)</span>
-<span class="fc" id="L40">    }</span>
+<span class="fc" id="L35">    init {</span>
+<span class="fc" id="L36">        val final = traverseMap(input)</span>
+<span class="fc" id="L37">        json = LambdaResourcesFactory.OBJECT_MAPPER.writeValueAsString(final)</span>
+<span class="fc" id="L38">    }</span>
 
-<span class="fc" id="L42">    private fun traverse(input: Any): Any = when (input) {</span>
-<span class="fc bfc" id="L43" title="All 2 branches covered.">        is Map&lt;*, *&gt; -&gt; traverseMap(asMap(input))</span>
-<span class="fc bfc" id="L44" title="All 2 branches covered.">        is List&lt;*&gt; -&gt; input.filterNotNull().map(::traverse)</span>
-<span class="fc" id="L45">        else -&gt; input</span>
-<span class="fc" id="L46">    }</span>
+<span class="fc" id="L40">    private fun traverse(input: Any): Any = when (input) {</span>
+<span class="fc bfc" id="L41" title="All 2 branches covered.">        is Map&lt;*, *&gt; -&gt; traverseMap(asMap(input))</span>
+<span class="fc bfc" id="L42" title="All 2 branches covered.">        is List&lt;*&gt; -&gt; input.filterNotNull().map(::traverse)</span>
+<span class="fc" id="L43">        else -&gt; input</span>
+<span class="fc" id="L44">    }</span>
 
-<span class="fc" id="L48">    private fun traverseMap(input: Map&lt;String, Any&gt;) = input.mapValuesOnly {</span>
-<span class="fc bfc" id="L49" title="All 6 branches covered.">        if (it is Map&lt;*, *&gt; &amp;&amp; it.size == 1 &amp;&amp; isIntrinsicFunction(it.keys.first().toString())) {</span>
-<span class="fc" id="L50">            plainText = false</span>
-<span class="fc" id="L51">            val (key, value) = asMap(it).entries.first()</span>
+<span class="fc" id="L46">    private fun traverseMap(input: Map&lt;String, Any&gt;) = input.mapValuesOnly {</span>
+<span class="fc bfc" id="L47" title="All 6 branches covered.">        if (it is Map&lt;*, *&gt; &amp;&amp; it.size == 1 &amp;&amp; isIntrinsicFunction(it.keys.first().toString())) {</span>
+<span class="fc" id="L48">            plainText = false</span>
+<span class="fc" id="L49">            val (key, value) = asMap(it).entries.first()</span>
 
-<span class="fc" id="L53">            when {</span>
-<span class="fc bfc" id="L54" title="All 6 branches covered.">                key == CALL_REF || key == CALL_GET_ATT &amp;&amp; value is String -&gt; &quot;\${${value}}&quot;</span>
-<span class="pc bpc" id="L55" title="1 of 4 branches missed.">                key == CALL_GET_ATT &amp;&amp; value is List&lt;*&gt; -&gt; &quot;\${${value[0]}.${value[1]}}&quot;</span>
+<span class="fc" id="L51">            when {</span>
+<span class="fc bfc" id="L52" title="All 6 branches covered.">                key == CALL_REF || key == CALL_GET_ATT &amp;&amp; value is String -&gt; &quot;\${${value}}&quot;</span>
+<span class="pc bpc" id="L53" title="1 of 4 branches missed.">                key == CALL_GET_ATT &amp;&amp; value is List&lt;*&gt; -&gt; &quot;\${${value[0]}.${value[1]}}&quot;</span>
                 // this is the simples one - just elevate encapsulation
-<span class="fc bfc" id="L57" title="All 4 branches covered.">                key == CALL_SUB &amp;&amp; value is String -&gt; value</span>
-<span class="pc bpc" id="L58" title="1 of 4 branches missed.">                key == CALL_SUB &amp;&amp; value is List&lt;*&gt; -&gt; {</span>
-<span class="fc" id="L59">                    params.putAll(asMapAlways(value[1]))</span>
-<span class="pc bpc" id="L60" title="1 of 2 branches missed.">                    value[0] ?: &quot;&quot;</span>
+<span class="fc bfc" id="L55" title="All 4 branches covered.">                key == CALL_SUB &amp;&amp; value is String -&gt; value</span>
+<span class="pc bpc" id="L56" title="1 of 4 branches missed.">                key == CALL_SUB &amp;&amp; value is List&lt;*&gt; -&gt; {</span>
+<span class="fc" id="L57">                    params.putAll(asMapAlways(value[1]))</span>
+<span class="pc bpc" id="L58" title="1 of 2 branches missed.">                    value[0] ?: &quot;&quot;</span>
                 }
                 // this is our notation - it will be handled afterwards
-<span class="pc bpc" id="L63" title="1 of 4 branches missed.">                key == CALL_IMPORT_VALUE &amp;&amp; value is String -&gt; &quot;\${Import:${value}}&quot;</span>
+<span class="pc bpc" id="L61" title="1 of 4 branches missed.">                key == CALL_IMPORT_VALUE &amp;&amp; value is String -&gt; &quot;\${Import:${value}}&quot;</span>
                 // this is specific to CodePipeline+CloudFormation but still - intrinsic function
-<span class="fc bfc" id="L65" title="All 2 branches covered.">                key == CALL_GET_PARAM -&gt; it</span>
-<span class="fc" id="L66">                else -&gt; generateParamPlaceholder(++index, it, params)</span>
+<span class="fc bfc" id="L63" title="All 2 branches covered.">                key == CALL_GET_PARAM -&gt; it</span>
+<span class="fc" id="L64">                else -&gt; generateParamPlaceholder(++index, it, params)</span>
             }
         } else {
-<span class="fc" id="L69">            traverse(it)</span>
-        }
-<span class="fc" id="L71">    }</span>
+<span class="fc" id="L67">            traverse(it)</span>
+<span class="fc" id="L68">        }</span>
+<span class="fc" id="L69">    }</span>
 
-<span class="fc bfc" id="L73" title="All 4 branches covered.">    private fun isIntrinsicFunction(key: String) = key == &quot;Ref&quot; || key.startsWith(&quot;Fn::&quot;)</span>
+<span class="fc bfc" id="L71" title="All 4 branches covered.">    private fun isIntrinsicFunction(key: String) = key == &quot;Ref&quot; || key.startsWith(&quot;Fn::&quot;)</span>
 }
 
 private fun generateParamPlaceholder(index: Int, value: Any, params: MutableMap&lt;String, Any&gt;): String {
-<span class="fc" id="L77">    val param = &quot;param${index}&quot;</span>
-<span class="fc" id="L78">    params[param] = value</span>
-<span class="fc" id="L79">    return &quot;\${${param}}&quot;</span>
+<span class="fc" id="L75">    val param = &quot;param${index}&quot;</span>
+<span class="fc" id="L76">    params[param] = value</span>
+<span class="fc" id="L77">    return &quot;\${${param}}&quot;</span>
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

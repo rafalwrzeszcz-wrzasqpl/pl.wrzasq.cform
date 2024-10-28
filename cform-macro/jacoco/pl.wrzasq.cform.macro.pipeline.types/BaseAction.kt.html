@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BaseAction.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CloudFormation macro processor.</a> &gt; <a href="index.source.html" class="el_package">pl.wrzasq.cform.macro.pipeline.types</a> &gt; <span class="el_source">BaseAction.kt</span></div><h1>BaseAction.kt</h1><pre class="source lang-java linenums">/**
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BaseAction.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CloudFormation macro processor.</a> &gt; <a href="index.source.html" class="el_package">pl.wrzasq.cform.macro.pipeline.types</a> &gt; <span class="el_source">BaseAction.kt</span></div><h1>BaseAction.kt</h1><pre class="source lang-java linenums">/**
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021 - 2022 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021 - 2022, 2024 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package pl.wrzasq.cform.macro.pipeline.types
@@ -21,6 +21,7 @@ private const val OPTION_INPUTARTIFACTS = &quot;InputArtifacts&quot;
 private const val OPTION_OUTPUTARTIFACTS = &quot;OutputArtifacts&quot;
 
 private const val PROPERTY_CONFIGURATION = &quot;Configuration&quot;
+private const val PROPERTY_COMMANDS = &quot;Commands&quot;
 private const val PROPERTY_NAMESPACE = &quot;Namespace&quot;
 private const val PROPERTY_RUNORDER = &quot;RunOrder&quot;
 
@@ -31,33 +32,42 @@ private const val PROPERTY_RUNORDER = &quot;RunOrder&quot;
  * @param input Input properties.
  * @param condition Condition name.
  */
-<span class="fc" id="L34">abstract class BaseAction(</span>
-<span class="fc" id="L35">    override val name: String,</span>
+<span class="fc" id="L35">abstract class BaseAction(</span>
+<span class="fc" id="L36">    override val name: String,</span>
     input: Map&lt;String, Any&gt;,
-<span class="fc" id="L37">    private val condition: String?</span>
+<span class="fc" id="L38">    private val condition: String?,</span>
 ) : PipelineAction {
-<span class="fc" id="L39">    protected val properties = input.toMutableMap()</span>
-<span class="fc" id="L40">    override val inputs = mutableSetOf&lt;String&gt;()</span>
-<span class="fc" id="L41">    override val outputs = mutableSetOf&lt;String&gt;()</span>
-<span class="fc" id="L42">    override val dependencies = mutableSetOf&lt;String&gt;()</span>
+<span class="fc" id="L40">    protected val properties = input.toMutableMap()</span>
+<span class="fc" id="L41">    override val inputs = mutableSetOf&lt;String&gt;()</span>
+<span class="fc" id="L42">    override val outputs = mutableSetOf&lt;String&gt;()</span>
+<span class="fc" id="L43">    override val dependencies = mutableSetOf&lt;String&gt;()</span>
 
     // we compute these stuff but might have been defined already in the template
 
-<span class="fc bfc" id="L46" title="All 2 branches covered.">    override var namespace = properties[PROPERTY_NAMESPACE]?.toString()</span>
-<span class="pc bpc" id="L47" title="1 of 4 branches missed.">    override var runOrder: Int? = properties[PROPERTY_RUNORDER]?.toString()?.toInt()</span>
+<span class="fc bfc" id="L47" title="All 2 branches covered.">    override var namespace = properties[PROPERTY_NAMESPACE]?.toString()</span>
+<span class="pc bpc" id="L48" title="1 of 4 branches missed.">    override var runOrder: Int? = properties[PROPERTY_RUNORDER]?.toString()?.toInt()</span>
 
-<span class="fc" id="L49">    init {</span>
-<span class="fc bfc" id="L50" title="All 2 branches covered.">        properties[OPTION_INPUTARTIFACTS]?.let { readArtifacts(it, inputs) }</span>
-<span class="fc bfc" id="L51" title="All 2 branches covered.">        properties[OPTION_OUTPUTARTIFACTS]?.let { readArtifacts(it, outputs) }</span>
-<span class="fc" id="L52">    }</span>
+<span class="fc" id="L50">    init {</span>
+<span class="fc bfc" id="L51" title="All 2 branches covered.">        properties[OPTION_INPUTARTIFACTS]?.let { readArtifacts(it, inputs) }</span>
+<span class="fc bfc" id="L52" title="All 2 branches covered.">        properties[OPTION_OUTPUTARTIFACTS]?.let { readArtifacts(it, outputs) }</span>
+<span class="fc" id="L53">    }</span>
 
     override fun compile(manager: PipelineManager) {
-<span class="fc bfc" id="L55" title="All 2 branches covered.">        properties[PROPERTY_CONFIGURATION]?.let {</span>
-<span class="fc" id="L56">            properties[PROPERTY_CONFIGURATION] = asMap(it).mapValuesOnly { value -&gt;</span>
-<span class="fc" id="L57">                processReference(value, manager)</span>
+<span class="fc bfc" id="L56" title="All 2 branches covered.">        properties[PROPERTY_CONFIGURATION]?.let {</span>
+<span class="fc" id="L57">            properties[PROPERTY_CONFIGURATION] = asMap(it).mapValuesOnly { value -&gt;</span>
+<span class="fc" id="L58">                processReference(value, manager)</span>
             }
-<span class="fc" id="L59">        }</span>
-<span class="fc" id="L60">    }</span>
+<span class="fc" id="L60">        }</span>
+<span class="fc bfc" id="L61" title="All 2 branches covered.">        properties[PROPERTY_COMMANDS]?.let {</span>
+<span class="pc bpc" id="L62" title="1 of 2 branches missed.">            properties[PROPERTY_COMMANDS] = if (it is List&lt;*&gt;) {</span>
+<span class="fc" id="L63">                it.filterNotNull().map { value -&gt;</span>
+<span class="fc" id="L64">                    processReference(value, manager)</span>
+                }
+            } else {
+<span class="pc" id="L67">                it</span>
+            }
+<span class="fc" id="L69">        }</span>
+<span class="fc" id="L70">    }</span>
 
     /**
      * Generates `ActionTypeId` clause.
@@ -71,69 +81,69 @@ private const val PROPERTY_RUNORDER = &quot;RunOrder&quot;
      *
      * @param configuration Initial configuration structure.
      */
-<span class="fc" id="L74">    open fun buildConfiguration(configuration: MutableMap&lt;String, Any&gt;) {}</span>
+<span class="fc" id="L84">    open fun buildConfiguration(configuration: MutableMap&lt;String, Any&gt;) {}</span>
 
     override fun buildDefinition(): Map&lt;String, Any&gt; {
-<span class="fc" id="L77">        val input = mutableMapOf(</span>
-<span class="fc" id="L78">            &quot;Name&quot; to name,</span>
-<span class="fc" id="L79">            &quot;ActionTypeId&quot; to buildActionTypeId()</span>
+<span class="fc" id="L87">        val input = mutableMapOf(</span>
+<span class="fc" id="L88">            &quot;Name&quot; to name,</span>
+<span class="fc" id="L89">            &quot;ActionTypeId&quot; to buildActionTypeId(),</span>
         )
 
-<span class="fc" id="L82">        val configuration = asMapAlways(properties[PROPERTY_CONFIGURATION]).toMutableMap()</span>
-<span class="fc" id="L83">        buildConfiguration(configuration)</span>
+<span class="fc" id="L92">        val configuration = asMapAlways(properties[PROPERTY_CONFIGURATION]).toMutableMap()</span>
+<span class="fc" id="L93">        buildConfiguration(configuration)</span>
 
         // we do these as conditional `.put()` calls as these stuff might be in `.properties` when defined by hand
-<span class="fc bfc" id="L86" title="All 2 branches covered.">        namespace?.let { input[PROPERTY_NAMESPACE] = it }</span>
-<span class="fc bfc" id="L87" title="All 2 branches covered.">        runOrder?.let { input[PROPERTY_RUNORDER] = it }</span>
-<span class="fc bfc" id="L88" title="All 4 branches covered.">        if (inputs.isNotEmpty()) {</span>
-<span class="fc" id="L89">            input[OPTION_INPUTARTIFACTS] = inputs.sorted()</span>
+<span class="fc bfc" id="L96" title="All 2 branches covered.">        namespace?.let { input[PROPERTY_NAMESPACE] = it }</span>
+<span class="fc bfc" id="L97" title="All 2 branches covered.">        runOrder?.let { input[PROPERTY_RUNORDER] = it }</span>
+<span class="fc bfc" id="L98" title="All 4 branches covered.">        if (inputs.isNotEmpty()) {</span>
+<span class="fc" id="L99">            input[OPTION_INPUTARTIFACTS] = inputs.sorted()</span>
         }
-<span class="fc bfc" id="L91" title="All 4 branches covered.">        if (outputs.isNotEmpty()) {</span>
-<span class="fc" id="L92">            input[OPTION_OUTPUTARTIFACTS] = outputs.sorted()</span>
+<span class="fc bfc" id="L101" title="All 4 branches covered.">        if (outputs.isNotEmpty()) {</span>
+<span class="fc" id="L102">            input[OPTION_OUTPUTARTIFACTS] = outputs.sorted()</span>
         }
-<span class="fc bfc" id="L94" title="All 4 branches covered.">        if (configuration.isNotEmpty()) {</span>
-<span class="fc" id="L95">            input[PROPERTY_CONFIGURATION] = configuration</span>
+<span class="fc bfc" id="L104" title="All 4 branches covered.">        if (configuration.isNotEmpty()) {</span>
+<span class="fc" id="L105">            input[PROPERTY_CONFIGURATION] = configuration</span>
         }
 
-<span class="fc" id="L98">        val definition = (properties + input).mapSelected(</span>
-<span class="fc" id="L99">            OPTION_INPUTARTIFACTS to ::buildArtifacts,</span>
-<span class="fc" id="L100">            OPTION_OUTPUTARTIFACTS to ::buildArtifacts</span>
+<span class="fc" id="L108">        val definition = (properties + input).mapSelected(</span>
+<span class="fc" id="L109">            OPTION_INPUTARTIFACTS to ::buildArtifacts,</span>
+<span class="fc" id="L110">            OPTION_OUTPUTARTIFACTS to ::buildArtifacts,</span>
         )
 
-<span class="fc" id="L103">        return conditional(definition, condition)</span>
+<span class="fc" id="L113">        return conditional(definition, condition)</span>
     }
 
-<span class="fc bfc" id="L106" title="All 2 branches covered.">    protected fun processReference(value: Any, manager: PipelineManager) = if (value is String) {</span>
-<span class="fc" id="L107">        value.replace(REFERENCE) { match -&gt;</span>
-<span class="fc" id="L108">            val group = match.groupValues</span>
-<span class="fc" id="L109">            val reference = &quot;${group[1]}:${group[2]}&quot;</span>
+<span class="fc bfc" id="L116" title="All 2 branches covered.">    protected fun processReference(value: Any, manager: PipelineManager) = if (value is String) {</span>
+<span class="fc" id="L117">        value.replace(REFERENCE) { match -&gt;</span>
+<span class="fc" id="L118">            val group = match.groupValues</span>
+<span class="fc" id="L119">            val reference = &quot;${group[1]}:${group[2]}&quot;</span>
 
-<span class="fc" id="L111">            dependencies.add(reference)</span>
+<span class="fc" id="L121">            dependencies.add(reference)</span>
 
-<span class="fc" id="L113">            &quot;#{${manager.resolveNamespace(reference)}.${group[3]}}&quot;</span>
+<span class="fc" id="L123">            &quot;#{${manager.resolveNamespace(reference)}.${group[3]}}&quot;</span>
         }
     } else {
-<span class="fc" id="L116">        value</span>
-<span class="fc" id="L117">    }</span>
+<span class="fc" id="L126">        value</span>
+<span class="fc" id="L127">    }</span>
 }
 
 private fun readArtifacts(input: Any, target: MutableSet&lt;String&gt;) {
-<span class="fc bfc" id="L121" title="All 2 branches covered.">    if (input is List&lt;*&gt;) {</span>
-<span class="fc bfc" id="L122" title="All 2 branches covered.">        for (artifact in input) {</span>
-<span class="fc bfc" id="L123" title="All 2 branches covered.">            if (artifact is String) {</span>
-<span class="fc" id="L124">                target.add(artifact)</span>
-<span class="pc bpc" id="L125" title="2 of 4 branches missed.">            } else if (artifact is Map&lt;*, *&gt; &amp;&amp; &quot;Name&quot; in artifact) {</span>
-<span class="fc" id="L126">                target.add(artifact[&quot;Name&quot;].toString())</span>
+<span class="fc bfc" id="L131" title="All 2 branches covered.">    if (input is List&lt;*&gt;) {</span>
+<span class="fc bfc" id="L132" title="All 2 branches covered.">        for (artifact in input) {</span>
+<span class="fc bfc" id="L133" title="All 2 branches covered.">            if (artifact is String) {</span>
+<span class="fc" id="L134">                target.add(artifact)</span>
+<span class="pc bpc" id="L135" title="2 of 4 branches missed.">            } else if (artifact is Map&lt;*, *&gt; &amp;&amp; &quot;Name&quot; in artifact) {</span>
+<span class="fc" id="L136">                target.add(artifact[&quot;Name&quot;].toString())</span>
             }
         }
     }
-<span class="fc" id="L130">}</span>
+<span class="fc" id="L140">}</span>
 
-<span class="fc bfc" id="L132" title="All 2 branches covered.">private fun buildArtifacts(input: Any) = if (input is List&lt;*&gt;) {</span>
-<span class="pc bpc" id="L133" title="1 of 2 branches missed.">    input.map { if (it is String) mapOf(&quot;Name&quot; to it) else it }</span>
+<span class="fc bfc" id="L142" title="All 2 branches covered.">private fun buildArtifacts(input: Any) = if (input is List&lt;*&gt;) {</span>
+<span class="pc bpc" id="L143" title="1 of 2 branches missed.">    input.map { if (it is String) mapOf(&quot;Name&quot; to it) else it }</span>
 } else {
-<span class="fc" id="L135">    input</span>
-<span class="fc" id="L136">}</span>
+<span class="fc" id="L145">    input</span>
+<span class="fc" id="L146">}</span>
 
 /**
  * Builds action type definition for default AWS actions.
@@ -143,10 +153,10 @@ private fun readArtifacts(input: Any, target: MutableSet&lt;String&gt;) {
  * @param owner Action vendor.
  * @param version Definition version.
  */
-<span class="fc" id="L146">fun buildAwsActionTypeId(category: String, provider: String, owner: String = &quot;AWS&quot;, version: String = &quot;1&quot;) = mapOf(</span>
-<span class="fc" id="L147">    &quot;Category&quot; to category,</span>
-<span class="fc" id="L148">    &quot;Owner&quot; to owner,</span>
-<span class="fc" id="L149">    &quot;Provider&quot; to provider,</span>
-<span class="fc" id="L150">    &quot;Version&quot; to version</span>
-<span class="fc" id="L151">)</span>
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
+<span class="fc" id="L156">fun buildAwsActionTypeId(category: String, provider: String, owner: String = &quot;AWS&quot;, version: String = &quot;1&quot;) = mapOf(</span>
+<span class="fc" id="L157">    &quot;Category&quot; to category,</span>
+<span class="fc" id="L158">    &quot;Owner&quot; to owner,</span>
+<span class="fc" id="L159">    &quot;Provider&quot; to provider,</span>
+<span class="fc" id="L160">    &quot;Version&quot; to version,</span>
+<span class="fc" id="L161">)</span>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
