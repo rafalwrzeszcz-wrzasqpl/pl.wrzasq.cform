@@ -2,7 +2,7 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021, 2024 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package pl.wrzasq.cform.macro.apigateway
@@ -22,7 +22,7 @@ private val SLUG_FILTER = Regex("\\W")
  */
 class ApiGateway(
     val id: String,
-    input: Map<String, Any>
+    input: Map<String, Any>,
 ) : ApiTemplateResource {
     private val properties: Map<String, Any>
 
@@ -86,8 +86,8 @@ class ApiGateway(
             ResourceDefinition(
                 id = resourceId,
                 type = "AWS::ApiGateway::RestApi",
-                properties = properties
-            )
+                properties = properties,
+            ),
         )
 
         // sorted resources to ensure consistent order for hash computation
@@ -103,8 +103,8 @@ class ApiGateway(
                 id = "${resourceId}Deployment${computeDeploymentHash(definitions)}",
                 type = "AWS::ApiGateway::Deployment",
                 dependsOn = methods.values.map(ApiMethod::resourceId).sorted(),
-                properties = mapOf("RestApiId" to ref())
-            )
+                properties = mapOf("RestApiId" to ref()),
+            ),
         )
 
         return definitions
@@ -119,7 +119,7 @@ class ApiGateway(
         parent: Any,
         input: Map<String, Any>,
         scopePath: String = "",
-        scopeId: String = ""
+        scopeId: String = "",
     ) {
         for ((key, value) in input) {
             when (key[0]) {

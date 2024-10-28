@@ -2,7 +2,7 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021, 2024 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package pl.wrzasq.cform.commons
@@ -25,16 +25,16 @@ import software.amazon.cloudformation.proxy.StdCallbackContext
  * @param configuration Handler configuration.
  * @param handlers Mapping of action handlers.
  */
-abstract class ResourceLambdaHandler<ResourceType>(
+abstract class ResourceLambdaHandler<ResourceType, ConfigurationType>(
     private val configuration: Configuration,
-    private val handlers: Map<Action, ActionHandler<ResourceType>>
-) : LambdaWrapper<ResourceType?, StdCallbackContext>() {
+    private val handlers: Map<Action, ActionHandler<ResourceType>>,
+) : LambdaWrapper<ResourceType?, StdCallbackContext, ConfigurationType>() {
     override fun provideResourceSchemaJSONObject() = configuration.resourceSchema
 
     override fun provideResourceDefinedTags(resourceModel: ResourceType?): Map<String, String>? = null
 
     override fun transform(
-        request: HandlerRequest<ResourceType?, StdCallbackContext>
+        request: HandlerRequest<ResourceType?, StdCallbackContext, ConfigurationType>,
     ): ResourceHandlerRequest<ResourceType?> {
         val requestData = request.requestData
         return ResourceHandlerRequest.builder<ResourceType?>()
@@ -55,7 +55,8 @@ abstract class ResourceLambdaHandler<ResourceType>(
         proxy: AmazonWebServicesClientProxy?,
         request: ResourceHandlerRequest<ResourceType?>,
         action: Action?,
-        callbackContext: StdCallbackContext?
+        callbackContext: StdCallbackContext?,
+        typeConfiguration: ConfigurationType,
     ): ProgressEvent<ResourceType?, StdCallbackContext> {
         requireNotNull(proxy)
         val actionName = action.toString()
@@ -66,7 +67,7 @@ abstract class ResourceLambdaHandler<ResourceType>(
             proxy,
             request,
             callbackContext ?: StdCallbackContext(),
-            loggerProxy
+            loggerProxy,
         ).also {
             loggerProxy.log("[$actionName] handler invoked")
         }

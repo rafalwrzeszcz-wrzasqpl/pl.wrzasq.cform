@@ -2,7 +2,7 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021 - 2022 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021 - 2022, 2024 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package pl.wrzasq.cform.macro.apigateway
@@ -58,21 +58,21 @@ class ApiGatewayManager : ExpansionHandler {
                         "Action" to listOf("sts:AssumeRole"),
                         "Effect" to "Allow",
                         "Principal" to mapOf(
-                            "Service" to listOf("apigateway.amazonaws.com")
-                        )
-                    )
+                            "Service" to listOf("apigateway.amazonaws.com"),
+                        ),
+                    ),
                 ),
                 "ManagedPolicyArns" to listOf(
-                    "arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"
-                )
-            )
+                    "arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs",
+                ),
+            ),
         )
         val account = ResourceDefinition(
             id = "ApiAccount",
             type = "AWS::ApiGateway::Account",
             // this is needed only for initial deploy, but doesn't hurt to keep it
             dependsOn = apis.values.map(ApiGateway::resourceId),
-            properties = mapOf("CloudWatchRoleArn" to Fn.getAtt(role.id, "Arn"))
+            properties = mapOf("CloudWatchRoleArn" to Fn.getAtt(role.id, "Arn")),
         )
 
         return apis.values.flatMap(ApiGateway::generateResources) + listOf(role, account)
@@ -86,7 +86,7 @@ class ApiGatewayManager : ExpansionHandler {
         val value = if (params is List<*> && params[0] is String) {
             listOf(
                 expandString(params[0].toString()),
-                params[1]
+                params[1],
             )
         } else if (params is String) {
             expandString(params)
@@ -110,7 +110,7 @@ class ApiGatewayManager : ExpansionHandler {
 
     private fun resolve(match: String): String {
         // using `:` is safer than `.` - dot is used by existing intrinsic functions like !GetAtt and !Sub and there
-        // are cases when nested dots are possible, eg. nested stacks modules etc. - would be super hard to reliably
+        // are cases when nested dots are possible, e.g. nested stacks modules etc. - would be super hard to reliably
         // distinguish between our references and other cases
         val parts = match.split(":")
         val apiId = parts.first()

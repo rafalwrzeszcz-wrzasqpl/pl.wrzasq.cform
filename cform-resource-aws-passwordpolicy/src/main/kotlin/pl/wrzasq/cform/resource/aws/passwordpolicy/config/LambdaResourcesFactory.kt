@@ -2,7 +2,7 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021, 2024 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package pl.wrzasq.cform.resource.aws.passwordpolicy.config
@@ -24,7 +24,7 @@ import software.amazon.cloudformation.proxy.StdCallbackContext
 /**
  * Resources factory for AWS Lambda environment.
  */
-class LambdaResourcesFactory : ResourcesFactory, BaseLambdaResourcesFactory<ResourceModel>() {
+class LambdaResourcesFactory : ResourcesFactory, BaseLambdaResourcesFactory<ResourceModel, Any?>() {
     private val createHandler by lazy { CreateHandler(this, readHandler) }
 
     private val deleteHandler by lazy { DeleteHandler(this) }
@@ -32,7 +32,7 @@ class LambdaResourcesFactory : ResourcesFactory, BaseLambdaResourcesFactory<Reso
     private val readHandler by lazy { ReadHandler(this) }
 
     override fun getRequestTypeReference() =
-        object : TypeReference<HandlerRequest<ResourceModel?, StdCallbackContext>>() {}
+        object : TypeReference<HandlerRequest<ResourceModel?, StdCallbackContext, Any?>>() {}
 
     override fun getResourceTypeReference() = object : TypeReference<ResourceModel?>() {}
 
@@ -40,7 +40,7 @@ class LambdaResourcesFactory : ResourcesFactory, BaseLambdaResourcesFactory<Reso
         Action.CREATE to createHandler,
         Action.UPDATE to createHandler,
         Action.READ to readHandler,
-        Action.DELETE to deleteHandler
+        Action.DELETE to deleteHandler,
     )
 
     override fun getClient(proxy: AmazonWebServicesClientProxy): ProxyClient<IamClient> = proxy.newProxy {

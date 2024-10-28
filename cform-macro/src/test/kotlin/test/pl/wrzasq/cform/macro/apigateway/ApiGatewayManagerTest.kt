@@ -2,7 +2,7 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021 - 2022 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021 - 2022, 2024 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package test.pl.wrzasq.cform.macro.apigateway
@@ -25,8 +25,8 @@ class ApiGatewayManagerTest {
     fun expandComplexArgument() {
         val input = Fn.sub(
             listOf(
-                Fn.fnIf("Check", "\${Foo}", "\${Bar}")
-            )
+                Fn.fnIf("Check", "\${Foo}", "\${Bar}"),
+            ),
         )
 
         assertEquals(input, ApiGatewayManager().expand(CALL_SUB to input.values.first()))

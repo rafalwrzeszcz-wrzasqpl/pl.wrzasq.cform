@@ -2,7 +2,7 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021, 2024 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package test.pl.wrzasq.cform.macro.processors.types
@@ -24,9 +24,9 @@ class PipelineDefinitionTest {
                 type = "AWS::CodePipeline::Pipeline",
                 properties = mapOf(
                     "ArtifactStores" to input,
-                    "Stages" to input
-                )
-            )
+                    "Stages" to input,
+                ),
+            ),
         )
 
         // these should be left untouched if not of type that is handled by processor

@@ -2,7 +2,7 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021, 2024 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package pl.wrzasq.cform.macro.pipeline
@@ -24,6 +24,7 @@ import pl.wrzasq.cform.macro.template.popProperty
 class PipelineManager {
     // order of stages is important, so they are a list
     private val stages = mutableListOf<PipelineStage>()
+
     // these will be computed during compilation
     private val namespaces = mutableMapOf<String, String>()
     private val artifacts = mutableMapOf<String, String>()

@@ -35,7 +35,7 @@ private const val PROPERTY_RUNORDER = "RunOrder"
 abstract class BaseAction(
     override val name: String,
     input: Map<String, Any>,
-    private val condition: String?
+    private val condition: String?,
 ) : PipelineAction {
     protected val properties = input.toMutableMap()
     override val inputs = mutableSetOf<String>()
@@ -86,7 +86,7 @@ abstract class BaseAction(
     override fun buildDefinition(): Map<String, Any> {
         val input = mutableMapOf(
             "Name" to name,
-            "ActionTypeId" to buildActionTypeId()
+            "ActionTypeId" to buildActionTypeId(),
         )
 
         val configuration = asMapAlways(properties[PROPERTY_CONFIGURATION]).toMutableMap()
@@ -107,7 +107,7 @@ abstract class BaseAction(
 
         val definition = (properties + input).mapSelected(
             OPTION_INPUTARTIFACTS to ::buildArtifacts,
-            OPTION_OUTPUTARTIFACTS to ::buildArtifacts
+            OPTION_OUTPUTARTIFACTS to ::buildArtifacts,
         )
 
         return conditional(definition, condition)
@@ -157,5 +157,5 @@ fun buildAwsActionTypeId(category: String, provider: String, owner: String = "AW
     "Category" to category,
     "Owner" to owner,
     "Provider" to provider,
-    "Version" to version
+    "Version" to version,
 )

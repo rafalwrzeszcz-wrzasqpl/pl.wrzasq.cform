@@ -2,7 +2,7 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021, 2024 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package test.pl.wrzasq.cform.commons
@@ -19,18 +19,18 @@ import software.amazon.cloudformation.proxy.StdCallbackContext
 class TestResourceLambdaHandler(
     configuration: Configuration,
     handlers: Map<Action, ActionHandler<Any>>,
-    logger: LoggerProxy
-) : ResourceLambdaHandler<Any>(configuration, handlers) {
+    logger: LoggerProxy,
+) : ResourceLambdaHandler<Any, Any?>(configuration, handlers) {
     init {
         loggerProxy = logger
     }
 
     public override fun provideResourceSchemaJSONObject() = super.provideResourceSchemaJSONObject()
 
-    public override fun transform(request: HandlerRequest<Any?, StdCallbackContext>) = super.transform(request)
+    public override fun transform(request: HandlerRequest<Any?, StdCallbackContext, Any?>) = super.transform(request)
 
-    override fun getTypeReference(): TypeReference<HandlerRequest<Any?, StdCallbackContext>> =
-        object : TypeReference<HandlerRequest<Any?, StdCallbackContext>>() {}
+    override fun getTypeReference(): TypeReference<HandlerRequest<Any?, StdCallbackContext, Any?>> =
+        object : TypeReference<HandlerRequest<Any?, StdCallbackContext, Any?>>() {}
 
     override fun getModelTypeReference(): TypeReference<Any?> = object : TypeReference<Any?>() {}
 }

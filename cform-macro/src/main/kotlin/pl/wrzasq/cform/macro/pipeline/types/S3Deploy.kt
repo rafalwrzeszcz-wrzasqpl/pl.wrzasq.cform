@@ -2,7 +2,7 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021 - 2022 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021 - 2022, 2024 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package pl.wrzasq.cform.macro.pipeline.types
@@ -19,7 +19,7 @@ import pl.wrzasq.cform.macro.pipeline.PipelineManager
 open class S3Deploy(
     name: String,
     input: Map<String, Any>,
-    condition: String?
+    condition: String?,
 ) : BaseAction(name, input, condition) {
     private var bucket: Any? = properties.remove("Bucket")
     protected var objectKey: Any? = properties.remove("ObjectKey")

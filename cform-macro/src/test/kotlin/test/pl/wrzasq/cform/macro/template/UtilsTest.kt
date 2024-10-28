@@ -2,7 +2,7 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021, 2024 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package test.pl.wrzasq.cform.macro.template
@@ -37,16 +37,16 @@ import pl.wrzasq.cform.macro.template.rebuildResource
 
 private const val OTHER = "Other"
 
-private val input = ResourceDefinition(
+private val INPUT = ResourceDefinition(
     id = "Test1",
     type = "AWS::Test",
     properties = mapOf(
         "A" to "B",
         "C" to "D",
-        "E" to "F"
+        "E" to "F",
     ),
     condition = "HasIt",
-    dependsOn = listOf(OTHER)
+    dependsOn = listOf(OTHER),
 )
 
 @ExtendWith(MockKExtension::class)
@@ -60,8 +60,8 @@ class UtilsTest {
             mapOf(
                 "Foo" to "Bar",
                 5 to 3,
-                "empty" to null
-            )
+                "empty" to null,
+            ),
         )
 
         assertFalse("empty" in output)
@@ -78,8 +78,8 @@ class UtilsTest {
     fun asMapAlwaysValue() {
         val output = asMap(
             mapOf(
-                "Some" to "Value"
-            )
+                "Some" to "Value",
+            ),
         )
 
         assertTrue("Some" in output)
@@ -95,7 +95,7 @@ class UtilsTest {
     fun popPropertyExists() {
         every { propertyHandler(any()) } just runs
 
-        val output = input.properties.popProperty("A", propertyHandler)
+        val output = INPUT.properties.popProperty("A", propertyHandler)
 
         assertFalse("A" in output)
 
@@ -107,24 +107,24 @@ class UtilsTest {
         every { propertyHandler(any()) } just runs
 
         val fallback = "Test"
-        input.properties.popProperty(OTHER, propertyHandler, fallback)
+        INPUT.properties.popProperty(OTHER, propertyHandler, fallback)
 
         verify { propertyHandler(fallback) }
     }
 
     @Test
     fun popPropertyMissing() {
-        input.properties.popProperty(OTHER, propertyHandler)
+        INPUT.properties.popProperty(OTHER, propertyHandler)
 
         verify { propertyHandler wasNot called }
     }
 
     @Test
     fun mapSelectedMulti() {
-        val output = input.properties.mapSelected(
+        val output = INPUT.properties.mapSelected(
             "A" to { 5 },
             "C" to { 6 },
-            OTHER to { 7 }
+            OTHER to { 7 },
         )
         assertEquals(5, output["A"])
         assertEquals(6, output["C"])
@@ -134,20 +134,20 @@ class UtilsTest {
 
     @Test
     fun mapSelectedSingle() {
-        val output = input.properties.mapSelected("A") { 5 }
+        val output = INPUT.properties.mapSelected("A") { 5 }
         assertEquals(5, output["A"])
         assertEquals("D", output["C"])
     }
 
     @Test
     fun mapValuesOnly() {
-        val output = input.properties.mapValuesOnly { "${it}X" }
+        val output = INPUT.properties.mapValuesOnly { "${it}X" }
         assertEquals("BX", output["A"])
     }
 
     @Test
     fun rebuildResourceOverrides() {
-        val output = rebuildResource(input.build(), mapOf("Foo" to "Bar"))
+        val output = rebuildResource(INPUT.build(), mapOf("Foo" to "Bar"))
         val properties = asMapAlways(output[PROPERTY_KEY_PROPERTIES])
 
         assertFalse("A" in properties)
@@ -157,24 +157,24 @@ class UtilsTest {
 
     @Test
     fun createResourceFull() {
-        val output = createResource(input)
+        val output = createResource(INPUT)
 
-        assertEquals(input.id, output.first)
-        assertEquals(input.type, output.second[PROPERTY_KEY_TYPE])
+        assertEquals(INPUT.id, output.first)
+        assertEquals(INPUT.type, output.second[PROPERTY_KEY_TYPE])
         assertTrue(PROPERTY_KEY_CONDITION in output.second)
-        assertEquals(input.condition, output.second[PROPERTY_KEY_CONDITION])
+        assertEquals(INPUT.condition, output.second[PROPERTY_KEY_CONDITION])
         assertTrue(PROPERTY_KEY_DEPENDSON in output.second)
-        assertEquals(input.dependsOn, output.second[PROPERTY_KEY_DEPENDSON])
+        assertEquals(INPUT.dependsOn, output.second[PROPERTY_KEY_DEPENDSON])
         assertTrue(PROPERTY_KEY_PROPERTIES in output.second)
-        assertEquals(input.properties, output.second[PROPERTY_KEY_PROPERTIES])
+        assertEquals(INPUT.properties, output.second[PROPERTY_KEY_PROPERTIES])
     }
 
     @Test
     fun createResourceWithoutOptional() {
-        val output = createResource(ResourceDefinition(id = input.id, type = input.type))
+        val output = createResource(ResourceDefinition(id = INPUT.id, type = INPUT.type))
 
-        assertEquals(input.id, output.first)
-        assertEquals(input.type, output.second[PROPERTY_KEY_TYPE])
+        assertEquals(INPUT.id, output.first)
+        assertEquals(INPUT.type, output.second[PROPERTY_KEY_TYPE])
         assertFalse(PROPERTY_KEY_CONDITION in output.second)
         assertFalse(PROPERTY_KEY_DEPENDSON in output.second)
         assertFalse(PROPERTY_KEY_PROPERTIES in output.second)
@@ -182,25 +182,28 @@ class UtilsTest {
 
     @Test
     fun asDefinitionWithInputs() {
-        val output = asDefinition(input.id, mapOf(
-            PROPERTY_KEY_TYPE to input.type,
-            PROPERTY_KEY_CONDITION to input.condition,
-            PROPERTY_KEY_DEPENDSON to input.dependsOn,
-            PROPERTY_KEY_PROPERTIES to input.properties
-        ))
+        val output = asDefinition(
+            INPUT.id,
+            mapOf(
+                PROPERTY_KEY_TYPE to INPUT.type,
+                PROPERTY_KEY_CONDITION to INPUT.condition,
+                PROPERTY_KEY_DEPENDSON to INPUT.dependsOn,
+                PROPERTY_KEY_PROPERTIES to INPUT.properties,
+            ),
+        )
 
-        assertEquals(input.id, output.id)
-        assertEquals(input.type, output.type)
-        assertEquals(input.condition, output.condition)
-        assertEquals(input.dependsOn, output.dependsOn)
-        assertEquals(input.properties, output.properties)
+        assertEquals(INPUT.id, output.id)
+        assertEquals(INPUT.type, output.type)
+        assertEquals(INPUT.condition, output.condition)
+        assertEquals(INPUT.dependsOn, output.dependsOn)
+        assertEquals(INPUT.properties, output.properties)
     }
 
     @Test
     fun asDefinitionFallbacks() {
-        val output = asDefinition(input.id, emptyMap<String, Any>())
+        val output = asDefinition(INPUT.id, emptyMap<String, Any>())
 
-        assertEquals(input.id, output.id)
+        assertEquals(INPUT.id, output.id)
         assertEquals("", output.type)
         assertNull(output.condition)
         assertTrue(output.dependsOn.isEmpty())
@@ -209,16 +212,16 @@ class UtilsTest {
 
     @Test
     fun asDefinitionStrangeDependsOn() {
-        val output = asDefinition(input.id, mapOf(PROPERTY_KEY_DEPENDSON to 1))
+        val output = asDefinition(INPUT.id, mapOf(PROPERTY_KEY_DEPENDSON to 1))
         assertTrue(output.dependsOn.isEmpty())
     }
 
     @Test
     fun buildOfDefinition() {
-        val output = input.build()
+        val output = INPUT.build()
 
-        assertEquals(input.id, output.first)
-        assertEquals(input.type, output.second[PROPERTY_KEY_TYPE])
+        assertEquals(INPUT.id, output.first)
+        assertEquals(INPUT.type, output.second[PROPERTY_KEY_TYPE])
         assertTrue(PROPERTY_KEY_DEPENDSON in output.second)
         assertEquals("D", asMapAlways(output.second[PROPERTY_KEY_PROPERTIES])["C"])
     }
@@ -227,9 +230,9 @@ class UtilsTest {
     fun popPropertyOfDefinition() {
         every { propertyHandler(any()) } just runs
 
-        val output = input.popProperty("A", propertyHandler)
+        val output = INPUT.popProperty("A", propertyHandler)
 
-        assertEquals(input.id, output.id)
+        assertEquals(INPUT.id, output.id)
         assertFalse(output.dependsOn.isEmpty())
         assertFalse("A" in output.properties)
         assertTrue("C" in output.properties)

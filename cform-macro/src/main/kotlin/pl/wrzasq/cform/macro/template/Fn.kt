@@ -2,7 +2,7 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021 - 2023 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021 - 2024 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package pl.wrzasq.cform.macro.template
@@ -93,7 +93,7 @@ object Fn {
      * @return !If call.
      */
     fun fnIf(condition: String, whenTrue: Any, whenFalse: Any) = mapOf(
-        CALL_IF to listOf(condition, whenTrue, whenFalse)
+        CALL_IF to listOf(condition, whenTrue, whenFalse),
     )
 
     /**

@@ -2,7 +2,7 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021, 2024 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package pl.wrzasq.cform.macro.template
@@ -129,7 +129,7 @@ fun Map<String, Any>.mapValuesOnly(transform: (Any) -> Any) = mapValues { transf
  */
 fun rebuildResource(
     input: Any,
-    properties: Map<String, Any>
+    properties: Map<String, Any>,
 ) = asMap(input) + mapOf(PROPERTY_KEY_PROPERTIES to properties)
 
 /**
@@ -170,7 +170,7 @@ fun asDefinition(id: String, input: Any): ResourceDefinition {
         dependsOn = data[PROPERTY_KEY_DEPENDSON]?.let {
             if (it is List<*>) it.filterNotNull().map(Any::toString) else emptyList()
         } ?: emptyList(),
-        properties = data[PROPERTY_KEY_PROPERTIES]?.let(::asMap) ?: emptyMap()
+        properties = data[PROPERTY_KEY_PROPERTIES]?.let(::asMap) ?: emptyMap(),
     )
 }
 
@@ -190,5 +190,5 @@ fun ResourceDefinition.build() = createResource(this)
  * @return Map without consumed key.
  */
 fun ResourceDefinition.popProperty(key: String, then: (Any) -> Unit, defaultValue: Any? = null) = copy(
-    properties = properties.popProperty(key, then, defaultValue)
+    properties = properties.popProperty(key, then, defaultValue),
 )

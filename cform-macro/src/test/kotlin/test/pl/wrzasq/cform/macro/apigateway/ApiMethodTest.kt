@@ -2,7 +2,7 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021, 2024 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package test.pl.wrzasq.cform.macro.apigateway
@@ -31,7 +31,7 @@ class ApiMethodTest {
                 "Test",
                 "Parent",
                 "GET",
-                mapOf("Authorizer" to "Not")
+                mapOf("Authorizer" to "Not"),
             )
         }
     }

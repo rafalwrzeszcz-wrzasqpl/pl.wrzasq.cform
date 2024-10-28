@@ -2,7 +2,7 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021, 2024 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package pl.wrzasq.cform.resource.aws.passwordpolicy.action
@@ -26,19 +26,19 @@ import software.amazon.cloudformation.proxy.StdCallbackContext
  * @param factory Dependent resource factory.
  */
 class DeleteHandler(
-    private val factory: ResourcesFactory
+    private val factory: ResourcesFactory,
 ) : ActionHandler<ResourceModel> {
     override fun handleRequest(
         proxy: AmazonWebServicesClientProxy,
         request: ResourceHandlerRequest<ResourceModel?>,
         callbackContext: StdCallbackContext,
-        logger: Logger
+        logger: Logger,
     ): ProgressEvent<ResourceModel?, StdCallbackContext> {
         val proxyClient = factory.getClient(proxy)
 
         return ProgressEvent.progress(
             requireNotNull(request.desiredResourceState),
-            callbackContext
+            callbackContext,
         )
             // step 1 - delete/stabilize progress chain - required for resource deletion
             .then {
@@ -46,14 +46,14 @@ class DeleteHandler(
                     "WrzasqPl-AWS-PasswordPolicy::Delete",
                     proxyClient,
                     it.resourceModel,
-                    it.callbackContext
+                    it.callbackContext,
                 )
                     .translateToServiceRequest(ResourceModel::toDeleteRequest)
                     .makeServiceCall { awsRequest, client ->
                         try {
                             client.injectCredentialsAndInvokeV2(
                                 awsRequest,
-                                client.client()::deleteAccountPasswordPolicy
+                                client.client()::deleteAccountPasswordPolicy,
                             ).also {
                                 logger.log("${ResourceModel.TYPE_NAME} successfully deleted.")
                             }

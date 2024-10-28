@@ -2,7 +2,7 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021, 2024 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package pl.wrzasq.cform.commons.config
@@ -14,9 +14,9 @@ import software.amazon.cloudformation.proxy.StdCallbackContext
 /**
  * Common base for factories required by all resource handlers.
  */
-interface BaseResourcesFactory<ResourceType>: ResourcesFactory {
+interface BaseResourcesFactory<ResourceType, ConfigurationType>: ResourcesFactory {
     /**
      * Lambda logic invocation handler.
      */
-    val lambdaHandler: LambdaWrapper<ResourceType?, StdCallbackContext>
+    val lambdaHandler: LambdaWrapper<ResourceType?, StdCallbackContext, ConfigurationType>
 }

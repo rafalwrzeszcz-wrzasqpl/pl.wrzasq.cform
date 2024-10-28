@@ -2,7 +2,7 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021, 2024 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package test.pl.wrzasq.cform.macro.apigateway
@@ -24,11 +24,11 @@ class ApiAuthorizerTest {
     fun authorizationType() {
         assertEquals(
             "COGNITO_USER_POOLS",
-            ApiAuthorizer(api, "Foo", mapOf("Type" to "COGNITO_USER_POOLS")).authorizationType
+            ApiAuthorizer(api, "Foo", mapOf("Type" to "COGNITO_USER_POOLS")).authorizationType,
         )
         assertEquals(
             "CUSTOM",
-            ApiAuthorizer(api, "Bar", mapOf("Type" to "TOKEN")).authorizationType
+            ApiAuthorizer(api, "Bar", mapOf("Type" to "TOKEN")).authorizationType,
         )
     }
 }

@@ -2,7 +2,7 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2023 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2023 - 2024 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package pl.wrzasq.cform.macro.matrix
@@ -24,7 +24,7 @@ class Matrix(
     private val idPattern: String,
     private val template: Map<String, Any>,
     private val key: List<String>,
-    private val entries: Map<List<String>, Map<String, String>>
+    private val entries: Map<List<String>, Map<String, String>>,
 ) {
     /**
      * Returns number of defined matrices.
@@ -50,7 +50,7 @@ class Matrix(
      * @return Expected logical ID.
      */
     fun resolve(selector: Map<String, String>) = generateLogicalId(
-        key.map { checkNotNull(selector[it]) { "Missing $it part of $id matrix selector." } }
+        key.map { checkNotNull(selector[it]) { "Missing $it part of $id matrix selector." } },
     )
 
     private fun generateLogicalId(params: List<String>) = key.foldIndexed(idPattern) { index, value, param ->

@@ -2,7 +2,7 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021 - 2022 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021 - 2022, 2024 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package test.pl.wrzasq.cform.macro.pipeline.types
@@ -34,8 +34,8 @@ class CloudFormationDeployTest {
     fun buildConfigurationExists() {
         val configuration = buildConfiguration(
             mapOf(
-                "From" to "To"
-            )
+                "From" to "To",
+            ),
         )
 
         assertEquals("{\"From\":\"To\"}", configuration[PARAMETER_OVERRIDES])
@@ -47,9 +47,9 @@ class CloudFormationDeployTest {
         val action = CloudFormationDeploy(
             "Test",
             mapOf(
-                "Parameters" to input
+                "Parameters" to input,
             ),
-            null
+            null,
         )
         action.compile(manager)
         action.buildConfiguration(configuration)

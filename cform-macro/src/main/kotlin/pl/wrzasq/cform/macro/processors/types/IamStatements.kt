@@ -2,7 +2,7 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021, 2024 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package pl.wrzasq.cform.macro.processors.types
@@ -20,7 +20,7 @@ class IamStatements : ResourceHandler {
         "AWS::IAM::ManagedPolicy",
         "AWS::IAM::Policy",
         "AWS::IAM::Role",
-        "AWS::IAM::User"
+        "AWS::IAM::User",
     )
 
     override fun handle(entry: ResourceDefinition) = if (
@@ -31,7 +31,7 @@ class IamStatements : ResourceHandler {
     } else {
         entry.properties.mapSelected(
             "Policies" to ::expandPolicies,
-            "AssumeRolePolicyDocument" to ::expandPolicyDocument
+            "AssumeRolePolicyDocument" to ::expandPolicyDocument,
         )
     }
 
@@ -40,7 +40,7 @@ class IamStatements : ResourceHandler {
         asMap(input).toSortedMap().map {
             mapOf(
                 "PolicyName" to it.key,
-                "PolicyDocument" to expandPolicyDocument(it.value)
+                "PolicyDocument" to expandPolicyDocument(it.value),
             )
         }
     } else {
@@ -51,7 +51,7 @@ class IamStatements : ResourceHandler {
         // builds policy statements envelope
         mapOf(
             "Version" to "2012-10-17",
-            "Statement" to input
+            "Statement" to input,
         )
     } else {
         input

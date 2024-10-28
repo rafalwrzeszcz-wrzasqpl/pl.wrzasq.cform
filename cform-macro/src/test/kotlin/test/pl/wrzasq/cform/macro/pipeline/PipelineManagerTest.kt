@@ -2,7 +2,7 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021, 2024 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package test.pl.wrzasq.cform.macro.pipeline
@@ -11,8 +11,8 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import pl.wrzasq.cform.macro.pipeline.PipelineManager
 import pl.wrzasq.cform.macro.pipeline.types.buildAwsActionTypeId
 
@@ -26,7 +26,7 @@ class PipelineManagerTest {
     fun handleStageWithoutActions() {
         val input = mapOf(
             "Name" to "Nothing",
-            "Actions" to emptyMap<String, Any>()
+            "Actions" to emptyMap<String, Any>(),
         )
 
         assertFalse(PipelineManager().handleStage(input))
@@ -37,9 +37,9 @@ class PipelineManagerTest {
         val input = mapOf(
             buildActions(
                 "Test" to mapOf(
-                    buildActionTypeId()
-                )
-            )
+                    buildActionTypeId(),
+                ),
+            ),
         )
 
         assertFalse(PipelineManager().handleStage(input))
@@ -50,9 +50,9 @@ class PipelineManagerTest {
         val input = mapOf(
             buildActions(
                 "Test" to mapOf(
-                    "ActionType" to "Whatever"
-                )
-            )
+                    "ActionType" to "Whatever",
+                ),
+            ),
         )
 
         assertThrows<IllegalArgumentException> { PipelineManager().handleStage(input) }
@@ -66,14 +66,14 @@ class PipelineManagerTest {
                 "A" to mapOf(
                     buildActionTypeId(),
                     "OutputArtifacts" to listOf("A"),
-                    "InputArtifacts" to listOf("B")
+                    "InputArtifacts" to listOf("B"),
                 ),
                 "B" to mapOf(
                     buildActionTypeId(),
                     "OutputArtifacts" to listOf("B"),
-                    "InputArtifacts" to listOf("A")
-                )
-            )
+                    "InputArtifacts" to listOf("A"),
+                ),
+            ),
         )
 
         val manager = PipelineManager()
@@ -87,14 +87,14 @@ class PipelineManagerTest {
         val input1 = mapOf(
             "Name" to "First-Deploy",
             buildActions(
-                "Db" to mapOf(buildActionTypeId())
-            )
+                "Db" to mapOf(buildActionTypeId()),
+            ),
         )
         val input2 = mapOf(
             "Name" to "First",
             buildActions(
-                "Deploy-Db" to mapOf(buildActionTypeId())
-            )
+                "Deploy-Db" to mapOf(buildActionTypeId()),
+            ),
         )
 
         val manager = PipelineManager()
@@ -117,7 +117,7 @@ class PipelineManagerTest {
     fun unhandledActions() {
         val input = mapOf(
             "Name" to "Wrong",
-            buildActions("A" to mapOf())
+            buildActions("A" to mapOf()),
         )
 
         val manager = PipelineManager()

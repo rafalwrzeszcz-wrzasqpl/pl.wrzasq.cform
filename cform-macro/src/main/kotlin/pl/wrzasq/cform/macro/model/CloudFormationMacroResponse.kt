@@ -2,7 +2,7 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021, 2024 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package pl.wrzasq.cform.macro.model
@@ -22,5 +22,5 @@ data class CloudFormationMacroResponse(
     @JsonProperty("status")
     val status: String = "SUCCESS",
     @JsonProperty("fragment")
-    val fragment: Map<String, Any>
+    val fragment: Map<String, Any>,
 )

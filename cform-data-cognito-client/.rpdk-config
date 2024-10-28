@@ -2,7 +2,7 @@
     "artifact_type": "RESOURCE",
     "typeName": "WrzasqPl::Cognito::ClientData",
     "language": "java",
-    "runtime": "provided.al2",
+    "runtime": "provided.al2023",
     "entrypoint": "pl.wrzasq.cform.data.cognito.client.config.LambdaResourcesFactory",
     "testEntrypoint": "pl.wrzasq.cform.data.cognito.client.config.LambdaResourcesFactory",
     "settings": {

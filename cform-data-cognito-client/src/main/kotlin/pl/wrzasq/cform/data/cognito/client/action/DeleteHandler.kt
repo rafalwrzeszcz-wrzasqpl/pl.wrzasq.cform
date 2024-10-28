@@ -2,7 +2,7 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2022 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2022, 2024 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package pl.wrzasq.cform.data.cognito.client.action
@@ -23,6 +23,6 @@ class DeleteHandler : ActionHandler<ResourceModel> {
         proxy: AmazonWebServicesClientProxy,
         request: ResourceHandlerRequest<ResourceModel?>,
         callbackContext: StdCallbackContext,
-        logger: Logger
+        logger: Logger,
     ): ProgressEvent<ResourceModel?, StdCallbackContext> = ProgressEvent.defaultSuccessHandler(null)
 }

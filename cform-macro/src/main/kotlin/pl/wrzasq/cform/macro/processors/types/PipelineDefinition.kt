@@ -2,7 +2,7 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021, 2024 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package pl.wrzasq.cform.macro.processors.types
@@ -21,14 +21,14 @@ class PipelineDefinition : ResourceHandler {
     override fun handle(entry: ResourceDefinition) = entry.properties.mapSelected(
         "ArtifactStore" to ::handleStore,
         "ArtifactStores" to ::handleStores,
-        "Stages" to ::processPipeline
+        "Stages" to ::processPipeline,
     )
 
     private fun handleStore(input: Any) = if (input !is Map<*, *> || input.size == 1) {
         // converts plain values (including calls) into full definition
         mapOf(
             "Type" to "S3",
-            "Location" to input
+            "Location" to input,
         )
     } else {
         input

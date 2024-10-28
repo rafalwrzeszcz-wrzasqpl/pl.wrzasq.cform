@@ -2,7 +2,7 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021, 2024 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package pl.wrzasq.cform.macro.apigateway
@@ -31,7 +31,7 @@ class ApiMethod(
     val id: String,
     private val parent: Any,
     private val method: String,
-    input: Map<String, Any>
+    input: Map<String, Any>,
 ) : ApiTemplateResource {
     private val properties: Map<String, Any>
 
@@ -52,7 +52,7 @@ class ApiMethod(
             })
             .mapSelected(
                 "Integration" to { initIntegration(asMap(it)) },
-                KEY_METHODRESPONSES to ::unfoldResponses
+                KEY_METHODRESPONSES to ::unfoldResponses,
             )
 
         // at this point responses are already `unfolded`
@@ -79,8 +79,8 @@ class ApiMethod(
         properties = properties + mapOf(
             "RestApiId" to api.ref(),
             "ResourceId" to parent,
-            "HttpMethod" to method
-        )
+            "HttpMethod" to method,
+        ),
     )
 
     private fun initIntegration(input: Map<String, Any>): Map<String, Any> {

@@ -2,7 +2,7 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021, 2024 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package pl.wrzasq.cform.resource.aws.passwordpolicy.action
@@ -27,19 +27,19 @@ import software.amazon.cloudformation.proxy.StdCallbackContext
  */
 class CreateHandler(
     private val factory: ResourcesFactory,
-    private val readHandler: ActionHandler<ResourceModel>
+    private val readHandler: ActionHandler<ResourceModel>,
 ) : ActionHandler<ResourceModel> {
     override fun handleRequest(
         proxy: AmazonWebServicesClientProxy,
         request: ResourceHandlerRequest<ResourceModel?>,
         callbackContext: StdCallbackContext,
-        logger: Logger
+        logger: Logger,
     ): ProgressEvent<ResourceModel?, StdCallbackContext> {
         val proxyClient = factory.getClient(proxy)
 
         return ProgressEvent.progress(
             requireNotNull(request.desiredResourceState),
-            callbackContext
+            callbackContext,
         )
             // step 1 - create/stabilize progress chain - required for resource creation
             .then {
@@ -47,14 +47,14 @@ class CreateHandler(
                     "WrzasqPl-AWS-PasswordPolicy::Create",
                     proxyClient,
                     it.resourceModel,
-                    it.callbackContext
+                    it.callbackContext,
                 )
                     .translateToServiceRequest(ResourceModel::toCreateRequest)
                     .makeServiceCall { awsRequest, client ->
                         try {
                             client.injectCredentialsAndInvokeV2(
                                 awsRequest,
-                                client.client()::updateAccountPasswordPolicy
+                                client.client()::updateAccountPasswordPolicy,
                             ).also {
                                 logger.log("${ResourceModel.TYPE_NAME} successfully created.")
                             }

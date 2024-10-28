@@ -2,7 +2,7 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021, 2024 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package pl.wrzasq.cform.macro.processors.types
@@ -20,10 +20,9 @@ class DynamoDbAttributesDefinitions : ResourceHandler {
 
     private fun processTable(input: Map<String, Any>): Map<String, Any> {
         val attributesDefinitions = input.getList("AttributeDefinitions").toMutableList()
-        val keys = input.extractKeyAttributeNames() + (
-            // both index types have same same structures
-            input.getList("GlobalSecondaryIndexes") + input.getList("LocalSecondaryIndexes")
-        ).flatMap { asMap(it).extractKeyAttributeNames() }
+        // both index types have same structures
+        val indices = input.getList("GlobalSecondaryIndexes") + input.getList("LocalSecondaryIndexes")
+        val keys = input.extractKeyAttributeNames() + indices.flatMap { asMap(it).extractKeyAttributeNames() }
 
         val existing = attributesDefinitions.extractAttributeNames()
         // we sort names to ensure predictable order
@@ -31,8 +30,8 @@ class DynamoDbAttributesDefinitions : ResourceHandler {
             attributesDefinitions.add(
                 mapOf(
                     "AttributeName" to it,
-                    "AttributeType" to "S"
-                )
+                    "AttributeType" to "S",
+                ),
             )
         }
 

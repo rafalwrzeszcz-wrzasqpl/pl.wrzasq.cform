@@ -2,7 +2,7 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021, 2024 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package pl.wrzasq.cform.macro.processors.loggroups
@@ -16,7 +16,7 @@ import pl.wrzasq.cform.macro.template.Fn
  * @param logGroupNameService Prefix for log group name.
  */
 class DefaultLogGroupHandler(
-    private val logGroupNameService: String
+    private val logGroupNameService: String,
 ) : AutomaticLogGroupHandler {
     override val propertyName = "LogsRetentionInDays"
 
@@ -25,7 +25,7 @@ class DefaultLogGroupHandler(
         type = "AWS::Logs::LogGroup",
         properties = mapOf(
             "LogGroupName" to Fn.sub("/aws/${logGroupNameService}/\${${resourceId}}"),
-            "RetentionInDays" to retention
-        )
+            "RetentionInDays" to retention,
+        ),
     )
 }

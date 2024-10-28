@@ -2,7 +2,7 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2023 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2023 - 2024 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package pl.wrzasq.cform.macro.matrix
@@ -118,7 +118,7 @@ class MatricesManager : ExpansionHandler {
         } else if (params is List<*> && params[0] is String) {
             listOf(
                 expand(params[0].toString()),
-                params[1]
+                params[1],
             )
         } else if (params is String) {
             expand(params)

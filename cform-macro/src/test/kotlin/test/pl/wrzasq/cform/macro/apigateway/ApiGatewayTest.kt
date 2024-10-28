@@ -2,7 +2,7 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021, 2024 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package test.pl.wrzasq.cform.macro.apigateway
@@ -36,10 +36,10 @@ class ApiGatewayTest {
                 mapOf(
                     PROPERTY_RESOURCES to mapOf(
                         "/this" to mapOf(
-                            "Illegal" to true
-                        )
-                    )
-                )
+                            "Illegal" to true,
+                        ),
+                    ),
+                ),
             )
         }
     }
@@ -69,9 +69,9 @@ class ApiGatewayTest {
         val api = buildApiGateway(
             mapOf(
                 PROPERTY_RESOURCES to mapOf(
-                    "/{name}" to emptyMap<String, Any>()
-                )
-            )
+                    "/{name}" to emptyMap<String, Any>(),
+                ),
+            ),
         )
 
         assertEquals("ApiGatewayTestApiResourceName", api.resolve(listOf("Resource", "/%name%")))
@@ -88,10 +88,10 @@ class ApiGatewayTest {
             mapOf(
                 PROPERTY_RESOURCES to mapOf(
                     "/{name}" to mapOf(
-                        "@GET" to emptyMap<String, Any>()
-                    )
-                )
-            )
+                        "@GET" to emptyMap<String, Any>(),
+                    ),
+                ),
+            ),
         )
 
         assertEquals("ApiGatewayTestApiMethodGETName", api.resolve(listOf("Method", "GET/%name%")))

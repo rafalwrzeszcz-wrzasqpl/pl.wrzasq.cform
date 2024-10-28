@@ -2,7 +2,7 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2023 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2023 - 2024 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package pl.wrzasq.cform.macro.processors
@@ -39,7 +39,9 @@ class MatricesExpander {
                         manager.buildMatrix(id, resource.filterKeys { key -> key != KEY_MATRIX }, asMap(matrix), params)
                     })
                     false
-                } else true
+                } else {
+                    true
+                }
             }
         }
 
@@ -53,9 +55,8 @@ class MatricesExpander {
                 rest.mapSelected(SECTION_RESOURCES) {
                     asMap(it) + manager.generateResources()
                 },
-                params
+                params,
             )
         }
     }
-
 }

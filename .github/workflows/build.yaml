@@ -45,15 +45,15 @@ jobs:
             -
                 uses: "actions/checkout@v4.2.2"
             -
-                uses: "ayltai/setup-graalvm@v1"
+                uses: "graalvm/setup-graalvm@v1.2.4.1"
                 with:
-                    java-version: "17"
-                    graalvm-version: "23.0.2"
-                    native-image: true
+                    java-version: "17.0.9"
+                    distribution: "graalvm"
+                    github-token: "${{ secrets.GITHUB_TOKEN }}"
             -
                 uses: "crazy-max/ghaction-import-gpg@v6.2.0"
                 with:
-                    gpg-private-key: "${{ secrets.GPG_PRIVATE_KEY }}"
+                    gpg_private_key: "${{ secrets.GPG_PRIVATE_KEY }}"
                     passphrase: "${{ secrets.GPG_PASSPHRASE }}"
             -
                 uses: "actions/cache@v4.1.2"

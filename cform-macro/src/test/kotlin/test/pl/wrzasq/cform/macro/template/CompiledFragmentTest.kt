@@ -2,14 +2,13 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2022 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2022, 2024 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package test.pl.wrzasq.cform.macro.template
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertSame
-//import org.junit.jupiter.api.Assertions.assertInstanceOf
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import pl.wrzasq.cform.macro.template.CALL_GET_PARAM
@@ -45,16 +44,16 @@ class CompiledFragmentTest {
             "ComplexSub" to Fn.sub(
                 listOf(
                     "\${Complex}",
-                    mapOf("Complex" to "NotReally")
-                )
+                    mapOf("Complex" to "NotReally"),
+                ),
             ),
             "StringImport" to Fn.importValue("Export:Name"),
             "Param" to mapOf(
                 CALL_GET_PARAM to listOf(
                     "artifact",
                     "file.json",
-                    "Name"
-                )
+                    "Name",
+                ),
             ),
             "Other" to other,
         )
@@ -82,7 +81,7 @@ class CompiledFragmentTest {
                     "\"Param\":{\"Fn::GetParam\":[\"artifact\",\"file.json\",\"Name\"]}," +
                     "\"Other\":\"\${param1}\"" +
                     "}",
-                params[0]
+                params[0],
             )
             //assertInstanceOf(Map::class.java, params[1])
             assertTrue(params[1] is Map<*, *>)
@@ -98,14 +97,14 @@ class CompiledFragmentTest {
         val struct = mapOf(
             "List" to listOf(
                 mapOf(
-                    "First" to Fn.ref("One")
-                )
+                    "First" to Fn.ref("One"),
+                ),
             ),
             "Dict" to mapOf(
                 "Outer" to mapOf(
-                    "Inner" to Fn.ref("Two")
-                )
-            )
+                    "Inner" to Fn.ref("Two"),
+                ),
+            ),
         )
 
         val call = CompiledFragment(struct).raw
@@ -128,7 +127,7 @@ class CompiledFragmentTest {
                 "\"Inner\":\"\${Two}\"" +
                 "}}" +
                 "}",
-            json
+            json,
         )
     }
 }

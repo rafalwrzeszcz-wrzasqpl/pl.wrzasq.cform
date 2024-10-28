@@ -2,7 +2,7 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021, 2024 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package test.pl.wrzasq.cform.resource.aws.passwordpolicy.action
@@ -39,16 +39,16 @@ import java.util.function.Function
 const val PHYSICAL_ID = "password-policy"
 const val MAX_PASSWORD_AGE = 4
 
-private val credentials = Credentials("ID", "secret", "test")
+private val CREDENTIALS = Credentials("ID", "secret", "test")
 
-val exception: AwsServiceException = AwsServiceException.builder()
+val EXCEPTION: AwsServiceException = AwsServiceException.builder()
     .awsErrorDetails(
         AwsErrorDetails.builder()
             .sdkHttpResponse(
                 SdkHttpResponse.builder()
-                    .build()
+                    .build(),
             )
-            .build()
+            .build(),
     )
     .build()
 
@@ -76,13 +76,13 @@ class ReadHandlerTest {
         every {
             proxyClient.injectCredentialsAndInvokeV2(
                 ofType(GetAccountPasswordPolicyRequest::class),
-                any<Function<GetAccountPasswordPolicyRequest, GetAccountPasswordPolicyResponse>>()
+                any<Function<GetAccountPasswordPolicyRequest, GetAccountPasswordPolicyResponse>>(),
             )
         } returns GetAccountPasswordPolicyResponse.builder()
             .passwordPolicy(
                 PasswordPolicy.builder()
                     .maxPasswordAge(MAX_PASSWORD_AGE)
-                    .build()
+                    .build(),
             )
             .build()
 
@@ -106,9 +106,9 @@ class ReadHandlerTest {
         every {
             proxyClient.injectCredentialsAndInvokeV2(
                 ofType(GetAccountPasswordPolicyRequest::class),
-                any<Function<GetAccountPasswordPolicyRequest, GetAccountPasswordPolicyResponse>>()
+                any<Function<GetAccountPasswordPolicyRequest, GetAccountPasswordPolicyResponse>>(),
             )
-        } throws exception
+        } throws EXCEPTION
 
         assertThrows<CfnGeneralServiceException> {
             ReadHandler(factory).handleRequest(proxy, request, StdCallbackContext(), logger)
@@ -130,9 +130,9 @@ class ReadHandlerTest {
 fun initializeProxy(
     logger: LoggerProxy,
     factory: ResourcesFactory,
-    proxyClient: ProxyClient<IamClient>
+    proxyClient: ProxyClient<IamClient>,
 ): AmazonWebServicesClientProxy {
-    val proxy = AmazonWebServicesClientProxy(logger, credentials) { 1L }
+    val proxy = AmazonWebServicesClientProxy(logger, CREDENTIALS) { 1L }
 
     every { logger.log(any()) } just runs
     every { factory.getClient(proxy) } returns proxyClient

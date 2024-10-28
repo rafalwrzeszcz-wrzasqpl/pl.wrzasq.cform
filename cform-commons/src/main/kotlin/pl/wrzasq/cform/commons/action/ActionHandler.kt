@@ -2,7 +2,7 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021, 2024 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package pl.wrzasq.cform.commons.action
@@ -26,10 +26,10 @@ interface ActionHandler<ResourceModel> {
      * @param logger Logger.
      * @return Progress notification.
      */
-   fun handleRequest(
-       proxy: AmazonWebServicesClientProxy,
-       request: ResourceHandlerRequest<ResourceModel?>,
-       callbackContext: StdCallbackContext,
-       logger: Logger
+    fun handleRequest(
+        proxy: AmazonWebServicesClientProxy,
+        request: ResourceHandlerRequest<ResourceModel?>,
+        callbackContext: StdCallbackContext,
+        logger: Logger,
     ): ProgressEvent<ResourceModel?, StdCallbackContext>
 }

@@ -2,7 +2,7 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2022 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2022, 2024 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package pl.wrzasq.cform.macro.processors.types
@@ -12,7 +12,7 @@ import pl.wrzasq.cform.macro.template.CompiledFragment
 import pl.wrzasq.cform.macro.template.asMap
 import pl.wrzasq.cform.macro.template.mapSelected
 
-private val defaults = mapOf(
+private val DEFAULTS = mapOf(
     "Version" to "2019-10-30",
 )
 
@@ -29,6 +29,6 @@ class ConnectContactFlow : ResourceHandler {
         input
     } else {
         // convert nested structure into plain JSON (possibly with Fn:: call)
-        CompiledFragment(defaults + asMap(input)).raw
+        CompiledFragment(DEFAULTS + asMap(input)).raw
     }
 }

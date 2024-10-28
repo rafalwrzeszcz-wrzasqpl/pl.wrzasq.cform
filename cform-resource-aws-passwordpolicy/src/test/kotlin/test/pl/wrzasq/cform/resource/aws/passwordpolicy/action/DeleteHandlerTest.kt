@@ -2,7 +2,7 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021, 2024 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package test.pl.wrzasq.cform.resource.aws.passwordpolicy.action
@@ -54,7 +54,7 @@ class DeleteHandlerTest {
         every {
             proxyClient.injectCredentialsAndInvokeV2(
                 ofType(DeleteAccountPasswordPolicyRequest::class),
-                any<Function<DeleteAccountPasswordPolicyRequest, DeleteAccountPasswordPolicyResponse>>()
+                any<Function<DeleteAccountPasswordPolicyRequest, DeleteAccountPasswordPolicyResponse>>(),
             )
         } returns DeleteAccountPasswordPolicyResponse.builder().build()
 
@@ -77,7 +77,7 @@ class DeleteHandlerTest {
         every {
             proxyClient.injectCredentialsAndInvokeV2(
                 ofType(DeleteAccountPasswordPolicyRequest::class),
-                any<Function<DeleteAccountPasswordPolicyRequest, DeleteAccountPasswordPolicyResponse>>()
+                any<Function<DeleteAccountPasswordPolicyRequest, DeleteAccountPasswordPolicyResponse>>(),
             )
         } throws NoSuchEntityException.builder().build()
 
@@ -100,9 +100,9 @@ class DeleteHandlerTest {
         every {
             proxyClient.injectCredentialsAndInvokeV2(
                 ofType(DeleteAccountPasswordPolicyRequest::class),
-                any<Function<DeleteAccountPasswordPolicyRequest, DeleteAccountPasswordPolicyResponse>>()
+                any<Function<DeleteAccountPasswordPolicyRequest, DeleteAccountPasswordPolicyResponse>>(),
             )
-        } throws exception
+        } throws EXCEPTION
 
         assertThrows<CfnGeneralServiceException> {
             DeleteHandler(factory).handleRequest(proxy, request, StdCallbackContext(), logger)

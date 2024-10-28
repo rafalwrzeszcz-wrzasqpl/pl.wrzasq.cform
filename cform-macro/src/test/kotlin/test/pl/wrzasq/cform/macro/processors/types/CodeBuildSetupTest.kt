@@ -32,7 +32,7 @@ class CodeBuildSetupTest {
     @Test
     fun plainVariables() {
         val variables = listOf(
-            mapOf("Name" to "ServiceVersion", "Value" to "v1")
+            mapOf("Name" to "ServiceVersion", "Value" to "v1"),
         )
         val entry = buildProjectDefinition("Environment" to mapOf("EnvironmentVariables" to variables))
 
@@ -50,6 +50,6 @@ class CodeBuildSetupTest {
     private fun buildProjectDefinition(vararg properties: Pair<String, Any>) = ResourceDefinition(
         id = "Test",
         type = "AWS::CodeBuild::Project",
-        properties = mapOf(*properties)
+        properties = mapOf(*properties),
     )
 }

@@ -2,7 +2,7 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2022 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2022, 2024 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package pl.wrzasq.cform.data.cognito.client.config
@@ -16,7 +16,7 @@ import software.amazon.cloudformation.proxy.ProxyClient
 /**
  * Factory for resource handler resources.
  */
-interface ResourcesFactory : BaseResourcesFactory<ResourceModel> {
+interface ResourcesFactory : BaseResourcesFactory<ResourceModel, Any?> {
     /**
      * Creates AWS service client proxy.
      *

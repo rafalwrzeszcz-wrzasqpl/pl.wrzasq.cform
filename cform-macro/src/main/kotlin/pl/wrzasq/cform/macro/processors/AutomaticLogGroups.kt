@@ -2,7 +2,7 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021, 2023 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021, 2023 - 2024 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package pl.wrzasq.cform.macro.processors
@@ -15,16 +15,16 @@ import pl.wrzasq.cform.macro.template.build
 import pl.wrzasq.cform.macro.template.mapSelected
 import pl.wrzasq.cform.macro.template.popProperty
 
-private val logGroupsHandlers = mapOf(
+private val LOG_GROUPS_HANDLERS = mapOf(
     "AWS::Lambda::Function" to DefaultLogGroupHandler("lambda"),
     "AWS::CodeBuild::Project" to DefaultLogGroupHandler("codebuild"),
-    "AWS::Serverless::Function" to DefaultLogGroupHandler("lambda")
+    "AWS::Serverless::Function" to DefaultLogGroupHandler("lambda"),
 )
 
 /**
  * Automatically declares LogGroups for certain types of resources.
  *
- * Currently Lambda functions (including Serverless transform) and CodeBuild projects are handled.
+ * Currently, Lambda functions (including Serverless transform) and CodeBuild projects are handled.
  */
 class AutomaticLogGroups {
     /**
@@ -44,7 +44,7 @@ class AutomaticLogGroups {
 
         for ((id, resource) in input) {
             val entry = asDefinition(id, resource)
-            val handler = logGroupsHandlers[entry.type]
+            val handler = LOG_GROUPS_HANDLERS[entry.type]
 
             // check if resource type is handled
             if (handler != null && entry.properties.containsKey(handler.propertyName)) {

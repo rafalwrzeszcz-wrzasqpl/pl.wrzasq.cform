@@ -2,7 +2,7 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2022 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2022, 2024 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package pl.wrzasq.cform.data.cognito.client.model
@@ -55,11 +55,14 @@ class ResourceModel {
         }
 
     /**
-     * All of the unique identifiers.
+     * All the unique identifiers.
      */
     @get:JsonIgnore
     val additionalIdentifiers: List<Any>? = null
 
+    /**
+     * Set of resource-related constants.
+     */
     companion object {
         /**
          * CloudFormation resource type.

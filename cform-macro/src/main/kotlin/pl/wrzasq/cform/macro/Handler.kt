@@ -2,7 +2,7 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021, 2023 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021, 2023 - 2024 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package pl.wrzasq.cform.macro
@@ -27,7 +27,7 @@ typealias TemplateProcessor = (Map<String, Any>, Map<String, Any>) -> Map<String
  */
 class Handler(
     private val objectMapper: ObjectMapper,
-    private val templateProcessors: Collection<TemplateProcessor>
+    private val templateProcessors: Collection<TemplateProcessor>,
 ) {
     /**
      * Handles invocation.
@@ -46,8 +46,8 @@ class Handler(
                 requestId = request.requestId,
                 fragment =  templateProcessors.fold(request.fragment) { state, fn ->
                     fn(state, request.templateParameterValues)
-                }
-            )
+                },
+            ),
         )
     }
 }

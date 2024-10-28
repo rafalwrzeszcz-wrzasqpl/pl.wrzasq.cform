@@ -2,14 +2,12 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2022 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2022, 2024 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package pl.wrzasq.cform.macro.template
 
-import pl.wrzasq.commons.json.ObjectMapperFactory
-
-private val OBJECT_MAPPER = ObjectMapperFactory.createObjectMapper()
+import pl.wrzasq.cform.macro.config.LambdaResourcesFactory
 
 /**
  * Template processing which replaces nested calls to intrinsic functions to produce plain JSON representation.
@@ -36,7 +34,7 @@ class CompiledFragment(input: Map<String, Any>) {
 
     init {
         val final = traverseMap(input)
-        json = OBJECT_MAPPER.writeValueAsString(final)
+        json = LambdaResourcesFactory.OBJECT_MAPPER.writeValueAsString(final)
     }
 
     private fun traverse(input: Any): Any = when (input) {

@@ -2,7 +2,7 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021, 2024 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package pl.wrzasq.cform.macro.apigateway
@@ -21,7 +21,7 @@ class ApiRequestValidator(
     private val api: ApiGateway,
     val id: String,
     private val validateRequestBody: Boolean,
-    private val validateParameters: Boolean
+    private val validateParameters: Boolean,
 ) : ApiTemplateResource {
     override val resourceId
         get() = "${api.resourceId}Validator$id"
@@ -37,7 +37,7 @@ class ApiRequestValidator(
         properties = mapOf(
             "RestApiId" to api.ref(),
             "ValidateRequestBody" to validateRequestBody,
-            "ValidateRequestParameters" to validateParameters
-        )
+            "ValidateRequestParameters" to validateParameters,
+        ),
     )
 }

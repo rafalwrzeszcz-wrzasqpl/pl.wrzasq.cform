@@ -2,7 +2,7 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021, 2024 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package pl.wrzasq.cform.macro.apigateway
@@ -21,7 +21,7 @@ import pl.wrzasq.cform.macro.template.popProperty
 class ApiModel(
     private val api: ApiGateway,
     val id: String,
-    input: Map<String, Any>
+    input: Map<String, Any>,
 ) : ApiTemplateResource {
     private val properties: Map<String, Any>
 
@@ -56,6 +56,6 @@ class ApiModel(
     fun generateResource() = ResourceDefinition(
         id = resourceId,
         type = "AWS::ApiGateway::Model",
-        properties = properties + mapOf("RestApiId" to api.ref())
+        properties = properties + mapOf("RestApiId" to api.ref()),
     )
 }

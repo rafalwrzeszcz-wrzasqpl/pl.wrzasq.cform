@@ -2,7 +2,7 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021, 2024 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package test.pl.wrzasq.cform.commons
@@ -60,9 +60,9 @@ class ResourceLambdaHandlerTest {
     fun transform() {
         val wrapper = TestResourceLambdaHandler(configuration, emptyMap(), logger)
 
-        val data = RequestData<Any?>()
+        val data = RequestData<Any?, Any?>()
 
-        val request = HandlerRequest<Any?, StdCallbackContext>().apply {
+        val request = HandlerRequest<Any?, StdCallbackContext, Any?>().apply {
             requestData = data
             region = Region.EU_CENTRAL_1.id()
         }
@@ -82,7 +82,7 @@ class ResourceLambdaHandlerTest {
         every { logger.log(any()) } just runs
 
         val wrapper = TestResourceLambdaHandler(configuration, mapOf(Action.CREATE to handler), logger)
-        val result = wrapper.invokeHandler(proxy, request, Action.CREATE, callbackContext)
+        val result = wrapper.invokeHandler(proxy, request, Action.CREATE, callbackContext, null)
 
         verify { handler.handleRequest(proxy, request, callbackContext, any()) }
 
@@ -98,7 +98,7 @@ class ResourceLambdaHandlerTest {
         every { logger.log(any()) } just runs
 
         val wrapper = TestResourceLambdaHandler(configuration, mapOf(Action.CREATE to handler), logger)
-        val result = wrapper.invokeHandler(proxy, request, Action.CREATE, null)
+        val result = wrapper.invokeHandler(proxy, request, Action.CREATE, null, null)
 
         verify { handler.handleRequest(proxy, request, any(), any()) }
 
@@ -109,13 +109,17 @@ class ResourceLambdaHandlerTest {
     fun invokeHandlerNullProxy() {
         val wrapper = TestResourceLambdaHandler(configuration, emptyMap(), logger)
 
-        assertThrows<IllegalArgumentException> { wrapper.invokeHandler(null, ResourceHandlerRequest(), null, null) }
+        assertThrows<IllegalArgumentException> {
+            wrapper.invokeHandler(null, ResourceHandlerRequest(), null, null, null)
+        }
     }
 
     @Test
     fun invokeHandlerNoHandler() {
         val wrapper = TestResourceLambdaHandler(configuration, emptyMap(), logger)
 
-        assertThrows<RuntimeException> { wrapper.invokeHandler(proxy, ResourceHandlerRequest(), Action.CREATE, null) }
+        assertThrows<RuntimeException> {
+            wrapper.invokeHandler(proxy, ResourceHandlerRequest(), Action.CREATE, null, null)
+        }
     }
 }

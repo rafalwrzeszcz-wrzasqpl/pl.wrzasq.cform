@@ -21,7 +21,7 @@
     <parent>
         <groupId>pl.wrzasq.parent</groupId>
         <artifactId>parent-opensource</artifactId>
-        <version>3.0.0</version>
+        <version>3.0.3</version>
     </parent>
 
     <!-- project meta info -->

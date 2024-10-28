@@ -2,7 +2,7 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2022 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2022, 2024 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package test.pl.wrzasq.cform.data.cognito.client.action
@@ -42,16 +42,16 @@ const val USER_POOL_ID = "eu-central-1_test"
 const val CLIENT_ID = "abcd"
 const val CLIENT_SECRET = "test1"
 
-private val credentials = Credentials("ID", "secret", "test")
+private val CREDENTIALS = Credentials("ID", "secret", "test")
 
-val exception: AwsServiceException = AwsServiceException.builder()
+val EXCEPTION: AwsServiceException = AwsServiceException.builder()
     .awsErrorDetails(
         AwsErrorDetails.builder()
             .sdkHttpResponse(
                 SdkHttpResponse.builder()
-                    .build()
+                    .build(),
             )
-            .build()
+            .build(),
     )
     .build()
 
@@ -79,7 +79,7 @@ class ReadHandlerTest {
         every {
             proxyClient.injectCredentialsAndInvokeV2(
                 ofType(DescribeUserPoolClientRequest::class),
-                any<Function<DescribeUserPoolClientRequest, DescribeUserPoolClientResponse>>()
+                any<Function<DescribeUserPoolClientRequest, DescribeUserPoolClientResponse>>(),
             )
         } returns DescribeUserPoolClientResponse.builder()
             .userPoolClient(
@@ -87,7 +87,7 @@ class ReadHandlerTest {
                     .userPoolId(USER_POOL_ID)
                     .clientId(CLIENT_ID)
                     .clientSecret(CLIENT_SECRET)
-                    .build()
+                    .build(),
             )
             .build()
 
@@ -115,7 +115,7 @@ class ReadHandlerTest {
         every {
             proxyClient.injectCredentialsAndInvokeV2(
                 ofType(DescribeUserPoolClientRequest::class),
-                any<Function<DescribeUserPoolClientRequest, DescribeUserPoolClientResponse>>()
+                any<Function<DescribeUserPoolClientRequest, DescribeUserPoolClientResponse>>(),
             )
         } throws ResourceNotFoundException.builder().build()
 
@@ -140,9 +140,9 @@ class ReadHandlerTest {
         every {
             proxyClient.injectCredentialsAndInvokeV2(
                 ofType(DescribeUserPoolClientRequest::class),
-                any<Function<DescribeUserPoolClientRequest, DescribeUserPoolClientResponse>>()
+                any<Function<DescribeUserPoolClientRequest, DescribeUserPoolClientResponse>>(),
             )
-        } throws exception
+        } throws EXCEPTION
 
         assertThrows<CfnGeneralServiceException> {
             ReadHandler(factory).handleRequest(proxy, request, StdCallbackContext(), logger)
@@ -164,9 +164,9 @@ class ReadHandlerTest {
 fun initializeProxy(
     logger: LoggerProxy,
     factory: ResourcesFactory,
-    proxyClient: ProxyClient<CognitoIdentityProviderClient>
+    proxyClient: ProxyClient<CognitoIdentityProviderClient>,
 ): AmazonWebServicesClientProxy {
-    val proxy = AmazonWebServicesClientProxy(logger, credentials) { 1L }
+    val proxy = AmazonWebServicesClientProxy(logger, CREDENTIALS) { 1L }
 
     every { logger.log(any()) } just runs
     every { factory.getClient(proxy) } returns proxyClient

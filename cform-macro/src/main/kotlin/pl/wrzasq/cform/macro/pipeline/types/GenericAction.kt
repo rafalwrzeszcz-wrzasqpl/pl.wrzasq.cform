@@ -2,7 +2,7 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021 - 2022 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021 - 2022, 2024 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package pl.wrzasq.cform.macro.pipeline.types
@@ -25,7 +25,7 @@ open class GenericAction(
     private val owner: String,
     private val provider: String,
     private val version: String,
-    condition: String?
+    condition: String?,
 ) : BaseAction(name, properties, condition) {
     override fun buildActionTypeId() = buildAwsActionTypeId(category, provider, owner, version)
 }
@@ -43,6 +43,6 @@ fun fromMap(input: Map<String, Any>) = { name: String, properties: Map<String, A
         (input["Owner"] ?: "AWS").toString(),
         input["Provider"].toString(),
         (input["Version"] ?: "1").toString(),
-        condition
+        condition,
     )
 }

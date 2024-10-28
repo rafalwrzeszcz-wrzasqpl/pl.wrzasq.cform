@@ -2,7 +2,7 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021, 2024 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package test.pl.wrzasq.cform.macro.pipeline.types
@@ -18,7 +18,7 @@ class S3SourceTest {
             S3Source(
                 "NoBucket",
                 mapOf("ObjectKey" to "test.json"),
-                null
+                null,
             )
         }
     }
@@ -29,7 +29,7 @@ class S3SourceTest {
             S3Source(
                 "NoObjectKey",
                 mapOf("Bucket" to "s3name"),
-                null
+                null,
             )
         }
     }

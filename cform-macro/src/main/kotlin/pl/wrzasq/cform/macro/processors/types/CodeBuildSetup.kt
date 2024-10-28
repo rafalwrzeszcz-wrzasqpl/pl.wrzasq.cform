@@ -2,7 +2,7 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021, 2024 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package pl.wrzasq.cform.macro.processors.types
@@ -11,7 +11,7 @@ import pl.wrzasq.cform.macro.model.ResourceDefinition
 import pl.wrzasq.cform.macro.template.asMap
 import pl.wrzasq.cform.macro.template.mapSelected
 
-private val fallback = mapOf(
+private val FALLBACK = mapOf(
     "Artifacts" to mapOf("Type" to "CODEPIPELINE"),
     "Source" to mapOf("Type" to "CODEPIPELINE"),
 )
@@ -22,10 +22,10 @@ private val fallback = mapOf(
 class CodeBuildSetup : ResourceHandler {
     override fun handledResourceTypes() = listOf("AWS::CodeBuild::Project")
 
-    override fun handle(entry: ResourceDefinition) = fallback + entry.properties.mapSelected(
+    override fun handle(entry: ResourceDefinition) = FALLBACK + entry.properties.mapSelected(
         "Artifacts" to { value -> handleArtifacts(asMap(value)) },
         "Cache" to ::expandCache,
-        "Environment" to { value -> handleEnvironment(asMap(value)) }
+        "Environment" to { value -> handleEnvironment(asMap(value)) },
     )
 
     private fun handleArtifacts(input: Map<String, Any>): Any {
@@ -51,7 +51,7 @@ class CodeBuildSetup : ResourceHandler {
                 output["EnvironmentVariables"] = asMap(it).toSortedMap().map { variable ->
                     mapOf(
                         "Name" to variable.key,
-                        "Value" to variable.value
+                        "Value" to variable.value,
                     )
                 }
             }
@@ -64,7 +64,7 @@ class CodeBuildSetup : ResourceHandler {
         // converts plain values (including calls) into full definition
         mapOf(
             "Type" to "S3",
-            "Location" to input
+            "Location" to input,
         )
     } else {
         input

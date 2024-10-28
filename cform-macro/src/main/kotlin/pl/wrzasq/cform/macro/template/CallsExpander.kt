@@ -2,7 +2,7 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021, 2023 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021, 2023 - 2024 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package pl.wrzasq.cform.macro.template
@@ -13,7 +13,7 @@ package pl.wrzasq.cform.macro.template
  * @param handler Function expansion handler.
  */
 class CallsExpander(
-    private val handler: ExpansionHandler
+    private val handler: ExpansionHandler,
 ) {
     /**
      * Applies calls modification to entire template.
@@ -25,7 +25,7 @@ class CallsExpander(
     fun processTemplate(input: Map<String, Any>, params: Map<String, Any>) = input.mapSelected(
         // these are the only sections where any function applies
         SECTION_RESOURCES to ::traverse,
-        SECTION_OUTPUTS to ::traverse
+        SECTION_OUTPUTS to ::traverse,
     )
 
     private fun traverse(input: Any): Any = when (input) {

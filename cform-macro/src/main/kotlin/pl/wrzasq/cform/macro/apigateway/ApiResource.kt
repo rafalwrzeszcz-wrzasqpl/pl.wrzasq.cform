@@ -2,7 +2,7 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021, 2024 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package pl.wrzasq.cform.macro.apigateway
@@ -21,7 +21,7 @@ class ApiResource(
     private val api: ApiGateway,
     val id: String,
     private val parent: Any,
-    private val path: String
+    private val path: String,
 ) : ApiTemplateResource {
     override val resourceId
         get() = "${api.resourceId}Resource$id"
@@ -37,7 +37,7 @@ class ApiResource(
         properties = mapOf(
             "RestApiId" to api.ref(),
             "ParentId" to parent,
-            "PathPart" to path
-        )
+            "PathPart" to path,
+        ),
     )
 }
