@@ -4,8 +4,8 @@ CloudFormation macro processor.,pl.wrzasq.cform.macro.apigateway,ApiAuthorizer,3
 CloudFormation macro processor.,pl.wrzasq.cform.macro.apigateway,ApiRequestValidator,3,76,0,0,0,14,1,3,1,3
 CloudFormation macro processor.,pl.wrzasq.cform.macro.apigateway,ApiModel,3,121,2,2,0,24,3,4,1,4
 CloudFormation macro processor.,pl.wrzasq.cform.macro.apigateway,ApiGatewayKt,0,20,0,0,0,2,0,2,0,2
-CloudFormation macro processor.,pl.wrzasq.cform.macro.apigateway,ApiGateway,15,814,3,36,1,86,4,35,1,15
 CloudFormation macro processor.,pl.wrzasq.cform.macro.apigateway,UtilsKt,0,14,0,0,0,2,0,1,0,1
+CloudFormation macro processor.,pl.wrzasq.cform.macro.apigateway,ApiGateway,15,814,3,36,1,86,4,35,1,15
 CloudFormation macro processor.,pl.wrzasq.cform.macro.apigateway,ApiTemplateResourceKt,12,8,0,0,1,1,1,1,1,1
 CloudFormation macro processor.,pl.wrzasq.cform.macro.apigateway,ApiMethodKt,1,73,1,3,1,13,1,5,0,4
 CloudFormation macro processor.,pl.wrzasq.cform.macro.apigateway,ApiGatewayManagerKt,0,11,0,0,0,2,0,1,0,1
@@ -30,8 +30,8 @@ CloudFormation macro processor.,pl.wrzasq.cform.macro.pipeline.types,BaseAction,
 CloudFormation macro processor.,pl.wrzasq.cform.macro.pipeline.types,GenericActionKt,0,43,0,4,0,11,0,4,0,2
 CloudFormation macro processor.,pl.wrzasq.cform.macro.processors,FnToolkit,0,135,0,4,0,15,0,7,0,5
 CloudFormation macro processor.,pl.wrzasq.cform.macro.processors,ApiGatewayDefinition,0,90,0,4,0,13,0,6,0,4
-CloudFormation macro processor.,pl.wrzasq.cform.macro.processors,AutomaticLogGroups,0,111,1,5,0,16,1,7,0,5
 CloudFormation macro processor.,pl.wrzasq.cform.macro.processors,AutomaticLogGroupsKt,0,34,0,0,0,4,0,1,0,1
+CloudFormation macro processor.,pl.wrzasq.cform.macro.processors,AutomaticLogGroups,0,111,1,5,0,16,1,7,0,5
 CloudFormation macro processor.,pl.wrzasq.cform.macro.processors,MatricesExpander,0,113,0,6,0,20,0,8,0,5
 CloudFormation macro processor.,pl.wrzasq.cform.macro.processors,DelegatingResourceProcessor,0,92,1,3,0,14,1,6,0,5
 CloudFormation macro processor.,pl.wrzasq.cform.macro.processors,FnToolkitKt,0,6,0,0,0,1,0,1,0,1
