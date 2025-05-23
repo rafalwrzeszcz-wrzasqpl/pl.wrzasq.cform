@@ -1,0 +1,19 @@
+##
+# This file is part of the pl.wrzasq.cform.
+#
+# @license http://mit-license.org/ The MIT license
+# @copyright 2025 © by Rafał Wrzeszcz - Wrzasq.pl.
+##
+
+version: 2
+updates:
+    -
+        package-ecosystem: "maven"
+        directory: "/"
+        schedule:
+            interval: "daily"
+    -
+        package-ecosystem: "github-actions"
+        directory: "/"
+        schedule:
+            interval: "daily"
