@@ -23,7 +23,7 @@ jobs:
             -
                 uses: "actions/checkout@v4.2.2"
             -
-                uses: "graalvm/setup-graalvm@v1.3.3"
+                uses: "graalvm/setup-graalvm@v1.3.4"
                 with:
                     java-version: "17.0.9"
                     distribution: "graalvm"
@@ -45,7 +45,7 @@ jobs:
             -
                 uses: "actions/checkout@v4.2.2"
             -
-                uses: "graalvm/setup-graalvm@v1.3.3"
+                uses: "graalvm/setup-graalvm@v1.3.4"
                 with:
                     java-version: "17.0.9"
                     distribution: "graalvm"
