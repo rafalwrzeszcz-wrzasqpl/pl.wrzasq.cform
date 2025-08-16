@@ -45,7 +45,7 @@ private const val PROPERTY_RUNORDER = &quot;RunOrder&quot;
     // we compute these stuff but might have been defined already in the template
 
 <span class="fc bfc" id="L47" title="All 2 branches covered.">    override var namespace = properties[PROPERTY_NAMESPACE]?.toString()</span>
-<span class="pc bpc" id="L48" title="1 of 4 branches missed.">    override var runOrder: Int? = properties[PROPERTY_RUNORDER]?.toString()?.toInt()</span>
+<span class="fc bfc" id="L48" title="All 4 branches covered.">    override var runOrder: Int? = properties[PROPERTY_RUNORDER]?.toString()?.toInt()</span>
 
 <span class="fc" id="L50">    init {</span>
 <span class="fc bfc" id="L51" title="All 2 branches covered.">        properties[OPTION_INPUTARTIFACTS]?.let { readArtifacts(it, inputs) }</span>
@@ -159,4 +159,4 @@ private fun readArtifacts(input: Any, target: MutableSet&lt;String&gt;) {
 <span class="fc" id="L159">    &quot;Provider&quot; to provider,</span>
 <span class="fc" id="L160">    &quot;Version&quot; to version,</span>
 <span class="fc" id="L161">)</span>
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>
