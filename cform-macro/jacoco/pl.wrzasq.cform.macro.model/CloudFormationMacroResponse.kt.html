@@ -18,10 +18,10 @@ import com.fasterxml.jackson.annotation.JsonProperty
  */
 <span class="fc" id="L19">data class CloudFormationMacroResponse(</span>
 <span class="fc" id="L20">    @JsonProperty(&quot;requestId&quot;)</span>
-    val requestId: String,
-<span class="pc" id="L22">    @JsonProperty(&quot;status&quot;)</span>
-<span class="fc" id="L23">    val status: String = &quot;SUCCESS&quot;,</span>
+<span class="fc" id="L21">    val requestId: String,</span>
+<span class="fc" id="L22">    @JsonProperty(&quot;status&quot;)</span>
+<span class="pc" id="L23">    val status: String = &quot;SUCCESS&quot;,</span>
 <span class="fc" id="L24">    @JsonProperty(&quot;fragment&quot;)</span>
-    val fragment: Map&lt;String, Any&gt;,
+<span class="fc" id="L25">    val fragment: Map&lt;String, Any&gt;,</span>
 <span class="fc" id="L26">)</span>
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

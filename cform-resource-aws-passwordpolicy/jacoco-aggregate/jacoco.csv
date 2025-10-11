@@ -2,5 +2,5 @@ GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_
 WrzasqPl::AWS::PasswordPolicy resource/cform-commons,pl.wrzasq.cform.commons.config,BaseLambdaResourcesFactory.lambdaHandler.2.new ResourceLambdaHandler() {...},14,0,0,0,5,0,3,0,3,0
 WrzasqPl::AWS::PasswordPolicy resource/cform-commons,pl.wrzasq.cform.commons.config,BaseLambdaResourcesFactory,112,0,0,0,16,0,10,0,10,0
 WrzasqPl::AWS::PasswordPolicy resource/cform-commons,pl.wrzasq.cform.commons.config,LambdaConfiguration,40,0,0,0,5,0,4,0,4,0
-WrzasqPl::AWS::PasswordPolicy resource/cform-commons,pl.wrzasq.cform.commons,ResourceLambdaHandler,0,148,0,6,0,31,0,8,0,5
-WrzasqPl::AWS::PasswordPolicy resource/cform-commons,pl.wrzasq.cform.commons.model,Tag,19,0,0,0,5,0,5,0,5,0
+WrzasqPl::AWS::PasswordPolicy resource/cform-commons,pl.wrzasq.cform.commons,ResourceLambdaHandler,0,126,0,6,0,30,0,8,0,5
+WrzasqPl::AWS::PasswordPolicy resource/cform-commons,pl.wrzasq.cform.commons.model,Tag,19,0,0,0,3,0,5,0,5,0

@@ -20,19 +20,19 @@ import software.amazon.awssdk.services.cognitoidentityprovider.model.DescribeUse
     /**
      * User pool ID.
      */
-<span class="fc" id="L23">    @JsonProperty(&quot;UserPoolId&quot;)</span>
+    @JsonProperty(&quot;UserPoolId&quot;)
 <span class="fc" id="L24">    var userPoolId: String? = null</span>
 
     /**
      * Client ID.
      */
-<span class="fc" id="L29">    @JsonProperty(&quot;ClientId&quot;)</span>
+    @JsonProperty(&quot;ClientId&quot;)
 <span class="fc" id="L30">    var clientId: String? = null</span>
 
     /**
      * OAuth client secret.
      */
-<span class="fc" id="L35">    @JsonProperty(&quot;ClientSecret&quot;)</span>
+    @JsonProperty(&quot;ClientSecret&quot;)
 <span class="fc" id="L36">    var clientSecret: String? = null</span>
 
     /**
@@ -57,8 +57,8 @@ import software.amazon.awssdk.services.cognitoidentityprovider.model.DescribeUse
     /**
      * All the unique identifiers.
      */
-<span class="nc" id="L60">    @get:JsonIgnore</span>
-    val additionalIdentifiers: List&lt;Any&gt;? = null
+    @get:JsonIgnore
+<span class="nc" id="L61">    val additionalIdentifiers: List&lt;Any&gt;? = null</span>
 
     /**
      * Set of resource-related constants.
@@ -67,20 +67,20 @@ import software.amazon.awssdk.services.cognitoidentityprovider.model.DescribeUse
         /**
          * CloudFormation resource type.
          */
-<span class="fc" id="L70">        @JsonIgnore</span>
+        @JsonIgnore
 <span class="fc" id="L71">        val TYPE_NAME = &quot;WrzasqPl::Cognito::ClientData&quot;</span>
 
         /**
          * Property path to UserPoolId.
          */
-<span class="nc" id="L76">        @JsonIgnore</span>
-<span class="fc" id="L77">        val IDENTIFIER_KEY_USER_POOL_ID = &quot;/properties/UserPoolId&quot;</span>
+        @JsonIgnore
+<span class="pc" id="L77">        val IDENTIFIER_KEY_USER_POOL_ID = &quot;/properties/UserPoolId&quot;</span>
 
         /**
          * Property path to ClientId.
          */
-<span class="nc" id="L82">        @JsonIgnore</span>
-<span class="fc" id="L83">        val IDENTIFIER_KEY_CLIENT_ID = &quot;/properties/ClientId&quot;</span>
+        @JsonIgnore
+<span class="pc" id="L83">        val IDENTIFIER_KEY_CLIENT_ID = &quot;/properties/ClientId&quot;</span>
     }
 }
 

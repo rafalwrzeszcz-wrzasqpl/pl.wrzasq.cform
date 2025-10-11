@@ -22,61 +22,61 @@ import software.amazon.awssdk.services.iam.model.UpdateAccountPasswordPolicyRequ
     /**
      * Physical resource identifier.
      */
-<span class="fc" id="L25">    @JsonProperty(&quot;PhysicalId&quot;)</span>
+    @JsonProperty(&quot;PhysicalId&quot;)
 <span class="fc" id="L26">    var physicalId: String? = null</span>
 
     /**
      * Minimum user password.
      */
-<span class="fc" id="L31">    @JsonProperty(&quot;MinimumPasswordLength&quot;)</span>
+    @JsonProperty(&quot;MinimumPasswordLength&quot;)
 <span class="fc" id="L32">    var minimumPasswordLength: Int? = null</span>
 
     /**
      * Lowercase characters requirement.
      */
-<span class="fc" id="L37">    @JsonProperty(&quot;RequireLowercaseCharacters&quot;)</span>
+    @JsonProperty(&quot;RequireLowercaseCharacters&quot;)
 <span class="fc" id="L38">    var requireLowercaseCharacters: Boolean? = null</span>
 
     /**
      * Uppercase characters requirement.
      */
-<span class="fc" id="L43">    @JsonProperty(&quot;RequireUppercaseCharacters&quot;)</span>
+    @JsonProperty(&quot;RequireUppercaseCharacters&quot;)
 <span class="fc" id="L44">    var requireUppercaseCharacters: Boolean? = null</span>
 
     /**
      * Numeric characters requirement.
      */
-<span class="fc" id="L49">    @JsonProperty(&quot;RequireNumbers&quot;)</span>
+    @JsonProperty(&quot;RequireNumbers&quot;)
 <span class="fc" id="L50">    var requireNumbers: Boolean? = null</span>
 
     /**
      * Non-alphanumeric characters requirement.
      */
-<span class="fc" id="L55">    @JsonProperty(&quot;RequireSymbols&quot;)</span>
+    @JsonProperty(&quot;RequireSymbols&quot;)
 <span class="fc" id="L56">    var requireSymbols: Boolean? = null</span>
 
     /**
      * Allowing users to change their passwords.
      */
-<span class="fc" id="L61">    @JsonProperty(&quot;AllowUsersToChangePassword&quot;)</span>
+    @JsonProperty(&quot;AllowUsersToChangePassword&quot;)
 <span class="fc" id="L62">    var allowUsersToChangePassword: Boolean? = null</span>
 
     /**
      * Number of previous password that are checked.
      */
-<span class="fc" id="L67">    @JsonProperty(&quot;PasswordReusePrevention&quot;)</span>
+    @JsonProperty(&quot;PasswordReusePrevention&quot;)
 <span class="fc" id="L68">    var passwordReusePrevention: Int? = null</span>
 
     /**
      * Maximum password age days.
      */
-<span class="fc" id="L73">    @JsonProperty(&quot;MaxPasswordAge&quot;)</span>
+    @JsonProperty(&quot;MaxPasswordAge&quot;)
 <span class="fc" id="L74">    var maxPasswordAge: Int? = null</span>
 
     /**
      * Hard expiration flag.
      */
-<span class="fc" id="L79">    @JsonProperty(&quot;HardExpiry&quot;)</span>
+    @JsonProperty(&quot;HardExpiry&quot;)
 <span class="fc" id="L80">    var hardExpiry: Boolean? = null</span>
 
     /**
@@ -98,8 +98,8 @@ import software.amazon.awssdk.services.iam.model.UpdateAccountPasswordPolicyRequ
     /**
      * All the unique identifiers.
      */
-<span class="nc" id="L101">    @get:JsonIgnore</span>
-    val additionalIdentifiers: List&lt;Any&gt;? = null
+    @get:JsonIgnore
+<span class="nc" id="L102">    val additionalIdentifiers: List&lt;Any&gt;? = null</span>
 
     /**
      * Set of resource-related constants.
@@ -108,14 +108,14 @@ import software.amazon.awssdk.services.iam.model.UpdateAccountPasswordPolicyRequ
         /**
          * CloudFormation resource type.
          */
-<span class="fc" id="L111">        @JsonIgnore</span>
+        @JsonIgnore
 <span class="fc" id="L112">        val TYPE_NAME = &quot;WrzasqPl::AWS::PasswordPolicy&quot;</span>
 
         /**
          * Property path to physical ID.
          */
-<span class="nc" id="L117">        @JsonIgnore</span>
-<span class="fc" id="L118">        val IDENTIFIER_KEY_PHYSICAL_ID = &quot;/properties/PhysicalId&quot;</span>
+        @JsonIgnore
+<span class="pc" id="L118">        val IDENTIFIER_KEY_PHYSICAL_ID = &quot;/properties/PhysicalId&quot;</span>
     }
 }
 
