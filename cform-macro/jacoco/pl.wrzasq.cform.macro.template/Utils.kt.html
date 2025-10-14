@@ -73,7 +73,7 @@ fun asMap(input: Any): Map&lt;String, Any&gt; {
  * @param input Input object.
  * @return Typed map.
  */
-<span class="pc bpc" id="L76" title="1 of 4 branches missed.">fun asMapAlways(input: Any?) = input?.let(::asMap) ?: emptyMap()</span>
+<span class="fc bfc" id="L76" title="All 4 branches covered.">fun asMapAlways(input: Any?) = input?.let(::asMap) ?: emptyMap()</span>
 
 /**
  * Handles optional property by removing it from generic properties pool.
@@ -100,7 +100,7 @@ fun asMap(input: Any): Map&lt;String, Any&gt; {
  * @return Mapped structure.
  */
 <span class="fc" id="L102">fun Map&lt;String, Any&gt;.mapSelected(vararg handlers: Pair&lt;String, (Any) -&gt; Any&gt;) = mapValues {</span>
-<span class="pc bpc" id="L103" title="1 of 4 branches missed.">    mapOf(*handlers)[it.key]?.invoke(it.value) ?: it.value</span>
+<span class="fc bfc" id="L103" title="All 4 branches covered.">    mapOf(*handlers)[it.key]?.invoke(it.value) ?: it.value</span>
 <span class="fc" id="L104">}</span>
 
 /**
@@ -165,12 +165,12 @@ fun asDefinition(id: String, input: Any): ResourceDefinition {
 <span class="fc" id="L165">    return ResourceDefinition(</span>
 <span class="fc" id="L166">        id = id,</span>
         // dummy fallback, should never be needed
-<span class="pc bpc" id="L168" title="1 of 4 branches missed.">        type = data[PROPERTY_KEY_TYPE]?.toString() ?: &quot;&quot;,</span>
+<span class="fc bfc" id="L168" title="All 4 branches covered.">        type = data[PROPERTY_KEY_TYPE]?.toString() ?: &quot;&quot;,</span>
 <span class="fc bfc" id="L169" title="All 2 branches covered.">        condition = data[PROPERTY_KEY_CONDITION]?.toString(),</span>
-<span class="pc bpc" id="L170" title="1 of 4 branches missed.">        dependsOn = data[PROPERTY_KEY_DEPENDSON]?.let {</span>
+<span class="fc bfc" id="L170" title="All 4 branches covered.">        dependsOn = data[PROPERTY_KEY_DEPENDSON]?.let {</span>
 <span class="fc bfc" id="L171" title="All 2 branches covered.">            if (it is List&lt;*&gt;) it.filterNotNull().map(Any::toString) else emptyList()</span>
 <span class="fc" id="L172">        } ?: emptyList(),</span>
-<span class="pc bpc" id="L173" title="1 of 4 branches missed.">        properties = data[PROPERTY_KEY_PROPERTIES]?.let(::asMap) ?: emptyMap(),</span>
+<span class="fc bfc" id="L173" title="All 4 branches covered.">        properties = data[PROPERTY_KEY_PROPERTIES]?.let(::asMap) ?: emptyMap(),</span>
     )
 }
 
@@ -192,4 +192,4 @@ fun asDefinition(id: String, input: Any): ResourceDefinition {
 <span class="fc" id="L192">fun ResourceDefinition.popProperty(key: String, then: (Any) -&gt; Unit, defaultValue: Any? = null) = copy(</span>
 <span class="fc" id="L193">    properties = properties.popProperty(key, then, defaultValue),</span>
 <span class="fc" id="L194">)</span>
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

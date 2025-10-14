@@ -41,11 +41,11 @@ import pl.wrzasq.cform.macro.template.rebuildResource
 <span class="fc" id="L41">    private fun processResources(input: Map&lt;String, Any&gt;) = input.mapValues {</span>
 <span class="fc" id="L42">        val entry = asDefinition(it.key, it.value)</span>
 
-<span class="pc bpc" id="L44" title="1 of 4 branches missed.">        typeHandles[entry.type]?.let { handler -&gt; rebuildResource(it.value, handler.handle(entry)) } ?: it.value</span>
+<span class="fc bfc" id="L44" title="All 4 branches covered.">        typeHandles[entry.type]?.let { handler -&gt; rebuildResource(it.value, handler.handle(entry)) } ?: it.value</span>
 <span class="fc" id="L45">    }</span>
 
     private fun register(handler: ResourceHandler) {
 <span class="fc" id="L48">        handler.handledResourceTypes().forEach { typeHandles[it] = handler }</span>
 <span class="fc" id="L49">    }</span>
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>
