@@ -21,7 +21,7 @@ jobs:
         runs-on: "ubuntu-24.04"
         steps:
             -
-                uses: "actions/checkout@v6.0.1"
+                uses: "actions/checkout@v6.0.2"
             -
                 uses: "graalvm/setup-graalvm@v1.4.5"
                 with:
@@ -43,7 +43,7 @@ jobs:
         steps:
             # workspace preparation
             -
-                uses: "actions/checkout@v6.0.1"
+                uses: "actions/checkout@v6.0.2"
             -
                 uses: "graalvm/setup-graalvm@v1.4.5"
                 with:
