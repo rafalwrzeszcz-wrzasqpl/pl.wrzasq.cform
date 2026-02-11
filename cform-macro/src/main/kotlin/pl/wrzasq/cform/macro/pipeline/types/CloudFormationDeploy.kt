@@ -2,14 +2,14 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021 - 2022, 2024 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021 - 2022, 2024, 2026 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package pl.wrzasq.cform.macro.pipeline.types
 
 import pl.wrzasq.cform.macro.pipeline.PipelineManager
 import pl.wrzasq.cform.macro.template.CALL_GET_PARAM
-import pl.wrzasq.cform.macro.template.CompiledFragment
+import pl.wrzasq.cform.macro.template.Fn
 import pl.wrzasq.cform.macro.template.asMapAlways
 
 /**
@@ -51,7 +51,7 @@ class CloudFormationDeploy(
 
     override fun buildConfiguration(configuration: MutableMap<String, Any>) {
         if (compiled.isNotEmpty()) {
-            configuration["ParameterOverrides"] = CompiledFragment(compiled).raw
+            configuration["ParameterOverrides"] = Fn.toJsonString(compiled)
         }
 
         configuration["ActionMode"] = "CREATE_UPDATE"

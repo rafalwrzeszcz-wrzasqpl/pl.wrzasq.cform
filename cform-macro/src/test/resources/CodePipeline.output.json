@@ -156,7 +156,12 @@
                                         "Fn::Sub": "checkout::config-${EnvironmentName}.json"
                                     },
                                     "ParameterOverrides": {
-                                        "Fn::Sub": "{\"TableName\":\"${TableName}\",\"BuildId\":\"#{deploy-build.Id}\"}"
+                                        "Fn::ToJsonString": {
+                                            "TableName": {
+                                                "Ref": "TableName"
+                                            },
+                                            "BuildId": "#{deploy-build.Id}"
+                                        }
                                     }
                                 },
                                 "InputArtifacts": [
@@ -180,7 +185,22 @@
                                     "Capabilities": "CAPABILITY_NAMED_IAM,CAPABILITY_AUTO_EXPAND",
                                     "TemplatePath": "checkout::service.yaml",
                                     "ParameterOverrides": {
-                                        "Fn::Sub": "{\"TableArn\":\"#{deploy-db.Arn}\",\"RoleArn\":\"${ServiceRole.Arn}\",\"Title\":\"Hello ${World}!\",\"ParamValue\":{\"Fn::GetParam\":[\"artifact\",\"output.json\",\"ParamName\"]}}"
+                                        "Fn::ToJsonString": {
+                                            "TableArn": "#{deploy-db.Arn}",
+                                            "RoleArn": {
+                                                "Fn::GetAtt": "ServiceRole.Arn"
+                                            },
+                                            "Title": {
+                                                "Fn::Sub": "Hello ${World}!"
+                                            },
+                                            "ParamValue": {
+                                                "Fn::GetParam": [
+                                                    "artifact",
+                                                    "output.json",
+                                                    "ParamName"
+                                                ]
+                                            }
+                                        }
                                     }
                                 },
                                 "InputArtifacts": [

@@ -2,13 +2,13 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2022 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2022, 2026 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package pl.wrzasq.cform.macro.processors.types
 
 import pl.wrzasq.cform.macro.model.ResourceDefinition
-import pl.wrzasq.cform.macro.template.CompiledFragment
+import pl.wrzasq.cform.macro.template.Fn
 import pl.wrzasq.cform.macro.template.asMap
 import pl.wrzasq.cform.macro.template.popProperty
 
@@ -23,6 +23,6 @@ class SecretStructure : ResourceHandler {
     private fun processSecret(input: Map<String, Any>): Map<String, Any> {
         val output = input.toMutableMap()
 
-        return output.popProperty("SecretContent", { output["SecretString"] = CompiledFragment(asMap(it)).raw })
+        return output.popProperty("SecretContent", { output["SecretString"] = Fn.toJsonString(asMap(it)) })
     }
 }

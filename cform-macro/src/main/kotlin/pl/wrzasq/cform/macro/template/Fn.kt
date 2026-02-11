@@ -2,7 +2,7 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021 - 2024 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021 - 2024, 2026 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package pl.wrzasq.cform.macro.template
@@ -31,6 +31,11 @@ const val CALL_IMPORT_VALUE = "Fn::ImportValue"
  * `Fn::Sub` definition.
  */
 const val CALL_SUB = "Fn::Sub"
+
+/**
+ * `Fn::ToJsonString` definition (AWS::LanguageExtensions transform).
+ */
+const val CALL_TO_JSON_STRING = "Fn::ToJsonString"
 
 /**
  * `Fn::If` definition.
@@ -83,6 +88,14 @@ object Fn {
      * @return !Sub call.
      */
     fun sub(params: Any) = mapOf(CALL_SUB to params)
+
+    /**
+     * Returns !ToJsonString reference call.
+     *
+     * @param input Input structure.
+     * @return !ToJsonString call.
+     */
+    fun toJsonString(input: Any) = mapOf(CALL_TO_JSON_STRING to input)
 
     /**
      * Builds !If call.

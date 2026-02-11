@@ -9,7 +9,30 @@
                 "Name": "Default Flow",
                 "Type": "CONTACT_FLOW",
                 "Content": {
-                    "Fn::Sub": "{\"Version\":\"2019-10-30\",\"StartAction\":\"start\",\"Actions\":[{\"Identifier\":\"start\",\"Type\":\"UpdateContactTargetQueue\",\"Parameters\":{\"QueueId\":\"${OrderQueueId}\"},\"Transitions\":{\"NextAction\":\"order_number\",\"Errors\":[{\"ErrorType\":\"NoMatchingError\",\"NextAction\":\"end\"}]}}]}"
+                    "Fn::ToJsonString": {
+                        "Version": "2019-10-30",
+                        "StartAction": "start",
+                        "Actions": [
+                            {
+                                "Identifier": "start",
+                                "Type": "UpdateContactTargetQueue",
+                                "Parameters": {
+                                    "QueueId": {
+                                        "Ref": "OrderQueueId"
+                                    }
+                                },
+                                "Transitions": {
+                                    "NextAction": "order_number",
+                                    "Errors": [
+                                        {
+                                            "ErrorType": "NoMatchingError",
+                                            "NextAction": "end"
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
                 }
             }
         },
@@ -21,7 +44,12 @@
                 },
                 "Name": "Default Flow",
                 "Type": "CONTACT_FLOW",
-                "Content": "{\"Version\":\"2022-01-30\",\"StartAction\":\"start\"}"
+                "Content": {
+                    "Fn::ToJsonString": {
+                        "Version": "2022-01-30",
+                        "StartAction": "start"
+                    }
+                }
             }
         },
         "ConnectFlowWithText": {

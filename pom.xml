@@ -3,7 +3,7 @@
 # This file is part of the pl.wrzasq.cform.
 #
 # @license http://mit-license.org/ The MIT license
-# @copyright 2020 - 2024 © by Rafał Wrzeszcz - Wrzasq.pl.
+# @copyright 2020 - 2024, 2026 © by Rafał Wrzeszcz - Wrzasq.pl.
 -->
 <project
     xmlns="http://maven.apache.org/POM/4.0.0"
@@ -17,7 +17,7 @@
     <groupId>pl.wrzasq.cform</groupId>
     <artifactId>cform</artifactId>
     <packaging>pom</packaging>
-    <version>1.4.22-SNAPSHOT</version>
+    <version>1.5.0-SNAPSHOT</version>
     <parent>
         <groupId>pl.wrzasq.parent</groupId>
         <artifactId>parent-opensource</artifactId>

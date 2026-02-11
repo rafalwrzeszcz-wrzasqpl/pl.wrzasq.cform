@@ -2,7 +2,7 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021 - 2022, 2024 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021 - 2022, 2024, 2026 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package test.pl.wrzasq.cform.macro.template
@@ -15,6 +15,7 @@ import pl.wrzasq.cform.macro.template.CALL_IF
 import pl.wrzasq.cform.macro.template.CALL_IMPORT_VALUE
 import pl.wrzasq.cform.macro.template.CALL_REF
 import pl.wrzasq.cform.macro.template.CALL_SUB
+import pl.wrzasq.cform.macro.template.CALL_TO_JSON_STRING
 import pl.wrzasq.cform.macro.template.Fn
 import pl.wrzasq.cform.macro.template.asMapAlways
 
@@ -57,6 +58,15 @@ class FnTest {
         val output = Fn.sub(input)
         assertEquals(1, output.size)
         assertEquals(CALL_SUB, output.keys.first())
+        assertEquals(input, output.values.first())
+    }
+
+    @Test
+    fun toJsonString() {
+        val input = mapOf(CALL_IF to RESOURCE_ID)
+        val output = Fn.toJsonString(input)
+        assertEquals(1, output.size)
+        assertEquals(CALL_TO_JSON_STRING, output.keys.first())
         assertEquals(input, output.values.first())
     }
 
