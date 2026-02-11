@@ -2,14 +2,14 @@
  * This file is part of the pl.wrzasq.cform.
  *
  * @license http://mit-license.org/ The MIT license
- * @copyright 2021 - 2022, 2024 © by Rafał Wrzeszcz - Wrzasq.pl.
+ * @copyright 2021 - 2022, 2024, 2026 © by Rafał Wrzeszcz - Wrzasq.pl.
  */
 
 package pl.wrzasq.cform.macro.pipeline.types
 
 import pl.wrzasq.cform.macro.pipeline.PipelineManager
 import pl.wrzasq.cform.macro.template.CALL_GET_PARAM
-import pl.wrzasq.cform.macro.template.CompiledFragment
+import pl.wrzasq.cform.macro.template.Fn
 import pl.wrzasq.cform.macro.template.asMapAlways
 
 /**
@@ -51,7 +51,7 @@ import pl.wrzasq.cform.macro.template.asMapAlways
 
     override fun buildConfiguration(configuration: MutableMap&lt;String, Any&gt;) {
 <span class="fc bfc" id="L53" title="All 4 branches covered.">        if (compiled.isNotEmpty()) {</span>
-<span class="fc" id="L54">            configuration[&quot;ParameterOverrides&quot;] = CompiledFragment(compiled).raw</span>
+<span class="fc" id="L54">            configuration[&quot;ParameterOverrides&quot;] = Fn.toJsonString(compiled)</span>
         }
 
 <span class="fc" id="L57">        configuration[&quot;ActionMode&quot;] = &quot;CREATE_UPDATE&quot;</span>
