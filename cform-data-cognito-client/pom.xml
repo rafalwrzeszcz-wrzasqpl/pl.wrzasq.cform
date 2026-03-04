@@ -19,7 +19,7 @@
     <parent>
         <groupId>pl.wrzasq.cform</groupId>
         <artifactId>cform</artifactId>
-        <version>1.5.12</version>
+        <version>1.5.13-SNAPSHOT</version>
         <relativePath>../</relativePath>
     </parent>
 
