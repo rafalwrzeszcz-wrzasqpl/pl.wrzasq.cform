@@ -99,7 +99,7 @@ jobs:
                         cp -r $site target/site/$(echo $site | cut -d / -f 1);
                     done
             -
-                uses: "peaceiris/actions-gh-pages@v4.0.0"
+                uses: "peaceiris/actions-gh-pages@v4.1.0"
                 with:
                     github_token: "${{ secrets.GITHUB_TOKEN }}"
                     publish_dir: "./target/site/"
